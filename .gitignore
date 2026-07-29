@@ -1,0 +1,28 @@
+# LaTeX temporary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+
+# Build directories
+build/
+out/
+
+# macOS
+.DS_Store
+
+# VS Code local settings
+.vscode/
+EOF
