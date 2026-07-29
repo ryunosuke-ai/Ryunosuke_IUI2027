@@ -132,32 +132,32 @@
   \node[corpus, text width=2.35cm] (small) at (1.48,2.62) {%
     {\color{blue}\large\faDatabase}\\[-1pt]
     {\scriptsize STYLE REFERENCE}\\[-1pt]
-    \textbf{Small, high-quality\\dialogue corpus}
+    {\bfseries\footnotesize Small,\\high-quality\\dialogue corpus}
   };
 
-  \node[modelcard, text width=2.82cm] (analysis) at (4.62,2.62) {%
-    \textbf{Dialogue Feature\\Analysis}\\[2pt]
-    {\scriptsize states \(\bullet\) strategies \(\bullet\) transitions}
+  \node[modelcard, text width=2.82cm] (analysis) at (4.52,2.62) {%
+    {\bfseries\small Dialogue Feature\\Analysis}\\[2pt]
+    {\scriptsize states \(\bullet\) strategies\\transitions}
   };
 
-  \node[modelcard, text width=3.05cm] (modeling) at (8.68,2.62) {%
-    \textbf{Bayesian Dialogue\\Modeling}\\[2pt]
-    {\scriptsize transition \& observation probabilities}
+  \node[modelcard, text width=3.05cm] (modeling) at (8.78,2.62) {%
+    {\bfseries\small Bayesian Dialogue\\Modeling}\\[2pt]
+    {\scriptsize transition probabilities\\observation likelihoods}
   };
 
   \node[corpus, text width=2.70cm] (large) at (1.66,-0.62) {%
     {\color{muted}\large\faLayerGroup}\\[-1pt]
     {\scriptsize CANDIDATE POOL}\\[-1pt]
-    \textbf{Large, general-purpose\\dialogue corpus}
+    {\bfseries\footnotesize Large,\\general-purpose\\dialogue corpus}
   };
 
-  \node[scorecard, text width=3.05cm] (scoring) at (6.05,-0.62) {%
-    \textbf{Style Compatibility\\Scoring}\\[2pt]
+  \node[scorecard, text width=3.45cm] (scoring) at (6.05,-0.62) {%
+    {\bfseries\small Style Compatibility\\Scoring}\\[2pt]
     {\scriptsize \(\mathrm{Score}(r_t)\in[0,1]\)}
   };
 
-  \node[adaptcard, text width=4.00cm] (adaptation) at (11.20,-0.62) {%
-    \textbf{Preference Data Selection\\\& DPO Adaptation}\\[2pt]
+  \node[adaptcard, text width=4.40cm] (adaptation) at (11.20,-0.62) {%
+    {\bfseries\small Preference Data Selection\\\& DPO Adaptation}\\[2pt]
     {\scriptsize \(\textit{chosen}\succ\textit{rejected}\)}
   };
 
@@ -178,35 +178,51 @@
   };
 
   % Number badges make the four modules easy to map to the method text.
-  \node[badge, fill=blue] at ($(analysis.north west)+(0.18,-0.16)$) {1};
-  \node[badge, fill=blue] at ($(modeling.north west)+(0.18,-0.16)$) {2};
-  \node[badge, fill=teal] at ($(scoring.north west)+(0.18,-0.16)$) {3};
-  \node[badge, fill=orange] at ($(adaptation.north west)+(0.18,-0.16)$) {4};
+  \node[badge, fill=blue] at ($(analysis.north west)+(-0.05,0.00)$) {1};
+  \node[badge, fill=blue] at ($(modeling.north west)+(-0.05,0.00)$) {2};
+  \node[badge, fill=teal] at ($(scoring.north west)+(-0.05,0.00)$) {3};
+  \node[badge, fill=orange] at ($(adaptation.north west)+(-0.05,0.00)$) {4};
 
   % Style-reference path.
   \draw[flow] (small.east) -- (analysis.west);
-  \draw[flow] (analysis.east) -- node[arrowlabel] {dialogue features} (modeling.west);
+  \draw[flow] (analysis.east) -- node[
+    arrowlabel,
+    font=\sffamily\tiny,
+    inner xsep=1.5pt
+  ] {dialogue\\features} (modeling.west);
 
   % The learned Bayesian model and general-corpus candidates meet at scoring.
   \draw[flow, draw=blue]
     (modeling.south)
-    -- (8.68,0.98)
+    -- (8.78,0.98)
     -- (6.05,0.98)
     -- node[arrowlabel, pos=0.67] {Bayesian dialogue model}
     (scoring.north);
   \draw[dataflow]
     (large.east)
-    -- node[arrowlabel] {candidate responses}
+    -- node[
+      arrowlabel,
+      font=\sffamily\tiny,
+      inner xsep=1.5pt
+    ] {responses}
     (scoring.west);
 
   % Scored candidates are converted to preferences and used for adaptation.
   \draw[flow, draw=teal]
     (scoring.east)
-    -- node[arrowlabel] {scored candidates}
+    -- node[
+      arrowlabel,
+      font=\sffamily\tiny,
+      inner xsep=1.5pt
+    ] {scores}
     (adaptation.west);
   \draw[flow, draw=orange]
     (adaptation.east)
-    -- node[arrowlabel] {LoRA--DPO}
+    -- node[
+      arrowlabel,
+      font=\sffamily\tiny,
+      inner xsep=1.5pt
+    ] {LoRA--DPO}
     (local.west);
 \end{tikzpicture}
 \end{document}

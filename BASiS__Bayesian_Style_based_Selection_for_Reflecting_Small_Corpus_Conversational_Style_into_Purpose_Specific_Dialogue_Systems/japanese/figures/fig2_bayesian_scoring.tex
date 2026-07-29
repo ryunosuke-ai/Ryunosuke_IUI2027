@@ -88,7 +88,7 @@
 \begin{tikzpicture}[font=\sffamily, every node/.append style={outer sep=0pt}]
   % Five compact panels mirror the five operations described in the paper.
   \node[panel, minimum width=3.20cm] (prior) at (1.72,2.72) {};
-  \node[panel, minimum width=3.20cm] (predict) at (5.22,2.72) {};
+  \node[panel, minimum width=3.45cm] (predict) at (5.22,2.72) {};
   \node[panel, minimum width=3.20cm] (observe) at (8.72,2.72) {};
   \node[panel, minimum width=4.55cm] (update) at (12.90,2.72) {};
   \node[panel, minimum width=3.20cm] (score) at (17.08,2.72) {};
@@ -114,26 +114,26 @@
   % Step 1: prior state distribution b_{t-1}.
   \node[font=\scriptsize, text=muted] at (1.72,4.58)
     {state belief \(b_{t-1}(s)\)};
-  \draw[draw=line, line width=0.6pt] (1.62,1.10) -- (1.62,4.16);
+  \draw[draw=line, line width=0.6pt] (1.72,1.10) -- (1.72,4.16);
 
-  \node[anchor=east, align=right, font=\scriptsize] at (1.49,3.78)
+  \node[anchor=east, align=right, font=\scriptsize] at (1.57,3.78)
     {Emotion\\disclosure};
-  \fill[blue] (1.66,3.66) rectangle ++(0.66,0.24);
-  \node[anchor=west, font=\scriptsize] at (2.42,3.78) {0.30};
+  \fill[blue] (1.76,3.66) rectangle ++(0.66,0.24);
+  \node[anchor=west, font=\scriptsize] at (2.52,3.78) {0.30};
 
-  \node[anchor=east, align=right, font=\scriptsize] at (1.49,2.82)
+  \node[anchor=east, align=right, font=\scriptsize] at (1.57,2.82)
     {Emotion\\processing};
-  \fill[blue] (1.66,2.70) rectangle ++(0.99,0.24);
-  \node[anchor=west, font=\scriptsize] at (2.75,2.82) {0.45};
+  \fill[blue] (1.76,2.70) rectangle ++(0.99,0.24);
+  \node[anchor=west, font=\scriptsize] at (2.85,2.82) {0.45};
 
-  \node[anchor=east, align=right, font=\scriptsize] at (1.49,1.86)
+  \node[anchor=east, align=right, font=\scriptsize] at (1.57,1.86)
     {Considering\\solutions};
-  \fill[blue] (1.66,1.74) rectangle ++(0.55,0.24);
-  \node[anchor=west, font=\scriptsize] at (2.31,1.86) {0.25};
+  \fill[blue] (1.76,1.74) rectangle ++(0.55,0.24);
+  \node[anchor=west, font=\scriptsize] at (2.41,1.86) {0.25};
 
   % Step 2: transition-model prediction.
-  \node[chipblue] at (5.22,4.42)
-    {transition model \(P(s_t\mid s_{t-1})\)};
+  \node[chipblue, align=center] at (5.22,4.42)
+    {transition model\\[-1pt]\(P(s_t\mid s_{t-1})\)};
   \node[
     circle,
     draw=blue,
@@ -157,15 +157,17 @@
   ] (s3) at (6.09,3.55) {\(s_3\)};
   \draw[-{Latex[length=1.5mm]}, draw=blue, line width=0.65pt] (s1) -- (s2);
   \draw[-{Latex[length=1.5mm]}, draw=blue, line width=0.65pt] (s2) -- (s3);
-  \draw[-{Latex[length=1.5mm]}, draw=blue, line width=0.55pt, bend left=42]
-    (s3.north west) to (s1.north east);
+  \draw[-{Latex[length=1.5mm]}, draw=blue, line width=0.55pt]
+    (s3.north)
+    .. controls +(0,0.25) and +(0,0.25) ..
+    (s1.north);
 
-  \node[align=center, font=\scriptsize] at (5.22,2.63) {%
+  \node[align=center, font=\scriptsize] at (5.22,2.57) {%
     \(\displaystyle
       \begin{aligned}
         \hat b_t(s_t)
         &=\sum_{s_{t-1}\in S}P(s_t\mid s_{t-1})\\[-1pt]
-        &\hspace{7mm}{}\cdot b_{t-1}(s_{t-1})
+        &\hspace{8mm}{}\cdot b_{t-1}(s_{t-1})
       \end{aligned}
     \)
   };
@@ -184,9 +186,13 @@
     inner ysep=5pt,
     font=\scriptsize
   ] (response) at (8.72,4.10)
-    {\textit{``That sounds really difficult.''}};
-  \node[font=\scriptsize, text=muted] at (8.72,3.45)
-    {candidate response \(r_t\)};
+    {\textit{``That sounds\\really difficult.''}};
+  \node[
+    anchor=west,
+    align=left,
+    font=\scriptsize,
+    text=muted
+  ] at (8.97,3.35) {candidate\\response \(r_t\)};
   \node[
     circle,
     draw=orange,
@@ -201,9 +207,9 @@
   \draw[orangeflow] (llm.south) -- (obsout.north);
 
   % Step 4: the two variables enter separate terms in the Bayesian update.
-  \node[chiporange] (obsport) at (11.92,4.55)
+  \node[chiporange] (obsport) at (11.55,4.55)
     {observation \(o_t\)};
-  \node[chipblue] (predport) at (14.00,4.55)
+  \node[chipblue] (predport) at (14.35,4.55)
     {prediction \(\hat b_t\)};
 
   \node[font=\small] at (11.32,3.68) {\(b_t(s_t)=\)};
@@ -245,7 +251,7 @@
     -- (6.93,6.08)
     -- node[railnote, text=blue, pos=0.66]
       {predicted state distribution}
-    (14.00,6.08)
+    (14.35,6.08)
     -- (predport.north);
   \draw[orangeflow]
     (obsout.east)
@@ -253,7 +259,7 @@
     -- (10.48,5.78)
     -- node[railnote, text=orange, pos=0.50]
       {response-derived observation}
-    (11.92,5.78)
+    (11.55,5.78)
     -- (obsport.north);
 
   % Step 5: sum only the target-state posterior mass.
@@ -284,14 +290,18 @@
   \node[font=\scriptsize, text=muted] at (17.08,0.78)
     {style compatibility};
 
-  % Primary state flow: prior -> prediction, posterior -> score.
-  \draw[flow] (prior.east) -- (predict.west);
-  \draw[flow] (update.east) -- node[
-    fill=white,
-    text=muted,
-    font=\scriptsize,
-    inner xsep=2pt,
-    inner ysep=1pt
-  ] {posterior} (score.west);
+  % Preserve the source figure's primary left-to-right flow with compact
+  % connectors that remain entirely inside the gaps between adjacent panels.
+  \draw[
+    -{Latex[length=1.0mm,width=0.8mm]},
+    draw=ink,
+    line width=0.55pt
+  ] (prior.east) -- (predict.west);
+  \draw[
+    -{Latex[length=1.0mm,width=0.8mm]},
+    draw=ink,
+    line width=0.55pt
+  ] (update.east) -- (score.west);
+
 \end{tikzpicture}
 \end{document}
