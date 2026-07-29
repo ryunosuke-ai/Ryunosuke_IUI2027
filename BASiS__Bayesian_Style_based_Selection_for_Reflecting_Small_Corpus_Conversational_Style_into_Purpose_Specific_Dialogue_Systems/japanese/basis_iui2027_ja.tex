@@ -217,6 +217,8 @@ Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて�
   \label{eq:update}
 \end{equation}
 
+ここで，$b_t(s_t)$は，それまでの観測を予測分布$\hat{b}_t(s_t)$に反映した上で，観測履歴$o_{1:t}$を条件とする事後確率$P(s_t\mid o_{1:t})$を表す．
+
 最後に，対象とする会話スタイルにおいて望ましいと定義された状態群を
 $S_{\mathrm{target}}\subseteq S$とし，候補応答$r_t$のScoreを，更新後の状態分布における
 $S_{\mathrm{target}}$の確率の合計として定義する．

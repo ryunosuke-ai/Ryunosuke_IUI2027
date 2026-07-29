@@ -85,11 +85,10 @@
     font=\sffamily\bfseries\scriptsize
   },
   arrowlabel/.style={
-    fill=white,
     text=muted,
-    font=\sffamily\scriptsize,
-    inner xsep=2.5pt,
-    inner ysep=1pt,
+    font=\sffamily\footnotesize,
+    inner sep=0pt,
+    anchor=south,
     align=center
   }
 }
@@ -102,13 +101,13 @@
     draw=blue!28,
     fill=bluefill!45,
     line width=0.65pt
-  ] (-0.05,1.25) rectangle (10.65,4.75);
+  ] (-0.05,1.25) rectangle (14.00,4.75);
   \filldraw[
     rounded corners=6pt,
     draw=teal!28,
     fill=slatefill,
     line width=0.65pt
-  ] (-0.05,-1.95) rectangle (18.25,1.45);
+  ] (-0.05,-1.95) rectangle (19.30,1.45);
 
   \node[
     anchor=west,
@@ -127,7 +126,7 @@
     inner xsep=4pt,
     inner ysep=1.5pt,
     font=\sffamily\bfseries\scriptsize
-  ] at (3.35,1.18) {B \quad DATA SELECTION \& ADAPTATION};
+  ] at (0.22,1.18) {B \quad DATA SELECTION \& ADAPTATION};
 
   \node[corpus, text width=2.35cm] (small) at (1.48,2.62) {%
     {\color{blue}\large\faDatabase}\\[-1pt]
@@ -135,12 +134,12 @@
     {\bfseries\footnotesize Small,\\high-quality\\dialogue corpus}
   };
 
-  \node[modelcard, text width=2.82cm] (analysis) at (4.52,2.62) {%
+  \node[modelcard, text width=2.82cm] (analysis) at (6.30,2.62) {%
     {\bfseries\small Dialogue Feature\\Analysis}\\[2pt]
     {\scriptsize states \(\bullet\) strategies\\transitions}
   };
 
-  \node[modelcard, text width=3.05cm] (modeling) at (8.78,2.62) {%
+  \node[modelcard, text width=3.05cm] (modeling) at (12.00,2.62) {%
     {\bfseries\small Bayesian Dialogue\\Modeling}\\[2pt]
     {\scriptsize transition probabilities\\observation likelihoods}
   };
@@ -151,12 +150,12 @@
     {\bfseries\footnotesize Large,\\general-purpose\\dialogue corpus}
   };
 
-  \node[scorecard, text width=3.45cm] (scoring) at (6.05,-0.62) {%
+  \node[scorecard, text width=3.45cm] (scoring) at (6.95,-0.62) {%
     {\bfseries\small Style Compatibility\\Scoring}\\[2pt]
     {\scriptsize \(\mathrm{Score}(r_t)\in[0,1]\)}
   };
 
-  \node[adaptcard, text width=4.40cm] (adaptation) at (11.20,-0.62) {%
+  \node[adaptcard, text width=4.40cm] (adaptation) at (12.35,-0.62) {%
     {\bfseries\small Preference Data Selection\\\& DPO Adaptation}\\[2pt]
     {\scriptsize \(\textit{chosen}\succ\textit{rejected}\)}
   };
@@ -172,7 +171,7 @@
     text=white,
     inner xsep=6pt,
     inner ysep=5pt
-  ] (local) at (16.32,-0.62) {%
+  ] (local) at (17.65,-0.62) {%
     {\large\faMicrochip}\\[-1pt]
     \textbf{Style-adapted\\local LLM}
   };
@@ -184,45 +183,36 @@
   \node[badge, fill=orange] at ($(adaptation.north west)+(-0.05,0.00)$) {4};
 
   % Style-reference path.
-  \draw[flow] (small.east) -- (analysis.west);
-  \draw[flow] (analysis.east) -- node[
-    arrowlabel,
-    font=\sffamily\tiny,
-    inner xsep=1.5pt
-  ] {dialogue\\features} (modeling.west);
+  \draw[flow]
+    (small.east)
+    -- node[arrowlabel, midway, yshift=2.5pt] {dialogue data}
+    (analysis.west);
+  \draw[flow]
+    (analysis.east)
+    -- node[arrowlabel, midway, yshift=2.5pt] {dialogue features}
+    (modeling.west);
 
   % The learned Bayesian model and general-corpus candidates meet at scoring.
   \draw[flow, draw=blue]
     (modeling.south)
-    -- (8.78,0.98)
-    -- (6.05,0.98)
-    -- node[arrowlabel, pos=0.67] {Bayesian dialogue model}
+    -- (12.00,0.98)
+    -- node[arrowlabel, midway, yshift=2.5pt] {Bayesian dialogue model}
+    (6.95,0.98)
+    --
     (scoring.north);
   \draw[dataflow]
     (large.east)
-    -- node[
-      arrowlabel,
-      font=\sffamily\tiny,
-      inner xsep=1.5pt
-    ] {responses}
+    -- node[arrowlabel, midway, yshift=2.5pt] {dialogue data}
     (scoring.west);
 
   % Scored candidates are converted to preferences and used for adaptation.
   \draw[flow, draw=teal]
     (scoring.east)
-    -- node[
-      arrowlabel,
-      font=\sffamily\tiny,
-      inner xsep=1.5pt
-    ] {scores}
+    -- node[arrowlabel, midway, yshift=2.5pt] {scores}
     (adaptation.west);
   \draw[flow, draw=orange]
     (adaptation.east)
-    -- node[
-      arrowlabel,
-      font=\sffamily\tiny,
-      inner xsep=1.5pt
-    ] {LoRA--DPO}
+    -- node[arrowlabel, midway, yshift=2.5pt] {LoRA--DPO}
     (local.west);
 \end{tikzpicture}
 \end{document}
