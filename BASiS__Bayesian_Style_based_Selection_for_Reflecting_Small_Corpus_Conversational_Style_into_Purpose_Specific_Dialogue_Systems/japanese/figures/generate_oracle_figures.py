@@ -1,16 +1,15 @@
 """Generate publication-ready Oracle evaluation figures.
 
-The means and Holm-corrected significance levels match the manuscript.
-Because the project contains no raw bootstrap samples or numeric CI table,
-the asymmetric 95% CI extents below were transcribed from the original
-plots so that their error bars are preserved in the restyled figures.
-Both vector PDF files (used by LaTeX) and high-resolution PNG previews
-are produced.
+The means, asymmetric bootstrap 95% confidence intervals, and
+Holm-corrected significance levels are transcribed from the source result
+plots. Both vector PDF files (used by LaTeX) and high-resolution PNG
+previews are produced.
 """
 
 from pathlib import Path
 
 import matplotlib as mpl
+mpl.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -44,31 +43,35 @@ EXPERIMENTS = (
             "ESConv Tone\nSimilarity",
             "Supporter Role\nConsistency",
             "Non-directive\nSupport Style",
+            "Strategy/Stage\nAlignment",
             "Premature Advice\nAvoidance",
+            "Naturalness",
         ),
         "means": (
-            (8.26, 8.21, 8.34, 7.84, 8.57),
-            (8.65, 8.52, 8.60, 8.34, 9.44),
-            (8.21, 8.13, 8.41, 7.99, 8.92),
+            (8.26, 8.21, 8.34, 7.84, 7.84, 8.57, 8.35),
+            (8.65, 8.52, 8.60, 8.34, 8.32, 9.44, 8.53),
+            (8.21, 8.13, 8.41, 7.99, 7.98, 8.92, 8.17),
         ),
         "ci_lower": (
-            (0.161, 0.132, 0.121, 0.243, 0.349),
-            (0.110, 0.120, 0.110, 0.211, 0.196),
-            (0.182, 0.162, 0.141, 0.242, 0.298),
+            (0.16, 0.11, 0.10, 0.24, 0.23, 0.35, 0.12),
+            (0.10, 0.10, 0.10, 0.20, 0.18, 0.20, 0.13),
+            (0.18, 0.14, 0.12, 0.23, 0.23, 0.29, 0.15),
         ),
         "ci_upper": (
-            (0.147, 0.087, 0.068, 0.265, 0.348),
-            (0.069, 0.069, 0.069, 0.167, 0.173),
-            (0.157, 0.117, 0.088, 0.206, 0.270),
+            (0.14, 0.11, 0.10, 0.23, 0.22, 0.33, 0.12),
+            (0.09, 0.10, 0.09, 0.19, 0.16, 0.18, 0.12),
+            (0.16, 0.14, 0.12, 0.22, 0.21, 0.28, 0.14),
         ),
         "significance": (
             ("***", "***"),
             ("***", "***"),
             ("**", "*"),
             ("**", "*"),
-            ("***", "**"),
+            ("**", None),
+            ("***", "*"),
+            (None, "**"),
         ),
-        "figsize": (7.15, 3.15),
+        "figsize": (7.15, 3.25),
     },
     {
         "filename": "mathdial_wildchat_oracle_scores_publication",
@@ -102,36 +105,40 @@ EXPERIMENTS = (
     {
         "filename": "meditod_wildchat_oracle_scores_publication",
         "labels": (
-            "Coverage without\nRedundancy",
-            "Premature Assessment\nAvoidance",
+            "Response\nRelevance",
+            "Overall\nQuality",
+            "Premature\nAssessment\nAvoidance",
             "Appropriate\nUncertainty",
-            "Unsafe Medical\nAdvice Avoidance",
-            "Unsupported\nDiagnosis Avoidance",
+            "Understandability",
+            "Unsafe Medical\nAdvice\nAvoidance",
+            "Unsupported\nDiagnosis\nAvoidance",
         ),
         "means": (
-            (4.30, 8.43, 7.84, 9.52, 9.62),
-            (4.74, 8.90, 8.26, 9.71, 9.82),
-            (4.64, 8.63, 7.92, 9.36, 9.61),
+            (4.46, 5.16, 8.43, 7.84, 8.56, 9.52, 9.62),
+            (5.09, 5.69, 8.90, 8.26, 8.77, 9.71, 9.82),
+            (4.91, 5.46, 8.63, 7.92, 8.55, 9.36, 9.61),
         ),
         "ci_lower": (
-            (0.468, 0.461, 0.286, 0.236, 0.205),
-            (0.485, 0.359, 0.234, 0.175, 0.125),
-            (0.446, 0.420, 0.316, 0.267, 0.206),
+            (0.48, 0.38, 0.48, 0.28, 0.15, 0.26, 0.22),
+            (0.52, 0.40, 0.38, 0.24, 0.12, 0.18, 0.12),
+            (0.48, 0.36, 0.42, 0.32, 0.17, 0.31, 0.25),
         ),
         "ci_upper": (
-            (0.416, 0.473, 0.250, 0.221, 0.192),
-            (0.429, 0.356, 0.213, 0.163, 0.094),
-            (0.408, 0.404, 0.280, 0.260, 0.212),
+            (0.53, 0.40, 0.43, 0.27, 0.14, 0.20, 0.18),
+            (0.52, 0.39, 0.35, 0.21, 0.12, 0.15, 0.09),
+            (0.47, 0.39, 0.41, 0.29, 0.15, 0.25, 0.18),
         ),
         # Each tuple is (BASiS vs Base, BASiS vs Random).
         "significance": (
-            (None, None),
+            ("**", None),
+            ("**", None),
             (None, None),
             ("**", "**"),
-            (None, "**"),
+            ("*", "*"),
+            ("***", "*"),
             ("*", "*"),
         ),
-        "figsize": (7.15, 3.15),
+        "figsize": (7.15, 3.25),
     },
 )
 
@@ -170,6 +177,9 @@ def make_figure(spec):
     x = np.arange(n_metrics, dtype=float)
     width = 0.22
     offsets = (-width, 0.0, width)
+    # Nudge numeric labels slightly away from the center of each group. This
+    # preserves separation when three values near 10 are shown in one column.
+    value_label_offsets = (-0.025, 0.0, 0.025)
 
     fig, ax = plt.subplots(figsize=spec["figsize"])
     ax.set_axisbelow(True)
@@ -204,20 +214,29 @@ def make_figure(spec):
             value = values[metric_index]
             upper = ci_upper[condition_index, metric_index]
             ax.text(
-                bar.get_x() + bar.get_width() / 2,
+                bar.get_x()
+                + bar.get_width() / 2
+                + value_label_offsets[condition_index],
                 value + upper + 0.075,
                 f"{value:.2f}",
                 ha="center",
                 va="bottom",
                 fontsize=6.8,
                 color="#222222",
+                zorder=5,
+                bbox={
+                    "facecolor": "white",
+                    "edgecolor": "none",
+                    "pad": 0.1,
+                },
             )
 
     for metric_index, (base_sig, random_sig) in enumerate(
         spec["significance"]
     ):
         upper_extent = means[:, metric_index] + ci_upper[:, metric_index]
-        label_clearance = 0.34
+        # Keep the brackets clear of both the error bars and their numeric labels.
+        label_clearance = 0.42
         first_y = float(np.max(upper_extent) + label_clearance)
         if base_sig is not None:
             add_bracket(
@@ -228,7 +247,7 @@ def make_figure(spec):
                 base_sig,
             )
         if random_sig is not None:
-            second_y = first_y + (0.34 if base_sig is not None else 0.0)
+            second_y = first_y + (0.38 if base_sig is not None else 0.0)
             add_bracket(
                 ax,
                 x[metric_index] + offsets[1],
