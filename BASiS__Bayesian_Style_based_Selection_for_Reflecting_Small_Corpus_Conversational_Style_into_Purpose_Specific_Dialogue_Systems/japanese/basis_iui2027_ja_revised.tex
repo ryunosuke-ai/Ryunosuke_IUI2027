@@ -12,6 +12,7 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{comment}
+\usepackage{pifont}
 
 %% Japanese support compatible with pdfLaTeX/Overleaf free-plan builds.
 %% CJKutf8 uses TeX Live's bundled Japanese fonts, so no system-font search is needed.
@@ -148,14 +149,14 @@ BASiSにより，大規模汎用コーパスに含まれる各対話データを
 
 BASiSの全体構成を図\ref{fig:basis_architecture}に示す．BASiSは，\textbf{Dialogue Feature Analysis Module}，\textbf{Bayesian Dialogue Modeling Module}，\textbf{Style Compatibility Scoring Module}，\textbf{Preference Data Selection and DPO Adaptation Module}の4つのモジュールから構成される．
 
-はじめに，Dialogue Feature Analysis Moduleが，小規模高品質コーパスに含まれる対話を分析し，会話状態，応答戦略，状態遷移を会話特徴として抽出する．次に，Bayesian Dialogue Modeling Moduleが，抽出された会話特徴の出現傾向を集計し，状態遷移確率と観測尤度からなるベイズ的対話モデルを構築する．Style Compatibility Scoring Moduleは，構築したモデルを用いて，大規模汎用コーパスに含まれる各候補応答を目的の会話スタイルへの適合度に基づいてスコアリングする．最後に，Preference Data Selection and DPO Adaptation Moduleが，得られたスコアに基づいて学習データを選別し，chosen応答とrejected応答からなる選好ペアを構築した後，LoRAを適用したDPOによってローカルLLMを学習する．
+図\ref{fig:basis_architecture}の上段Aは，小規模高品質コーパスから選別基準となるスタイルモデルを構築する\emph{Style Model Induction}の流れを示す．はじめに，Dialogue Feature Analysis Module（図中の\ding{172}）が，小規模コーパスの対話データから会話状態，応答戦略，状態遷移を会話特徴として抽出する．次に，Bayesian Dialogue Modeling Module（\ding{173}）が，抽出された特徴の出現傾向を集計し，状態遷移確率と観測尤度からなるベイズ的対話モデルを構築する．
 
-この構成では，小規模高品質コーパスは会話スタイルを抽出するための参照元として用いられ，大規模汎用コーパスは実際の学習データを選別するための候補プールとして用いられる．参照する小規模コーパスと選別対象となる大規模コーパスを変更することで，異なる目的特化対話へ同一のパイプラインを適用できる．
+下段Bは，このモデルを用いて学習データを選び，LLMを適応させる\emph{Data Selection \& Adaptation}の流れを示す．Style Compatibility Scoring Module（\ding{174}）には，上段で構築したベイズ的対話モデルと，大規模汎用コーパスからなる候補プールの対話データが入力される．本モジュールは各候補応答に0から1の適合度スコアを付与する．Preference Data Selection and DPO Adaptation Module（\ding{175}）は，このスコアからchosen応答とrejected応答の選好ペアを構築し，LoRAを適用したDPOによってローカルLLMを学習する．したがって，小規模コーパスは会話スタイルを抽出する参照元，大規模コーパスは実際の学習データを選ぶ候補プールとして役割が分かれている．両コーパスを変更することで，異なる目的特化対話にも同一のパイプラインを適用できる．
 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/fig1_basis_architecture.pdf}
-  \caption{BASiSの全体構成．上段では，小規模高品質コーパスから会話特徴を抽出し，ベイズ的対話モデルを構築する．下段では，構築したモデルによって大規模汎用コーパスの候補応答をスコアリングし，得られた選好データを用いたLoRA--DPOによりローカルLLMを適応させる．丸数字は本文で説明する4つのモジュールに対応する．}
+  \caption{BASiSの全体構成．上段では，小規模高品質コーパスから会話特徴を抽出し，ベイズ的対話モデルを構築する．下段では，構築したモデルによって大規模汎用コーパスの候補応答をスコアリングし，得られた選好データを用いたLoRA--DPOによりローカルLLMを適応させる．\ding{172}--\ding{175}は本文で説明する4つのモジュールに対応する．}
   \Description{二段構成の処理図．上段では，小規模高品質対話コーパスが会話特徴分析モジュールとベイズ対話モデル構築モジュールへ順に入力される．構築されたモデルは下段のスタイル適合度スコアリングモジュールへ渡され，大規模汎用対話コーパスからの候補応答と統合される．スコアリングされた候補は選好データ選別・DPO適応学習モジュールへ送られ，最終的に会話スタイルを反映したローカルLLMが得られる．}
   \label{fig:basis_architecture}
 \end{figure*}
@@ -164,9 +165,9 @@ BASiSの全体構成を図\ref{fig:basis_architecture}に示す．BASiSは，\te
 \label{mod:feature_analysis}
 \noindent\textbf{Dialogue Feature Analysis Module（会話特徴分析モジュール）}\par
 
-Dialogue Feature Analysis Moduleは，小規模高品質コーパスに含まれる各対話をLLMによって分析し，目的コーパスに特徴的な会話の進め方を構造化する．本モジュールでは，各ターンを，\emph{会話状態}，\emph{応答戦略}，および\emph{状態遷移}の三つの要素として表現する．
+Dialogue Feature Analysis Moduleは，図\ref{fig:basis_architecture}の\ding{172}に対応し，小規模高品質コーパスに含まれる各対話をLLMによって分析する．本モジュールは，目的コーパスに特徴的な会話の進め方を構造化するため，各ターンを\emph{会話状態}，\emph{応答戦略}，および\emph{状態遷移}の三つの要素で表現する．
 
-会話状態$s_t$は，ターン$t$における対話相手の状況や対話の段階を表す．例えば，感情支援では感情を開示している段階や解決策を検討している段階，数学チュータリングでは学習者が推論を試みている段階や誤りを整理している段階，医療問診では症状を提示している段階や追加情報を確認している段階などが該当する．応答戦略を表す観測ラベル$o_t$は，その状態に対して応答者が取った方針を表し，共感，質問，情報整理，ヒント，情報提供，助言などが含まれる．状態遷移は，応答戦略$o_t$が選択された結果，会話状態が$s_{t-1}$から$s_t$へどのように変化したかを表す．
+会話状態$s_t$は，ターン$t$における対話相手の状況や対話の段階を表す．例えば，感情支援では感情を開示している段階や解決策を検討している段階，数学チュータリングでは学習者が推論を試みている段階や誤りを整理している段階，医療問診では症状を提示している段階や追加情報を確認している段階などが該当する．応答戦略を表す観測ラベル$o_t$は，その状態に対して応答者が取った方針を表し，共感，質問，情報整理，ヒント，情報提供，助言などが含まれる．状態遷移は，コーパス中で応答戦略$o_t$が用いられたターンを介して，会話状態が$s_{t-1}$から$s_t$へどのように変化したかを表す．
 
 この処理を小規模コーパス全体へ適用することで，
 $(s_{t-1}, o_t, s_t)$からなる組の集合を得る．これにより，表層的な語彙や個別の応答文だけではなく，どのような状態に対してどのような応答戦略が用いられ，その後にどのような状態へ進みやすいかという会話の構造を抽出する．この構造は，コーパスに暗黙的に含まれる会話スタイルを，後続のモジュールで利用可能な形式に変換したものである．
@@ -189,9 +190,9 @@ $P(o_t\mid s_t)$から構成される．状態遷移確率は，目的コーパ�
 \label{mod:scoring}
 \noindent\textbf{Style Compatibility Scoring Module（スタイル適合度スコアリングモジュール）}\par
 
-Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて，大規模汎用コーパスに含まれる候補応答$r_t$を，目的コーパスの会話スタイルへの適合度に基づいて評価する．本モジュールの処理を図\ref{fig:bayesian_scoring}に示す．
+Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて，大規模汎用コーパスに含まれる候補応答$r_t$を，目的コーパスの会話スタイルへの適合度に基づいて評価する．本モジュールの処理を図\ref{fig:bayesian_scoring}に示す．図中の\ding{172}--\ding{176}は，事前状態の設定，状態予測，応答ラベルの付与，ベイズ更新，適合度スコアの算出という以下の処理に対応する．
 
-はじめに，候補応答が提示される前の対話状態を，一つの状態に固定するのではなく，状態集合$S$上の確率分布として保持する．ターン$t-1$までの状態分布を$b_{t-1}(s)$としたとき，状態遷移確率を用いて，次のターンにおける状態の予測分布を次式によって計算する．
+はじめに，候補応答が提示される前の対話状態を，一つの状態に固定するのではなく，状態集合$S$上の確率分布として保持する（図\ref{fig:bayesian_scoring}の\ding{172}）．図の例では，ターン$t-1$までの状態分布$b_{t-1}(s)$として，Emotion disclosureに0.30，Emotion processingに0.45，Considering solutionsに0.25を割り当てている．次に，状態遷移確率を用いて，ターン$t$における状態の予測分布を次式によって計算する（図中の\ding{173}）．
 
 \begin{equation}
   \hat{b}_t(s_t)
@@ -202,7 +203,9 @@ Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて�
   \label{eq:predict}
 \end{equation}
 
-次に，Dialogue Feature Analysis Moduleと同じラベル体系を用いて，LLMが候補応答$r_t$を観測ラベル$o_t$に分類する．この観測ラベルと観測尤度を用いて，予測分布$\hat{b}_t(s_t)$をベイズ則によって更新する．
+図\ref{fig:bayesian_scoring}の\ding{173}に示す状態遷移図は，Disclosure，Processing，Solutionsという状態間の遷移と，各遷移で観測される代表的な応答戦略の対応を模式的に示す．式\eqref{eq:predict}では，これらの遷移の出現傾向を表す$P(s_t\mid s_{t-1})$によって，直前の分布$b_{t-1}$を予測分布$\hat{b}_t$へ写像する．
+
+続いて，Dialogue Feature Analysis Moduleと同じラベル体系を用いて，LLMが候補応答$r_t$を観測ラベル$o_t$に分類する（図中の\ding{174}）．図の例では，候補応答``That sounds really difficult.''が\emph{Empathy / validation}に分類される．この観測ラベルと観測尤度を用いて，予測分布$\hat{b}_t(s_t)$をベイズ則によって更新する．
 
 \begin{equation}
   b_t(s_t)
@@ -217,7 +220,7 @@ Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて�
   \label{eq:update}
 \end{equation}
 
-ここで，$b_t(s_t)$は，それまでの観測を予測分布$\hat{b}_t(s_t)$に反映した上で，観測履歴$o_{1:t}$を条件とする事後確率$P(s_t\mid o_{1:t})$を表す．
+ここで，$b_t(s_t)$は，それまでの観測を予測分布$\hat{b}_t(s_t)$に反映した上で，観測履歴$o_{1:t}$を条件とする事後確率$P(s_t\mid o_{1:t})$を表す．図\ref{fig:bayesian_scoring}の\ding{175}では，橙色の経路が観測ラベル$o_t$によって尤度$P(o_t\mid s_t)$を定める流れ，青色の経路が予測分布$\hat{b}_t(s_t)$を更新式へ入力する流れを示す．分母は全状態について正規化を行い，更新後の確率の総和を1にする．この例では，更新後の分布はDisclosureが0.12，Processingが0.66，Solutionsが0.22となる．
 
 最後に，対象とする会話スタイルにおいて望ましいと定義された状態群を
 $S_{\mathrm{target}}\subseteq S$とし，候補応答$r_t$の適合度スコアを，更新後の状態分布における
@@ -231,7 +234,7 @@ $S_{\mathrm{target}}$の確率の合計として定義する．
   \label{eq:score}
 \end{equation}
 
-適合度スコアは0から1までの値を取り，値が大きいほど，候補応答によって目的コーパスに特徴的な状態へ移行する可能性が高いことを表す．例えば，感情支援では感情の整理や適切な解決策の検討，数学チュータリングでは学習者自身による推論の進展，医療問診では必要な症状情報の段階的な整理などを，対象領域に応じて$S_{\mathrm{target}}$として設定できる．
+適合度スコアは0から1までの値を取り，値が大きいほど，候補応答を観測した後の状態分布が，目的コーパスにおいて望ましい状態群と強く整合することを表す．図\ref{fig:bayesian_scoring}の\ding{176}では，$S_{\mathrm{target}}=\{\mathrm{Processing},\allowbreak\mathrm{Solutions}\}$とし，$0.66+0.22=0.88$を候補応答の適合度スコアとしている．一般には，感情支援における感情の整理や適切な解決策の検討，数学チュータリングにおける学習者自身の推論の進展，医療問診における必要な症状情報の段階的な整理などを，対象領域に応じて$S_{\mathrm{target}}$として設定できる．
 
 本モジュールは，次の応答戦略を一つの正解として固定せず，対話状態を確率分布として保持したまま候補応答を評価する．候補応答ごとに一つの観測ラベルを付与する場合でも，異なる応答戦略が望ましい状態群において高い観測尤度を持つならば，それぞれに対応する候補応答が高い適合度スコアを得られる．したがって，同一の文脈に複数の妥当な応答戦略が存在する場合も，単一の戦略に限定せず評価できる．
 
@@ -354,16 +357,7 @@ BASiS条件で確認された変化が，DPO学習を行ったこと自体や粗
 また，すべての実験設定で，同一のローカルLLMであるQwen3.5-27Bを使用した．Base条件には学習前のモデルを使用し，BASiS条件とRandom条件にはLoRAを適用したDPO学習を行った．各実験設定において，BASiS条件とRandom条件の学習データ数および選好データの形式を揃え，両条件の主な違いが，ベイズ的対話モデルによる会話スタイル適合度に基づく選別と，粗い話題カテゴリ内での無作為選別となるようにした．
 DPOの学習率は$5\times10^{-6}$，$\beta=0.1$とした．LoRAはランク$r=8$，$\alpha=16$，dropoutを$0.05$とし，学習エポック数を1とした．これらの学習設定は三種類のコーパスペアで共通とし，実験設定間で学習条件が変化しないようにした．
 
-\textbf{ESConvにおけるOracle評価軸：}
-ESConvとDailyDialogを用いた実験では，感情支援対話のスタイルと会話進行を捉えるため，表\ref{tab:oracle_axes}に示す七つの評価軸を用いた．これらの評価軸は，ESConvに特徴的な共感的支援スタイルの強さと語調に加え，支援者としての役割，非指示的な応答方針，応答戦略と会話段階の適合，助言を行うタイミング，および日本語対話としての自然さを評価する\cite{mir2019styletransfer,liu2021esconv,zhang2018persona,deng2023mixedinitiative}．
-
-\textbf{MathDialにおけるOracle評価軸：}
-MathDialとWildChat-1Mを用いた実験では，数学的な答えの正しさだけでなく，学習者自身の推論を促し，学習者の理解状態に応じて適切な教育的支援を行えているかを評価するため，表\ref{tab:oracle_axes}に示す七つの評価軸を用いた\cite{macina2023mathdial}．これらの評価軸は，学習者に思考の余地を残すこと，学習者の推論を正確に診断すること，誤りの箇所を特定すること，および質問，ヒント，説明，解答提示を会話段階に応じて使い分けることを評価する．
-
-\textbf{MediTODにおけるOracle評価軸：}
-MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応答品質，および医学的安全性を捉えるため，表\ref{tab:oracle_axes}に示す七つの評価軸を用いた\cite{saley2024meditod}．これらの評価軸では，直前までの症状や背景に即した応答，医療対話としての総合的な品質，情報不足時に診断や治療方針を急がないこと，不確実性の扱い，患者にとっての理解しやすさ，および根拠の乏しい診断や危険な医学的助言の回避を評価する．
-なお，表中のUnsafe Medical Advice AvoidanceおよびUnsupported Diagnosis Avoidanceについては，危険な助言や根拠のない診断を行う度合いではなく，それらを適切に回避できている度合いとして採点する．したがって，他の評価軸と同様に，得点が高いほど望ましい応答であることを表す．
-
+表\ref{tab:oracle_axes}に，各実験設定で用いる七つのOracle評価軸をまとめる．
 \begin{table*}[t]
   \centering
   \caption{各実験におけるOracle評価軸（1--10点；すべて高いほど望ましい）}
@@ -432,6 +426,15 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
   \end{tabularx}
 \end{table*}
 
+\textbf{ESConvにおけるOracle評価軸：}
+ESConvとDailyDialogを用いた実験では，評価軸によって感情支援対話のスタイルと会話進行を捉える．具体的には，ESConvに特徴的な共感的支援スタイルの強さと語調に加え，支援者としての役割，非指示的な応答方針，応答戦略と会話段階の適合，助言を行うタイミング，および日本語対話としての自然さを評価する\cite{mir2019styletransfer,liu2021esconv,zhang2018persona,deng2023mixedinitiative}．
+
+\textbf{MathDialにおけるOracle評価軸：}
+MathDialとWildChat-1Mを用いた実験では，数学的な答えの正しさだけでなく，学習者自身の推論を促し，現在の理解状態に応じて適切な教育的支援を行えているかを評価する\cite{macina2023mathdial}．具体的には，学習者に思考の余地を残すこと，推論を正確に診断すること，誤りの箇所を特定すること，および質問，ヒント，説明，解答提示を会話段階に応じて使い分けることを扱う．
+
+\textbf{MediTODにおけるOracle評価軸：}
+MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応答品質，および医学的安全性を評価する\cite{saley2024meditod}．具体的には，直前までの症状や背景に即した応答，医療対話としての総合的な品質，情報不足時に診断や治療方針を急がないこと，不確実性の扱い，患者にとっての理解しやすさ，および根拠の乏しい診断や危険な医学的助言の回避を扱う．
+なお，表中のUnsafe Medical Advice AvoidanceおよびUnsupported Diagnosis Avoidanceについては，危険な助言や根拠のない診断を行う度合いではなく，それらを適切に回避できている度合いとして採点する．したがって，他の評価軸と同様に，得点が高いほど望ましい応答であることを表す．
 
 \begin{comment}
 % 人手評価の実施時期は未定である．将来実施する場合に利用する質問項目と
@@ -485,6 +488,15 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
 \end{table}
 \end{comment}
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]
+  {figures/esconv_dailydialog_oracle_scores_publication.pdf}
+  \caption{ESConvとDailyDialogを用いた実験におけるOracle評価結果．棒は各条件の平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧はBASiSとBase，またはBASiSとRandomのHolm補正後の対応比較を表す（$*p<.05$，$**p<.01$，$***p<.001$）．}
+  \Description{感情支援対話の七つの評価軸について，Base，BASiS，Randomの平均Oracleスコアを比較した棒グラフ．BASiSはすべての評価軸で最も高い平均値を示している．}
+  \label{fig:esconv_oracle}
+\end{figure}
+
 \subsection{実験結果}
 \label{sec:results}
 
@@ -496,20 +508,21 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
 \begingroup
 \setlength{\emergencystretch}{4em}
 Style Strengthでは，Baseが8.26，BASiSが8.65，Randomが8.21であり，BASiSはBaseおよびRandomの双方に対して有意に高かった（いずれも$p<.001$）．ESConv Tone Similarityでも，Baseが8.21，BASiSが8.52，Randomが8.13となり，BASiSは両条件を有意に上回った（いずれも$p<.001$）．Oracle評価では，感情支援スタイルの全体的な強さだけでなく，共感的・受容的・非断定的な語調にも改善が認められた．
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]
+  {figures/mathdial_wildchat_oracle_scores_publication.pdf}
+  \caption{MathDialとWildChat-1Mを用いた実験におけるOracle評価結果．棒は各条件の平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧はBASiSとBase，またはBASiSとRandomのHolm補正後の対応比較を表す（$***p<.001$）．}
+  \Description{数学チュータリング対話の七つの評価軸について，Base，BASiS，Randomの平均Oracleスコアを比較した棒グラフ．BASiSはすべての評価軸で最も高く，すべての比較で有意差が示されている．}
+  \label{fig:mathdial_oracle}
+\end{figure}
+
 Supporter Role Consistencyでは，Baseが8.34，BASiSが8.60，Randomが8.41であり，BASiSはBaseに対して$p<.01$，Randomに対して$p<.05$で有意に高かった．Non-directive Support Styleでは，Baseが7.84，BASiSが8.34，Randomが7.99となり，BASiSはBaseに対して$p<.01$，Randomに対して$p<.05$で有意に高かった．この結果は，単一応答の語調に加えて，複数ターンにわたり支援者の立場を保ち，相手に結論を押しつけずに会話を進める傾向も強まったことを示唆する．
 Strategy/Stage Alignmentでは，Baseが7.84，BASiSが8.32，Randomが7.98であり，BASiSはBaseを有意に上回った（$p<.01$）が，Randomとの差は有意ではなかった．Premature Advice Avoidanceでは，Baseが8.57，BASiSが9.44，Randomが8.92であり，BASiSはBaseに対して$p<.001$，Randomに対して$p<.05$で有意に高かった．Baseとの差は0.87ポイントであり，七つの評価軸の中で最も大きかった．これらの結果から，応答戦略を会話段階に合わせ，感情や状況を十分に理解してから助言へ移る傾向が強まったと考えられる．
 Naturalnessでは，Baseが8.35，BASiSが8.53，Randomが8.17であり，BASiSはRandomを有意に上回った（$p<.01$）が，Baseとの差は有意ではなかった．したがって，BASiSによるスタイル適応は，日本語対話としての自然さを損なわずに実現されたと考えられる．
 \par
 \endgroup
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]
-  {figures/esconv_dailydialog_oracle_scores_publication.pdf}
-  \caption{ESConvとDailyDialogを用いた実験におけるOracle評価結果．棒は各条件の平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧はBASiSとBase，またはBASiSとRandomのHolm補正後の対応比較を表す（$*p<.05$，$**p<.01$，$***p<.001$）．}
-  \Description{感情支援対話の七つの評価軸について，Base，BASiS，Randomの平均Oracleスコアを比較した棒グラフ．BASiSはすべての評価軸で最も高い平均値を示している．}
-  \label{fig:esconv_oracle}
-\end{figure}
 
 
 \noindent\textbf{実験条件2：MathDial $\times$ WildChat-1M}\par
@@ -522,16 +535,6 @@ Guidance Qualityでは，Baseが6.88，BASiSが8.02，Randomが6.57であり，F
 Answer Revealing Calibrationでは，Baseが7.88，BASiSが8.86，Randomが7.50であり，Teacher Move--Stage Alignmentでは，Baseが7.44，BASiSが8.62，Randomが7.06であった．これらの結果から，答えを示す量とタイミング，および質問，焦点化，説明といった教師の応答戦略を，学習者の状態や会話段階に合わせる傾向が強まったと考えられる．
 \par
 \endgroup
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]
-  {figures/mathdial_wildchat_oracle_scores_publication.pdf}
-  \caption{MathDialとWildChat-1Mを用いた実験におけるOracle評価結果．棒は各条件の平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧はBASiSとBase，またはBASiSとRandomのHolm補正後の対応比較を表す（$***p<.001$）．}
-  \Description{数学チュータリング対話の七つの評価軸について，Base，BASiS，Randomの平均Oracleスコアを比較した棒グラフ．BASiSはすべての評価軸で最も高く，すべての比較で有意差が示されている．}
-  \label{fig:mathdial_oracle}
-\end{figure}
-
 
 \noindent\textbf{実験条件3：MediTOD $\times$ WildChat-1M}\par
 図\ref{fig:meditod_oracle}に，医療問診対話に関する七つの評価軸の結果を示す．BASiSは七つすべての評価軸において最も高い平均スコアを示したが，統計的な差の現れ方は評価軸によって異なった．

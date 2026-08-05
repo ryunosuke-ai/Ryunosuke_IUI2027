@@ -35,9 +35,7 @@
 
 \begin{abstract}
 This paper proposes BASiS (Bayesian Style-based Selection), a method for adapting a local large language model (LLM) to the conversational style required for purpose-specific dialogue through Bayesian data selection guided by a small, high-quality corpus. Recent LLMs can produce fluent dialogue and accurate responses. In purpose-specific settings such as emotional support and medical history-taking, however, conversational style---\emph{how} the system responds, not only \emph{what} it says---is also crucial. Although small, high-quality dialogue corpora capture styles suited to particular purposes, they contain too little data to train an LLM directly. Large general-purpose dialogue corpora provide sufficient volume, but they do not necessarily contain enough dialogues that match the target style.
-
 BASiS extracts conversational states, response strategies, and state transitions from a small, high-quality corpus and represents them as a Bayesian dialogue model. It then uses this model to assess dialogue data in a large general-purpose corpus according to their compatibility with the target conversational style and selects data for training. Finally, BASiS constructs preference pairs from the selected data and trains a local LLM using Direct Preference Optimization (DPO). This formulation does not require detailed, purpose-specific guidelines to be written manually and represents, as a probability distribution, the conversational diversity in which multiple response strategies may be valid for the same context.
-
 We evaluated BASiS in three types of purpose-specific dialogue: emotional support, mathematics tutoring, and medical history-taking. In each setting, we compared an untrained base model, a model trained on data selected by BASiS, and a model trained on data randomly sampled from a category coarsely filtered using keywords that describe the target corpus. We evaluated how well each model reproduced the characteristic response policies and dialogue progression of the target corpus and analyzed how training affected general conversational quality. Across all three experimental settings, the model trained on BASiS-selected data reproduced the characteristic conversational style of the target corpus to the greatest extent among the three conditions.
 \end{abstract}
 
@@ -118,9 +116,9 @@ BASiS evaluates each dialogue instance in the large general-purpose corpus accor
 
 Figure~\ref{fig:basis_architecture} shows the overall architecture of BASiS. BASiS consists of four modules: the \textbf{Dialogue Feature Analysis Module}, \textbf{Bayesian Dialogue Modeling Module}, \textbf{Style Compatibility Scoring Module}, and \textbf{Preference Data Selection and DPO Adaptation Module}.
 
-First, the Dialogue Feature Analysis Module analyzes dialogues in the small, high-quality corpus and extracts conversational states, response strategies, and state transitions as conversational features. The Bayesian Dialogue Modeling Module then aggregates the occurrence patterns of these features and constructs a Bayesian dialogue model consisting of state-transition probabilities and observation likelihoods. The Style Compatibility Scoring Module uses this model to score each candidate response in the large general-purpose corpus according to its compatibility with the target conversational style. Finally, the Preference Data Selection and DPO Adaptation Module selects training data based on these scores, constructs preference pairs consisting of \emph{chosen} and \emph{rejected} responses, and trains a local LLM with LoRA-based DPO.
+The upper pathway A in Figure~\ref{fig:basis_architecture}, \emph{Style Model Induction}, constructs the style model that serves as the selection criterion. First, the Dialogue Feature Analysis Module (Step~1 in the figure) extracts conversational states, response strategies, and state transitions from dialogue data in the small corpus. The Bayesian Dialogue Modeling Module (Step~2) then aggregates the occurrence patterns of these features and constructs a Bayesian dialogue model consisting of state-transition probabilities and observation likelihoods.
 
-In this architecture, the small, high-quality corpus serves as the reference from which the conversational style is extracted, whereas the large general-purpose corpus serves as the candidate pool from which training data are selected. The same pipeline can be applied to different types of purpose-specific dialogue by changing the small reference corpus and the large selection corpus.
+The lower pathway B, \emph{Data Selection \& Adaptation}, uses this model to select training data and adapt the LLM. The Style Compatibility Scoring Module (Step~3) receives both the Bayesian dialogue model from the upper pathway and dialogue data from the large general-purpose candidate pool, and assigns each candidate response a compatibility score between 0 and 1. The Preference Data Selection and DPO Adaptation Module (Step~4) uses the scores to construct preference pairs of \emph{chosen} and \emph{rejected} responses, and trains a local LLM with LoRA-based DPO. Thus, the small corpus serves as the style reference, whereas the large corpus serves as the candidate pool for the actual training data. The same pipeline can be applied to other types of purpose-specific dialogue by changing these two corpora.
 
 \begin{figure*}[t]
   \centering
@@ -134,9 +132,9 @@ In this architecture, the small, high-quality corpus serves as the reference fro
 \label{mod:feature_analysis}
 \noindent\textbf{Dialogue Feature Analysis Module}\par
 
-The Dialogue Feature Analysis Module uses an LLM to analyze each dialogue in the small, high-quality corpus and structures the dialogue progression characteristic of the target corpus. It represents each turn in terms of three elements: a \emph{conversational state}, a \emph{response strategy}, and a \emph{state transition}.
+The Dialogue Feature Analysis Module corresponds to Step~1 in Figure~\ref{fig:basis_architecture}. It uses an LLM to analyze each dialogue in the small, high-quality corpus and structures the dialogue progression characteristic of the target corpus. Each turn is represented by three elements: a \emph{conversational state}, a \emph{response strategy}, and a \emph{state transition}.
 
-The conversational state $s_t$ represents the interlocutor's situation or the stage of the dialogue at turn $t$. Examples include disclosing emotions or considering solutions in emotional support, attempting a line of reasoning or organizing an error in mathematics tutoring, and presenting symptoms or confirming additional information in medical history-taking. The observation label $o_t$, which represents the response strategy, describes the policy taken by the respondent in that state; examples include empathy, questioning, information organization, hints, information provision, and advice. The state transition describes how the conversational state changes from $s_{t-1}$ to $s_t$ as a result of choosing response strategy $o_t$.
+The conversational state $s_t$ represents the interlocutor's situation or the stage of the dialogue at turn $t$. Examples include disclosing emotions or considering solutions in emotional support, attempting a line of reasoning or organizing an error in mathematics tutoring, and presenting symptoms or confirming additional information in medical history-taking. The observation label $o_t$, which represents the response strategy, describes the policy taken by the respondent in that state; examples include empathy, questioning, information organization, hints, information provision, and advice. The state transition describes the observed change from $s_{t-1}$ to $s_t$ across a turn in which response strategy $o_t$ is used.
 
 Applying this analysis to the entire small corpus yields a collection of tuples $(s_{t-1}, o_t, s_t)$. These tuples capture not only surface vocabulary and individual responses, but also the dialogue structure: which strategies tend to be used in particular states and which states tend to follow. This structure converts the conversational style implicit in the corpus into a form that can be used by the subsequent modules.
 
@@ -154,9 +152,9 @@ Together, these distributions represent which conversational states are likely t
 \label{mod:scoring}
 \noindent\textbf{Style Compatibility Scoring Module}\par
 
-The Style Compatibility Scoring Module uses the Bayesian dialogue model to evaluate a candidate response $r_t$ from the large general-purpose corpus according to its compatibility with the target conversational style. Figure~\ref{fig:bayesian_scoring} illustrates this process.
+The Style Compatibility Scoring Module uses the Bayesian dialogue model to evaluate a candidate response $r_t$ from the large general-purpose corpus according to its compatibility with the target conversational style. Figure~\ref{fig:bayesian_scoring} illustrates the five steps: prior-state specification, prediction, response labeling, Bayesian update, and compatibility scoring.
 
-Before a candidate response is presented, the dialogue state is maintained as a probability distribution over the state set $S$ rather than fixed to a single state. Given the state distribution through turn $t-1$, denoted by $b_{t-1}(s)$, the predicted state distribution for the next turn is computed using the transition probabilities:
+Before a candidate response is presented, the dialogue state is maintained as a probability distribution over the state set $S$ rather than fixed to a single state (Step~1 in Figure~\ref{fig:bayesian_scoring}). In the example, the state distribution through turn $t-1$, $b_{t-1}(s)$, assigns 0.30 to Emotion disclosure, 0.45 to Emotion processing, and 0.25 to Considering solutions. The predicted state distribution at turn $t$ is then computed using the transition probabilities (Step~2):
 
 \begin{equation}
   \hat{b}_t(s_t)
@@ -167,7 +165,9 @@ Before a candidate response is presented, the dialogue state is maintained as a 
   \label{eq:predict}
 \end{equation}
 
-Next, an LLM classifies candidate response $r_t$ into observation label $o_t$ using the same label scheme as the Dialogue Feature Analysis Module. The predicted distribution $\hat{b}_t(s_t)$ is updated according to Bayes' rule using this observation label and the observation likelihood:
+The state-transition diagram in Step~2 of Figure~\ref{fig:bayesian_scoring} schematically shows transitions among Disclosure, Processing, and Solutions, together with representative response strategies observed around those transitions. Equation~\eqref{eq:predict} maps the previous distribution $b_{t-1}$ to the predicted distribution $\hat{b}_t$ using $P(s_t\mid s_{t-1})$, which summarizes the transition patterns in the reference corpus.
+
+Next, an LLM classifies candidate response $r_t$ into observation label $o_t$ using the same label scheme as the Dialogue Feature Analysis Module (Step~3). In the example, the candidate response ``That sounds really difficult.'' is labeled \emph{Empathy / validation}. The predicted distribution $\hat{b}_t(s_t)$ is then updated according to Bayes' rule using this observation label and the observation likelihood:
 
 \begin{equation}
   b_t(s_t)
@@ -182,7 +182,7 @@ Next, an LLM classifies candidate response $r_t$ into observation label $o_t$ us
   \label{eq:update}
 \end{equation}
 
-Here, $b_t(s_t)$ is the posterior probability $P(s_t\mid o_{1:t})$ conditioned on the observation history $o_{1:t}$ after incorporating the observations into the predicted distribution $\hat{b}_t(s_t)$.
+Here, $b_t(s_t)$ is the posterior probability $P(s_t\mid o_{1:t})$ conditioned on the observation history $o_{1:t}$ after incorporating the observations into the predicted distribution $\hat{b}_t(s_t)$. In Step~4 of Figure~\ref{fig:bayesian_scoring}, the orange path shows that observation $o_t$ determines the likelihood term $P(o_t\mid s_t)$, whereas the blue path shows where prediction $\hat{b}_t(s_t)$ enters the update. The denominator normalizes the posterior over all states. In this example, the updated distribution assigns 0.12 to Disclosure, 0.66 to Processing, and 0.22 to Solutions.
 
 Finally, let $S_{\mathrm{target}}\subseteq S$ be the set of states defined as desirable for the target conversational style. The compatibility score of candidate response $r_t$ is the total probability assigned to $S_{\mathrm{target}}$ in the updated state distribution:
 
@@ -194,7 +194,7 @@ Finally, let $S_{\mathrm{target}}\subseteq S$ be the set of states defined as de
   \label{eq:score}
 \end{equation}
 
-The compatibility score ranges from 0 to 1. A larger value indicates a higher probability that the candidate response will move the dialogue toward states characteristic of the target corpus. Depending on the domain, $S_{\mathrm{target}}$ may include states such as processing emotions or considering appropriate solutions in emotional support, advancing the learner's own reasoning in mathematics tutoring, or progressively organizing necessary symptom information in medical history-taking.
+The compatibility score ranges from 0 to 1. A larger value indicates that the state distribution after observing the candidate response is more strongly aligned with states considered desirable in the target corpus. In Step~5 of Figure~\ref{fig:bayesian_scoring}, $S_{\mathrm{target}}=\{\mathrm{Processing},\mathrm{Solutions}\}$, so the score is $0.66+0.22=0.88$. More generally, $S_{\mathrm{target}}$ may include states such as processing emotions or considering appropriate solutions in emotional support, advancing the learner's own reasoning in mathematics tutoring, or progressively organizing necessary symptom information in medical history-taking.
 
 This module evaluates candidate responses while maintaining a probability distribution over states instead of fixing a single response strategy as the correct next action. Even when each candidate response receives one observation label, responses associated with different strategies can each obtain a high compatibility score if those strategies have high observation likelihoods in the desirable states. Thus, when several response strategies are valid for the same context, the module can evaluate them without restricting the choice to a single strategy.
 
@@ -464,6 +464,16 @@ This section reports the oracle-evaluation results for the ESConv--DailyDialog, 
 \noindent\textbf{Experimental Setting 1: ESConv $\times$ DailyDialog}\par
 Figure~\ref{fig:esconv_oracle} presents the results for the seven emotional-support axes. BASiS achieved a higher mean score than both Base and Random on every axis.
 For Style Strength, the mean scores were 8.26 for Base, 8.65 for BASiS, and 8.21 for Random; BASiS was significantly higher than both comparison conditions (both $p<.001$). For ESConv Tone Similarity, the corresponding scores were 8.21, 8.52, and 8.13, and BASiS again significantly outperformed both conditions (both $p<.001$). The oracle evaluation thus identified improvements not only in the overall strength of the emotional-support style but also in its empathetic, accepting, and non-assertive tone.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]
+  {figures/mathdial_wildchat_oracle_scores_publication.pdf}
+  \caption{Oracle-evaluation results for the MathDial--WildChat-1M experiment. Bars show condition means and error bars show bootstrap 95\% confidence intervals. Brackets indicate Holm-corrected paired comparisons of BASiS with Base or Random ($***p<.001$).}
+  \Description{A bar chart comparing mean oracle scores for Base, BASiS, and Random on seven mathematics-tutoring dialogue axes. BASiS has the highest score on every axis, and all comparisons are statistically significant.}
+  \label{fig:mathdial_oracle}
+\end{figure}
+
 For Supporter Role Consistency, the scores were 8.34 for Base, 8.60 for BASiS, and 8.41 for Random; BASiS was significantly higher than Base at $p<.01$ and Random at $p<.05$. For Non-directive Support Style, the scores were 7.84, 8.34, and 7.99, respectively; BASiS was significantly higher than Base at $p<.01$ and Random at $p<.05$. These results suggest that, beyond the tone of individual responses, BASiS strengthened the tendency to maintain a supportive role across multiple turns and to continue the conversation without imposing a conclusion on the other person.
 For Strategy/Stage Alignment, the scores were 7.84 for Base, 8.32 for BASiS, and 7.98 for Random. BASiS significantly exceeded Base ($p<.01$), whereas its difference from Random was not significant. For Premature Advice Avoidance, the scores were 8.57, 9.44, and 8.92, respectively; BASiS was significantly higher than Base at $p<.001$ and Random at $p<.05$. Its 0.87-point improvement over Base was the largest among the seven axes. These results suggest a stronger tendency to match response strategies to the current dialogue stage and to offer advice only after understanding the person's emotions and situation.
 For Naturalness, the scores were 8.35 for Base, 8.53 for BASiS, and 8.17 for Random. BASiS significantly exceeded Random ($p<.01$), whereas its difference from Base was not significant. The style adaptation achieved by BASiS therefore did not appear to compromise the naturalness of the Japanese dialogue.
@@ -474,15 +484,6 @@ For Equitable Tutoring, the scores were 6.77 for Base, 7.75 for BASiS, and 6.00 
 For Learner Reasoning Diagnosis, the scores were 7.38, 8.70, and 6.97, so BASiS exceeded Base by 1.32 points and Random by 1.73 points. For Mistake Location and Targeting, the scores were 7.53, 8.85, and 7.27; BASiS exceeded Base by 1.32 points and Random by 1.58 points. The oracle evaluation identified improvements not only in recognizing whether a learner's reasoning was correct, but also in locating specific errors or incomplete steps.
 For Guidance Quality, the scores were 6.88 for Base, 8.02 for BASiS, and 6.57 for Random. For Feedback Actionability, they were 7.01, 8.03, and 6.18, respectively. The 1.85-point gap between BASiS and Random on Feedback Actionability was the largest among the seven axes. The oracle evaluator found that BASiS produced more pedagogical responses that clearly indicated what the learner should think about, calculate, or check next.
 For Answer Revealing Calibration, the scores were 7.88 for Base, 8.86 for BASiS, and 7.50 for Random. For Teacher Move--Stage Alignment, they were 7.44, 8.62, and 7.06, respectively. These results suggest a stronger tendency to align the amount and timing of answer revelation, as well as teacher moves such as questions, focusing, and explanations, with the learner's state and the dialogue stage.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]
-  {figures/mathdial_wildchat_oracle_scores_publication.pdf}
-  \caption{Oracle-evaluation results for the MathDial--WildChat-1M experiment. Bars show condition means and error bars show bootstrap 95\% confidence intervals. Brackets indicate Holm-corrected paired comparisons of BASiS with Base or Random ($***p<.001$).}
-  \Description{A bar chart comparing mean oracle scores for Base, BASiS, and Random on seven mathematics-tutoring dialogue axes. BASiS has the highest score on every axis, and all comparisons are statistically significant.}
-  \label{fig:mathdial_oracle}
-\end{figure}
 
 \noindent\textbf{Experimental Setting 3: MediTOD $\times$ WildChat-1M}\par
 Figure~\ref{fig:meditod_oracle} presents the seven medical history-taking axes. BASiS had the highest mean score on all seven axes, although the pattern of statistical significance differed across axes.
