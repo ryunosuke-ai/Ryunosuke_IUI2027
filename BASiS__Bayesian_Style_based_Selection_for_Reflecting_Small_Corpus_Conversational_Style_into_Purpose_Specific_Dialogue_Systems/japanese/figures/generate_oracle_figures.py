@@ -29,11 +29,11 @@ BASIS_INDEX = 2
 mpl.rcParams.update(
     {
         "font.family": "DejaVu Sans",
-        "font.size": 9,
-        "axes.labelsize": 9,
-        "xtick.labelsize": 7.5,
-        "ytick.labelsize": 8,
-        "legend.fontsize": 8.2,
+        "font.size": 7.2,
+        "axes.labelsize": 7.5,
+        "xtick.labelsize": 7.0,
+        "ytick.labelsize": 6.8,
+        "legend.fontsize": 7.0,
         "pdf.fonttype": 42,
         "ps.fonttype": 42,
         "hatch.linewidth": 0.65,
@@ -55,12 +55,12 @@ EXPERIMENT_SPECS = (
             "text_style_transfer.naturalness",
         ),
         "labels": (
-            "Style Strength",
-            "ESConv Tone\nSimilarity",
-            "Supporter Role\nConsistency",
-            "Non-directive\nSupport Style",
-            "Strategy/Stage\nAlignment",
-            "Premature Advice\nAvoidance",
+            "Style strength",
+            "Tone similarity",
+            "Role consistency",
+            "Non-directive",
+            "Stage alignment",
+            "Advice timing",
             "Naturalness",
         ),
     },
@@ -77,13 +77,13 @@ EXPERIMENT_SPECS = (
             "pedagogical_v2.teacher_move_stage_alignment",
         ),
         "labels": (
-            "Equitable\nTutoring",
-            "Reasoning\nDiagnosis",
-            "Mistake\nTargeting",
-            "Guidance\nQuality",
-            "Feedback\nActionability",
-            "Answer\nCalibration",
-            "Move/Stage\nAlignment",
+            "Equitable tutoring",
+            "Reasoning diagnosis",
+            "Mistake targeting",
+            "Guidance quality",
+            "Actionability",
+            "Answer calibration",
+            "Move-stage alignment",
         ),
     },
     {
@@ -99,13 +99,13 @@ EXPERIMENT_SPECS = (
             "safety.unsupported_diagnosis",
         ),
         "labels": (
-            "Response\nRelevance",
-            "Overall\nQuality",
-            "Premature\nAssessment\nAvoidance",
-            "Appropriate\nUncertainty",
+            "Response relevance",
+            "Overall quality",
+            "Assessment timing",
+            "Uncertainty",
             "Understandability",
-            "Unsafe Medical\nAdvice\nAvoidance",
-            "Unsupported\nDiagnosis\nAvoidance",
+            "Unsafe advice",
+            "Unsupported diagnosis",
         ),
     },
 )
@@ -217,7 +217,9 @@ def build_experiment(spec, sections):
         "ci_lower": ci_lower,
         "ci_upper": ci_upper,
         "significance": significance,
-        "figsize": (7.15, 3.35),
+        # Generate at the final half-page width used by the side-by-side
+        # layout. This avoids LaTeX scaling the labels down after rendering.
+        "figsize": (3.45, 2.60),
     }
 
 
@@ -237,7 +239,7 @@ def add_bracket(ax, x1, x2, y, stars):
         stars,
         ha="center",
         va="bottom",
-        fontsize=8.2,
+        fontsize=7.0,
         fontweight="bold",
         color="#111111",
     )
@@ -296,19 +298,25 @@ def make_figure(spec):
             if stars_by_index[index] is not None
         ]
         upper_extent = means[:, metric_index] + ci_upper[:, metric_index]
-        first_y = float(np.max(upper_extent) + 0.42)
+        # Alternate the bracket baseline for adjacent metrics so that the
+        # larger significance labels remain visually distinct at one-column
+        # publication size.
+        first_y = float(
+            np.max(upper_extent) + 0.34 + 0.22 * (metric_index % 2)
+        )
         for level, comparison_index in enumerate(active_comparisons):
             add_bracket(
                 ax,
                 x[metric_index] + offsets[comparison_index],
                 x[metric_index] + offsets[BASIS_INDEX],
-                first_y + 0.32 * level,
+                first_y + 0.78 * level,
                 stars_by_index[comparison_index],
             )
 
     ax.set_ylabel("Oracle score (1–10)")
-    ax.set_xticks(x, labels)
-    ax.set_ylim(0, 11.5)
+    ax.set_xticks(x, labels, rotation=35, ha="right", rotation_mode="anchor")
+    ax.set_xlim(-1.2, len(labels) - 0.35)
+    ax.set_ylim(0, 12.8)
     ax.set_yticks(np.arange(0, 11, 2))
     ax.grid(axis="y", color="#D9D9D9", linewidth=0.65)
     ax.axhline(10, color="#8A8A8A", linewidth=0.7, linestyle=(0, (2, 2)))
@@ -317,7 +325,7 @@ def make_figure(spec):
     ax.spines["right"].set_visible(False)
     ax.spines["left"].set_linewidth(0.8)
     ax.spines["bottom"].set_linewidth(0.8)
-    ax.tick_params(axis="x", length=0, pad=5)
+    ax.tick_params(axis="x", length=0, pad=3)
     ax.tick_params(axis="y", width=0.7, length=3)
 
     ax.legend(
@@ -326,18 +334,20 @@ def make_figure(spec):
         frameon=False,
         columnspacing=1.15,
         handlelength=1.65,
-        bbox_to_anchor=(0.0, 1.005),
+        bbox_to_anchor=(0.0, 1.10),
         borderaxespad=0,
     )
 
-    fig.subplots_adjust(left=0.075, right=0.995, top=0.91, bottom=0.22)
+    fig.subplots_adjust(left=0.105, right=0.995, top=0.83, bottom=0.34)
 
     output_base = OUTPUT_DIR / spec["filename"]
-    fig.savefig(output_base.with_suffix(".pdf"), bbox_inches="tight")
+    # Keep the canvas at the final half-page width.  A tight bounding box
+    # expands around the rotated edge labels and makes LaTeX scale all text
+    # down again.
+    fig.savefig(output_base.with_suffix(".pdf"))
     fig.savefig(
         output_base.with_suffix(".png"),
         dpi=300,
-        bbox_inches="tight",
         facecolor="white",
     )
     plt.close(fig)
