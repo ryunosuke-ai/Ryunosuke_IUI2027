@@ -1,0 +1,177 @@
+USER EVALUATION PLOT DATA (COMPLETE PARTICIPANTS ONLY)
+
+SCORE_SCALE: 1-7 Likert
+ANALYSIS_UNIT: participant; each participant mean is calculated over 10 items
+ERROR_BAR: participant-level bootstrap 95% confidence interval (2,000 draws, seed=42)
+OMNIBUS: Friedman test across Base/BASiS/Random-DPO
+POSTHOC: paired permutation test; Holm correction within each axis across 3 pairs
+STAR_RULE: * p_holm<0.05; ** p_holm<0.01; *** p_holm<0.001; ns otherwise
+POSTHOC_GATE: post-hoc not run when Friedman p>=0.05
+MODEL_ORDER: Base, BASiS, Random-DPO
+
+DATASET: esconv
+AXIS_DATA_COLUMNS: axis | model | mean | ci95_low | ci95_high | errorbar_lower | errorbar_upper
+AXIS_DATA:
+Content Preservation | Base | 5.189 | 4.600 | 5.789 | 0.589 | 0.600
+Content Preservation | BASiS | 5.911 | 5.411 | 6.433 | 0.500 | 0.522
+Content Preservation | Random-DPO | 5.089 | 4.389 | 5.756 | 0.700 | 0.667
+FRIEDMAN | Content Preservation | chi2=14.352941 | p=0.0007643608311 | kendalls_w=0.797386
+SIGNIFICANCE | Content Preservation | BASiS_vs_Base | p_holm=0.008399160084 | **
+SIGNIFICANCE | Content Preservation | BASiS_vs_Random-DPO | p_holm=0.008399160084 | **
+SIGNIFICANCE | Content Preservation | Base_vs_Random-DPO | p_holm=0.7770222978 | ns
+ESConv Tone Similarity | Base | 4.589 | 4.156 | 5.200 | 0.433 | 0.611
+ESConv Tone Similarity | BASiS | 6.167 | 5.778 | 6.567 | 0.389 | 0.400
+ESConv Tone Similarity | Random-DPO | 4.433 | 3.822 | 5.089 | 0.611 | 0.656
+FRIEDMAN | ESConv Tone Similarity | chi2=14.114286 | p=0.0008612352542 | kendalls_w=0.784127
+SIGNIFICANCE | ESConv Tone Similarity | BASiS_vs_Base | p_holm=0.01499850015 | *
+SIGNIFICANCE | ESConv Tone Similarity | BASiS_vs_Random-DPO | p_holm=0.01499850015 | *
+SIGNIFICANCE | ESConv Tone Similarity | Base_vs_Random-DPO | p_holm=0.4155584442 | ns
+Naturalness | Base | 5.111 | 4.500 | 5.656 | 0.611 | 0.544
+Naturalness | BASiS | 6.000 | 5.467 | 6.511 | 0.533 | 0.511
+Naturalness | Random-DPO | 4.700 | 3.833 | 5.467 | 0.867 | 0.767
+FRIEDMAN | Naturalness | chi2=12.967742 | p=0.001527884824 | kendalls_w=0.720430
+SIGNIFICANCE | Naturalness | BASiS_vs_Base | p_holm=0.02309769023 | *
+SIGNIFICANCE | Naturalness | BASiS_vs_Random-DPO | p_holm=0.02309769023 | *
+SIGNIFICANCE | Naturalness | Base_vs_Random-DPO | p_holm=0.1704829517 | ns
+Non-directive Support Style | Base | 3.522 | 2.889 | 4.044 | 0.633 | 0.522
+Non-directive Support Style | BASiS | 5.967 | 5.567 | 6.400 | 0.400 | 0.433
+Non-directive Support Style | Random-DPO | 3.533 | 2.811 | 4.233 | 0.722 | 0.700
+FRIEDMAN | Non-directive Support Style | chi2=14.352941 | p=0.0007643608311 | kendalls_w=0.797386
+SIGNIFICANCE | Non-directive Support Style | BASiS_vs_Base | p_holm=0.01199880012 | *
+SIGNIFICANCE | Non-directive Support Style | BASiS_vs_Random-DPO | p_holm=0.01199880012 | *
+SIGNIFICANCE | Non-directive Support Style | Base_vs_Random-DPO | p_holm=1 | ns
+Premature Advice Avoidance | Base | 4.089 | 3.411 | 4.722 | 0.678 | 0.633
+Premature Advice Avoidance | BASiS | 5.656 | 4.922 | 6.311 | 0.733 | 0.656
+Premature Advice Avoidance | Random-DPO | 4.067 | 3.378 | 4.633 | 0.689 | 0.567
+FRIEDMAN | Premature Advice Avoidance | chi2=8.705882 | p=0.01286890714 | kendalls_w=0.483660
+SIGNIFICANCE | Premature Advice Avoidance | BASiS_vs_Base | p_holm=0.1071892811 | ns
+SIGNIFICANCE | Premature Advice Avoidance | BASiS_vs_Random-DPO | p_holm=0.06269373063 | ns
+SIGNIFICANCE | Premature Advice Avoidance | Base_vs_Random-DPO | p_holm=0.9223077692 | ns
+Style Strength | Base | 4.222 | 3.600 | 4.967 | 0.622 | 0.744
+Style Strength | BASiS | 5.644 | 5.000 | 6.233 | 0.644 | 0.589
+Style Strength | Random-DPO | 3.967 | 3.211 | 4.844 | 0.756 | 0.878
+FRIEDMAN | Style Strength | chi2=8.628571 | p=0.01337610043 | kendalls_w=0.479365
+SIGNIFICANCE | Style Strength | BASiS_vs_Base | p_holm=0.02819718028 | *
+SIGNIFICANCE | Style Strength | BASiS_vs_Random-DPO | p_holm=0.02819718028 | *
+SIGNIFICANCE | Style Strength | Base_vs_Random-DPO | p_holm=0.2140785921 | ns
+Supporter Role Consistency | Base | 4.522 | 4.011 | 5.089 | 0.511 | 0.567
+Supporter Role Consistency | BASiS | 5.911 | 5.389 | 6.389 | 0.522 | 0.478
+Supporter Role Consistency | Random-DPO | 4.322 | 3.733 | 4.867 | 0.589 | 0.544
+FRIEDMAN | Supporter Role Consistency | chi2=15.764706 | p=0.0003773441428 | kendalls_w=0.875817
+SIGNIFICANCE | Supporter Role Consistency | BASiS_vs_Base | p_holm=0.01139886011 | *
+SIGNIFICANCE | Supporter Role Consistency | BASiS_vs_Random-DPO | p_holm=0.01139886011 | *
+SIGNIFICANCE | Supporter Role Consistency | Base_vs_Random-DPO | p_holm=0.4171582842 | ns
+FINAL_CHOICE_COLUMNS: choice | count | rate
+FINAL_CHOICE:
+Base | 14 | 0.155556
+BASiS | 67 | 0.744444
+Random-DPO | 6 | 0.066667
+Almost same | 2 | 0.022222
+Cannot judge | 1 | 0.011111
+
+DATASET: mathdial
+AXIS_DATA_COLUMNS: axis | model | mean | ci95_low | ci95_high | errorbar_lower | errorbar_upper
+AXIS_DATA:
+Answer Revealing Calibration | Base | 4.044 | 3.578 | 4.544 | 0.467 | 0.500
+Answer Revealing Calibration | BASiS | 5.211 | 4.689 | 5.778 | 0.522 | 0.567
+Answer Revealing Calibration | Random-DPO | 3.622 | 2.889 | 4.367 | 0.733 | 0.744
+FRIEDMAN | Answer Revealing Calibration | chi2=12.882353 | p=0.001594529659 | kendalls_w=0.715686
+SIGNIFICANCE | Answer Revealing Calibration | BASiS_vs_Base | p_holm=0.008399160084 | **
+SIGNIFICANCE | Answer Revealing Calibration | BASiS_vs_Random-DPO | p_holm=0.01759824018 | *
+SIGNIFICANCE | Answer Revealing Calibration | Base_vs_Random-DPO | p_holm=0.1886811319 | ns
+Equitable Tutoring | Base | 4.278 | 3.844 | 4.700 | 0.433 | 0.422
+Equitable Tutoring | BASiS | 5.422 | 4.922 | 5.944 | 0.500 | 0.522
+Equitable Tutoring | Random-DPO | 3.733 | 3.233 | 4.256 | 0.500 | 0.522
+FRIEDMAN | Equitable Tutoring | chi2=16.909091 | p=0.0002129303471 | kendalls_w=0.939394
+SIGNIFICANCE | Equitable Tutoring | BASiS_vs_Base | p_holm=0.01499850015 | *
+SIGNIFICANCE | Equitable Tutoring | BASiS_vs_Random-DPO | p_holm=0.01499850015 | *
+SIGNIFICANCE | Equitable Tutoring | Base_vs_Random-DPO | p_holm=0.02889711029 | *
+Feedback Actionability | Base | 4.133 | 3.711 | 4.578 | 0.422 | 0.444
+Feedback Actionability | BASiS | 5.433 | 4.889 | 5.978 | 0.544 | 0.544
+Feedback Actionability | Random-DPO | 3.722 | 3.200 | 4.300 | 0.522 | 0.578
+FRIEDMAN | Feedback Actionability | chi2=16.750000 | p=0.0002305598676 | kendalls_w=0.930556
+SIGNIFICANCE | Feedback Actionability | BASiS_vs_Base | p_holm=0.01229877012 | *
+SIGNIFICANCE | Feedback Actionability | BASiS_vs_Random-DPO | p_holm=0.01229877012 | *
+SIGNIFICANCE | Feedback Actionability | Base_vs_Random-DPO | p_holm=0.06209379062 | ns
+Guidance Quality | Base | 3.978 | 3.578 | 4.400 | 0.400 | 0.422
+Guidance Quality | BASiS | 5.411 | 4.889 | 5.956 | 0.522 | 0.544
+Guidance Quality | Random-DPO | 3.600 | 3.111 | 4.178 | 0.489 | 0.578
+FRIEDMAN | Guidance Quality | chi2=14.114286 | p=0.0008612352542 | kendalls_w=0.784127
+SIGNIFICANCE | Guidance Quality | BASiS_vs_Base | p_holm=0.01199880012 | *
+SIGNIFICANCE | Guidance Quality | BASiS_vs_Random-DPO | p_holm=0.01199880012 | *
+SIGNIFICANCE | Guidance Quality | Base_vs_Random-DPO | p_holm=0.1240875912 | ns
+Learner Reasoning Diagnosis | Base | 4.167 | 3.711 | 4.700 | 0.456 | 0.533
+Learner Reasoning Diagnosis | BASiS | 5.600 | 5.089 | 6.089 | 0.511 | 0.489
+Learner Reasoning Diagnosis | Random-DPO | 4.056 | 3.522 | 4.644 | 0.533 | 0.589
+FRIEDMAN | Learner Reasoning Diagnosis | chi2=14.727273 | p=0.0006338892118 | kendalls_w=0.818182
+SIGNIFICANCE | Learner Reasoning Diagnosis | BASiS_vs_Base | p_holm=0.01139886011 | *
+SIGNIFICANCE | Learner Reasoning Diagnosis | BASiS_vs_Random-DPO | p_holm=0.01139886011 | *
+SIGNIFICANCE | Learner Reasoning Diagnosis | Base_vs_Random-DPO | p_holm=0.5356464354 | ns
+Mistake Location and Targeting | Base | 4.111 | 3.700 | 4.522 | 0.411 | 0.411
+Mistake Location and Targeting | BASiS | 5.489 | 4.878 | 6.000 | 0.611 | 0.511
+Mistake Location and Targeting | Random-DPO | 3.867 | 3.344 | 4.433 | 0.522 | 0.567
+FRIEDMAN | Mistake Location and Targeting | chi2=14.352941 | p=0.0007643608311 | kendalls_w=0.797386
+SIGNIFICANCE | Mistake Location and Targeting | BASiS_vs_Base | p_holm=0.01229877012 | *
+SIGNIFICANCE | Mistake Location and Targeting | BASiS_vs_Random-DPO | p_holm=0.01229877012 | *
+SIGNIFICANCE | Mistake Location and Targeting | Base_vs_Random-DPO | p_holm=0.4420557944 | ns
+Teacher Move–Stage Alignment | Base | 3.944 | 3.522 | 4.422 | 0.422 | 0.478
+Teacher Move–Stage Alignment | BASiS | 5.244 | 4.678 | 5.867 | 0.567 | 0.622
+Teacher Move–Stage Alignment | Random-DPO | 3.567 | 2.989 | 4.267 | 0.578 | 0.700
+FRIEDMAN | Teacher Move–Stage Alignment | chi2=13.470588 | p=0.001188225671 | kendalls_w=0.748366
+SIGNIFICANCE | Teacher Move–Stage Alignment | BASiS_vs_Base | p_holm=0.01139886011 | *
+SIGNIFICANCE | Teacher Move–Stage Alignment | BASiS_vs_Random-DPO | p_holm=0.01739826017 | *
+SIGNIFICANCE | Teacher Move–Stage Alignment | Base_vs_Random-DPO | p_holm=0.102389761 | ns
+FINAL_CHOICE_COLUMNS: choice | count | rate
+FINAL_CHOICE:
+Base | 16 | 0.177778
+BASiS | 55 | 0.611111
+Random-DPO | 12 | 0.133333
+Almost same | 3 | 0.033333
+Cannot judge | 4 | 0.044444
+
+DATASET: meditod
+AXIS_DATA_COLUMNS: axis | model | mean | ci95_low | ci95_high | errorbar_lower | errorbar_upper
+AXIS_DATA:
+Appropriate Uncertainty | Base | 4.586 | 4.071 | 5.057 | 0.514 | 0.471
+Appropriate Uncertainty | BASiS | 5.314 | 4.843 | 5.729 | 0.471 | 0.414
+Appropriate Uncertainty | Random-DPO | 4.757 | 4.314 | 5.129 | 0.443 | 0.371
+FRIEDMAN | Appropriate Uncertainty | chi2=5.846154 | p=0.05376799254 | kendalls_w=0.417582
+SIGNIFICANCE | Appropriate Uncertainty | BASiS_vs_Base | not_tested | ns
+SIGNIFICANCE | Appropriate Uncertainty | BASiS_vs_Random-DPO | not_tested | ns
+SIGNIFICANCE | Appropriate Uncertainty | Base_vs_Random-DPO | not_tested | ns
+Coverage Without Redundancy | Base | 4.429 | 4.100 | 4.786 | 0.329 | 0.357
+Coverage Without Redundancy | BASiS | 5.057 | 4.600 | 5.500 | 0.457 | 0.443
+Coverage Without Redundancy | Random-DPO | 4.371 | 3.957 | 4.757 | 0.414 | 0.386
+FRIEDMAN | Coverage Without Redundancy | chi2=5.407407 | p=0.06695706381 | kendalls_w=0.386243
+SIGNIFICANCE | Coverage Without Redundancy | BASiS_vs_Base | not_tested | ns
+SIGNIFICANCE | Coverage Without Redundancy | BASiS_vs_Random-DPO | not_tested | ns
+SIGNIFICANCE | Coverage Without Redundancy | Base_vs_Random-DPO | not_tested | ns
+Premature Assessment Avoidance | Base | 4.600 | 4.071 | 5.100 | 0.529 | 0.500
+Premature Assessment Avoidance | BASiS | 5.329 | 4.757 | 5.857 | 0.571 | 0.529
+Premature Assessment Avoidance | Random-DPO | 4.614 | 4.043 | 5.114 | 0.571 | 0.500
+FRIEDMAN | Premature Assessment Avoidance | chi2=11.384615 | p=0.003371802901 | kendalls_w=0.813187
+SIGNIFICANCE | Premature Assessment Avoidance | BASiS_vs_Base | p_holm=0.04289571043 | *
+SIGNIFICANCE | Premature Assessment Avoidance | BASiS_vs_Random-DPO | p_holm=0.04289571043 | *
+SIGNIFICANCE | Premature Assessment Avoidance | Base_vs_Random-DPO | p_holm=1 | ns
+Unsafe Medical Advice Avoidance | Base | 4.700 | 4.129 | 5.200 | 0.571 | 0.500
+Unsafe Medical Advice Avoidance | BASiS | 5.357 | 4.786 | 5.900 | 0.571 | 0.543
+Unsafe Medical Advice Avoidance | Random-DPO | 4.657 | 3.943 | 5.243 | 0.714 | 0.586
+FRIEDMAN | Unsafe Medical Advice Avoidance | chi2=11.384615 | p=0.003371802901 | kendalls_w=0.813187
+SIGNIFICANCE | Unsafe Medical Advice Avoidance | BASiS_vs_Base | p_holm=0.04349565043 | *
+SIGNIFICANCE | Unsafe Medical Advice Avoidance | BASiS_vs_Random-DPO | p_holm=0.04349565043 | *
+SIGNIFICANCE | Unsafe Medical Advice Avoidance | Base_vs_Random-DPO | p_holm=0.7487251275 | ns
+Unsupported Diagnosis Avoidance | Base | 4.800 | 4.243 | 5.386 | 0.557 | 0.586
+Unsupported Diagnosis Avoidance | BASiS | 5.429 | 4.857 | 5.971 | 0.571 | 0.543
+Unsupported Diagnosis Avoidance | Random-DPO | 4.700 | 4.000 | 5.400 | 0.700 | 0.700
+FRIEDMAN | Unsupported Diagnosis Avoidance | chi2=11.185185 | p=0.003725357001 | kendalls_w=0.798942
+SIGNIFICANCE | Unsupported Diagnosis Avoidance | BASiS_vs_Base | p_holm=0.04319568043 | *
+SIGNIFICANCE | Unsupported Diagnosis Avoidance | BASiS_vs_Random-DPO | p_holm=0.04319568043 | *
+SIGNIFICANCE | Unsupported Diagnosis Avoidance | Base_vs_Random-DPO | p_holm=0.3426657334 | ns
+FINAL_CHOICE_COLUMNS: choice | count | rate
+FINAL_CHOICE:
+Base | 11 | 0.157143
+BASiS | 31 | 0.442857
+Random-DPO | 19 | 0.271429
+Almost same | 8 | 0.114286
+Cannot judge | 1 | 0.014286
+
