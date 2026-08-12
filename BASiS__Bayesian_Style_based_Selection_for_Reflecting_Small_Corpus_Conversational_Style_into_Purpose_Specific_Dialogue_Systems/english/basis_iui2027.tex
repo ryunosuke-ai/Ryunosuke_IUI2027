@@ -30,14 +30,20 @@
   \fi
 }
 \newcommand{\BasisFinalChoiceLabel}[1]{%
-  \ifBasisPolishedTables\textbf{#1}\else#1\fi
+  \ifBasisPolishedTables\mbox{\textbf{#1}}\else#1\fi
 }
 \ifBasisPolishedTables
+  \newcommand{\BasisOracleTableWidth}{0.98\textwidth}
+  \newcommand{\BasisOracleAxisWidth}{0.34\textwidth}
   \newcommand{\BasisHumanTableWidth}{0.98\textwidth}
-  \newcolumntype{I}{>{\centering\arraybackslash}p{0.11\textwidth}}
-  \newcolumntype{Q}{>{\centering\arraybackslash}X}
+  \newcolumntype{A}{>{\raggedleft\arraybackslash}p{\BasisOracleAxisWidth}}
+  \newcolumntype{I}{>{\raggedleft\arraybackslash}p{0.11\textwidth}}
+  \newcolumntype{Q}{>{\raggedright\arraybackslash}X}
 \else
+  \newcommand{\BasisOracleTableWidth}{0.98\textwidth}
+  \newcommand{\BasisOracleAxisWidth}{0.30\textwidth}
   \newcommand{\BasisHumanTableWidth}{0.96\textwidth}
+  \newcolumntype{A}{>{\centering\arraybackslash}p{\BasisOracleAxisWidth}}
   \newcolumntype{I}{>{\centering\arraybackslash}p{0.08\textwidth}}
   \newcolumntype{Q}{>{\centering\arraybackslash}X}
 \fi
@@ -263,7 +269,7 @@ For emotional support, we use ESConv \cite{liu2021esconv}, which contains dialog
   \centering
   \caption{Corpus pairs used for evaluation and the role of each corpus}
   \label{tab:corpus_pairs}
-  \small
+  \footnotesize
   \renewcommand{\arraystretch}{1.15}
   \begin{tabular}
     {@{}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{}}
@@ -344,9 +350,8 @@ Table~\ref{tab:oracle_axes} summarizes the seven oracle-evaluation axes used in 
   \label{tab:oracle_axes}
   \small
   \renewcommand{\arraystretch}{1.15}
-  \begin{tabularx}{0.98\textwidth}
-    {@{}>{\centering\arraybackslash}p{0.30\textwidth}
-        >{\centering\arraybackslash}X@{}}
+  \begin{tabularx}{\BasisOracleTableWidth}
+    {@{}A@{\hspace{0.8em}}Q@{}}
     \toprule
     \textbf{Evaluation axis} & \textbf{What the axis measures} \\
     \midrule
@@ -412,7 +417,7 @@ The human evaluation uses questions that make the purpose-specific conversationa
   \label{tab:human_items}
   \small
   \renewcommand{\arraystretch}{1.1}
-  \begin{tabularx}{\BasisHumanTableWidth}{@{}IQ@{}}
+  \begin{tabularx}{\BasisHumanTableWidth}{@{}I@{\hspace{0.6em}}Q@{}}
     \toprule
     \textbf{Item} & \textbf{Question} \\
     \midrule

@@ -31,12 +31,20 @@
   \fi
 }
 \newcommand{\BasisFinalChoiceLabel}[1]{%
-  \ifBasisPolishedTables\textbf{#1}\else#1\fi
+  \ifBasisPolishedTables\mbox{\textbf{#1}}\else#1\fi
 }
 \ifBasisPolishedTables
-  \newcolumntype{I}{>{\centering\arraybackslash}p{0.075\textwidth}}
-  \newcolumntype{Q}{>{\centering\arraybackslash}X}
+  \newcommand{\BasisOracleTableWidth}{0.90\textwidth}
+  \newcommand{\BasisOracleAxisWidth}{0.36\textwidth}
+  \newcommand{\BasisHumanTableWidth}{0.90\textwidth}
+  \newcolumntype{A}{>{\raggedleft\arraybackslash}p{\BasisOracleAxisWidth}}
+  \newcolumntype{I}{>{\raggedleft\arraybackslash}p{0.10\textwidth}}
+  \newcolumntype{Q}{>{\raggedright\arraybackslash}X}
 \else
+  \newcommand{\BasisOracleTableWidth}{0.98\textwidth}
+  \newcommand{\BasisOracleAxisWidth}{0.30\textwidth}
+  \newcommand{\BasisHumanTableWidth}{\textwidth}
+  \newcolumntype{A}{>{\centering\arraybackslash}p{\BasisOracleAxisWidth}}
   \newcolumntype{I}{c@{\hspace{1em}}}
   \newcolumntype{Q}{>{\centering\arraybackslash}X}
 \fi
@@ -394,9 +402,8 @@ DPOの学習率は$5\times10^{-6}$，$\beta=0.1$とした．LoRAはランク$r=8
   \label{tab:oracle_axes}
   \small
   \renewcommand{\arraystretch}{1.15}
-  \begin{tabularx}{0.98\textwidth}
-    {@{}>{\centering\arraybackslash}p{0.30\textwidth}
-        >{\centering\arraybackslash}X@{}}
+  \begin{tabularx}{\BasisOracleTableWidth}
+    {@{}A@{\hspace{0.8em}}Q@{}}
     \toprule
     \textbf{評価軸} & \textbf{評価内容} \\
     \midrule
@@ -473,7 +480,7 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
   \label{tab:human_items}
   \footnotesize
   \renewcommand{\arraystretch}{1.08}
-  \begin{tabularx}{\textwidth}{@{}IQ@{}}
+  \begin{tabularx}{\BasisHumanTableWidth}{@{}I@{\hspace{0.8em}}Q@{}}
     \toprule
     \textbf{項目} & \textbf{質問文} \\
     \midrule
