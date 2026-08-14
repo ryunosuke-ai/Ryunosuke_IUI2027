@@ -181,16 +181,14 @@ LLMを効率的に目的へ適応させるため，学習データの量だけ�
 \label{sec:method_concept}
 
 本研究では，小規模高品質コーパスに基づくベイズ的データ選別を通じて，目的特化対話に求められる会話スタイルをローカル大規模言語モデル（LLM）へ反映する手法BASiS（Bayesian Style-based Selection）を提案する．BASiSの目的は，小規模コーパスに暗黙的に表れる応答方針や対話の進め方を，ローカルLLMの学習に利用できる形へ変換することである．小規模高品質コーパスをそのまま学習に用いるのではなく，そこから会話状態，応答戦略，状態遷移を抽出して確率的な対話モデルを構築し，大規模汎用コーパスの選別基準として利用する．
-
 BASiSにより，大規模汎用コーパスに含まれる各対話データを，目的コーパスに特徴的な会話スタイルへの適合度に基づいて評価できる．目的や領域ごとの詳細な対話ガイドラインの手動記述を前提とせず，小規模コーパスに含まれる対話の流れを学習データへ反映する．また，会話状態を一つに決定せず確率分布として保持することで，同一の文脈に対して複数の応答戦略が妥当となる会話の多様性を扱う．最終的に，選別したデータを用いてDPO学習を行い，小規模コーパスに含まれる会話スタイルをローカルLLMへ反映する．
 
 \subsection{BASiSの学習パイプライン}
 \label{sec:method_architecture}
 
-BASiSの学習パイプラインを図\ref{fig:basis_architecture}に示す．本パイプラインは，\textbf{Dialogue Feature Analysis Module}，\textbf{Bayesian Dialogue Modeling Module}，\textbf{Style Compatibility Scoring Module}，\textbf{Preference Data Selection and DPO Adaptation Module}の4つのモジュールを順に実行し，スタイルモデルの誘導から学習データの選別，DPOによるモデル適応までを行う．
+BASiSの学習パイプラインを図\ref{fig:basis_architecture}に示す．本パイプラインは，\textbf{Dialogue Feature Analysis Module}，\textbf{Bayesian Dialogue Modeling Module}，\textbf{Style Compatibility Scoring Module}，\textbf{Preference Data Selection and DPO Adaptation Module}の4つのモジュールで構成されており，スタイルモデルの誘導から学習データの選別，DPOによるモデル適応までを行う．
 
 図\ref{fig:basis_architecture}の上段Aは，小規模高品質コーパスから選別基準となるスタイルモデルを構築する\emph{Style Model Induction}の流れを示す．はじめに，Dialogue Feature Analysis Module（図中の\ding{172}）が，小規模コーパスの対話データから会話状態，応答戦略，状態遷移を会話特徴として抽出する．次に，Bayesian Dialogue Modeling Module（\ding{173}）が，抽出された特徴の出現傾向を集計し，状態遷移確率と観測尤度からなるベイズ的対話モデルを構築する．
-
 下段Bは，このモデルを用いて学習データを選び，LLMを適応させる\emph{Data Selection \& Adaptation}の流れを示す．Style Compatibility Scoring Module（\ding{174}）には，上段で構築したベイズ的対話モデルと，大規模汎用コーパスからなる候補プールの対話データが入力される．本モジュールは各候補応答に0から1の適合度スコアを付与する．Preference Data Selection and DPO Adaptation Module（\ding{175}）は，このスコアからchosen応答とrejected応答の選好ペアを構築し，LoRAを適用したDPOによってローカルLLMを学習する．したがって，小規模コーパスは会話スタイルを抽出する参照元，大規模コーパスは実際の学習データを選ぶ候補プールとして役割が分かれている．両コーパスを変更することで，異なる目的特化対話にも同一のパイプラインを適用できる．
 
 \begin{figure*}[t]
@@ -205,31 +203,36 @@ BASiSの学習パイプラインを図\ref{fig:basis_architecture}に示す．�
 \label{mod:feature_analysis}
 \noindent\textbf{Dialogue Feature Analysis Module（会話特徴分析モジュール）}\par
 
-Dialogue Feature Analysis Moduleは，図\ref{fig:basis_architecture}の\ding{172}に対応し，小規模高品質コーパスから，目的固有の会話の進め方を表すラベル体系を帰納的に生成する．本研究ではGPT-5.4-proを使用し，temperatureはAPIの既定値，reasoning effortはhighとした．LLMにはコーパスの会話本文と既存アノテーションを提示する．ESConvの支援戦略，MathDialのTeacher move，MediTODのintent・slotは分析の根拠として利用するが，既存ラベルを状態名として機械的に転用することは求めない．
+Dialogue Feature Analysis Moduleは，図\ref{fig:basis_architecture}の\ding{172}に対応し，LLMを用いて小規模高品質コーパスを分析し，目的固有の会話の進め方を表すラベル体系を生成する．本研究ではGPT-5.4-proを使用し，temperatureはAPIの既定値，reasoning effortはhighとした．LLMにはコーパスの会話本文と既存アノテーションを提示する．
 
-プロンプトでは，4--7個の潜在的な\emph{会話状態}，各状態で観測される\emph{応答戦略}，望ましい状態群と目的から外れる状態群，初期状態確率，状態遷移確率，および観測確率を生成するよう指示する．会話状態は対話相手の状況や対話段階，応答戦略は応答者が取る観測可能な方針を表すため，両者を同義のラベルにしないよう制約する．さらに，ラベル名，説明，確率を所定のJSON objectのみで出力させる．すなわち，ラベル集合を人手で固定するのでも，LLMに無制約で生成させるのでもなく，ラベル数・役割・出力形式を人手で制約したラベル体系誘導（ontology induction）として実施する．
-
-例えば，本実験で使用したESConvからは，挨拶や短い安否確認を通じて相談者が安心して話せる雰囲気を作る状態の\texttt{opening\_\allowbreak rapport}と，相談者の感情を受け止めて承認し，孤立感や心理的負担を和らげる状態の\texttt{empathic\_\allowbreak support}が生成された．応答戦略としては，状況や悩みを詳しく理解するために出来事や背景を文脈に沿って尋ねる\texttt{explore\_\allowbreak question}と，発言内容や感情を言い換えて認め，共感と受容を示す\texttt{reflect\_\allowbreak validate}が生成された．生成されたラベル体系と確率構造は実験開始前に固定し，後続のモジュールで共通して用いる．
+プロンプトでは，4--7個の潜在的な\emph{会話状態}，各状態で観測される\emph{応答戦略}，望ましい状態群と目的から外れる状態群，初期状態確率，状態遷移確率，および観測確率を生成するよう指示する．会話状態は対話相手の状況や対話段階，応答戦略は応答者が取る観測可能な方針を表すため，両者を同義のラベルにしないよう制約する．つまり，ラベル集合を人手で固定するのでも，LLMに無制約で生成させるのでもなく，ラベル数・役割・出力形式を人手で制約したラベル体系誘導（ontology induction）として実施する．
+例えば，本実験で使用したESConvからは，挨拶や短い安否確認を通じて相談者が安心して話せる雰囲気を作る状態の\texttt{opening\_\allowbreak rapport}と，相談者の感情を受け止めて承認し，孤立感や心理的負担を和らげる状態の\texttt{empathic\_\allowbreak support}が生成された．応答戦略としては，状況や悩みを詳しく理解するために出来事や背景を文脈に沿って尋ねる\texttt{explore\_\allowbreak question}と，発言内容や感情を言い換えて認め，共感と受容を示す\texttt{reflect\_\allowbreak validate}が生成された．
 
 \phantomsection
 \label{mod:bayesian_modeling}
 \noindent\textbf{Bayesian Dialogue Modeling Module（ベイズ対話モデル構築モジュール）}\par
 
-Bayesian Dialogue Modeling Moduleは，Dialogue Feature Analysis Moduleが出力したJSONを用いて，目的コーパスの会話の流れを表すベイズ的対話モデルを構築する．会話状態の集合を
+Bayesian Dialogue Modeling Moduleは，Dialogue Feature Analysis Moduleが出力した会話状態，応答戦略，状態遷移を用いて，目的コーパスの会話の流れを表すベイズ的対話モデルを構築する．会話状態の集合を
 $S=\{s_1,\ldots,s_K\}$，応答戦略に対応する観測ラベルの集合を
 $O=\{o_1,\ldots,o_L\}$とする．
-
 ベイズ的対話モデルは，初期状態確率$P(s_1)$，状態遷移確率
 $P(s_t\mid s_{t-1})$と観測尤度
 $P(o_t\mid s_t)$から構成される．状態遷移確率は，目的コーパスから推定した，会話状態$s_{t-1}$から$s_t$へ移行する相対的な傾向を表す．観測尤度は，会話が状態$s_t$にあるときに，応答戦略$o_t$が観測される確率を表す．
-
-これらの確率は，GPT-5.4-proが小規模コーパス全体の傾向として推定した値を正規化し，ラベル体系とともに実験前に固定したものである．確率分布を組み合わせることで，どのような対話状態が生じやすく，各状態でどのような応答戦略が用いられやすいかを表現する．構築したモデルは，小規模コーパス中の発話を記憶するのではなく，状態と戦略の確率的な関係を表すため，コーパスに含まれていない候補応答にも適用できる．
+これらの確率は，LLMが小規模コーパス全体の傾向として推定した値を正規化したものである．確率分布を組み合わせることで，どのような対話状態が生じやすく，各状態でどのような応答戦略が用いられやすいかを表現する．構築したモデルは，小規模コーパス中の発話を記憶するのではなく，状態と戦略の確率的な関係を表すため，コーパスに含まれていない候補応答にも適用できる．
 
 \phantomsection
 \label{mod:scoring}
 \noindent\textbf{Style Compatibility Scoring Module（スタイル適合度スコアリングモジュール）}\par
 
 Style Compatibility Scoring Moduleは，ベイズ的対話モデルを用いて，大規模汎用コーパスに含まれる候補応答$r_t$を，目的コーパスの会話スタイルへの適合度に基づいて評価する．本モジュールの処理を図\ref{fig:bayesian_scoring}に示す．図中の\ding{172}--\ding{176}は，事前状態の設定，状態予測，応答ラベルの付与，ベイズ更新，適合度スコアの算出という以下の処理に対応する．
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/fig2_bayesian_scoring.pdf}
+  \caption{Style Compatibility Scoring Moduleにおける候補応答の評価処理の模式例．前ターンまでの状態分布を遷移モデルにより予測し，候補応答から得た観測ラベルを用いてベイズ更新を行う．青色の経路は予測分布，橙色の経路は観測ラベルが更新式のどの項へ入力されるかを示す．例では，更新後の分布における対象状態ProcessingとSolutionsの確率を合計し，Score \(=0.88\)を得る．}
+  \Description{五つのパネルからなる処理図．前状態分布の例はEmotion disclosureが0.30，Emotion processingが0.45，Considering solutionsが0.25である．遷移モデルによる予測後，候補応答をLLMがEmpathy / validationと分類する．予測分布と観測ラベルは別々の矢印でベイズ更新式の対応する項へ入力され，更新後の分布はDisclosureが0.12，Processingが0.66，Solutionsが0.22となる．対象状態であるProcessingとSolutionsを合計し，スタイル適合度0.88を得る．}
+  \label{fig:bayesian_scoring}
+\end{figure*}
 
 はじめに，候補応答が提示される前の対話状態を，一つの状態に固定するのではなく，状態集合$S$上の確率分布として保持する（図\ref{fig:bayesian_scoring}の\ding{172}）．図の例では，ターン$t-1$までの状態分布$b_{t-1}(s)$として，Emotion disclosureに0.30，Emotion processingに0.45，Considering solutionsに0.25を割り当てている．次に，状態遷移確率を用いて，ターン$t$における状態の予測分布を次式によって計算する（図中の\ding{173}）．
 
@@ -277,20 +280,13 @@ $S_{\mathrm{target}}$の確率の合計として定義する．
 
 本モジュールは，次の応答戦略を一つの正解として固定せず，対話状態を確率分布として保持したまま候補応答を評価する．候補応答ごとに一つの観測ラベルを付与する場合でも，異なる応答戦略が望ましい状態群において高い観測尤度を持つならば，それぞれに対応する候補応答が高い適合度スコアを得られる．したがって，同一の文脈に複数の妥当な応答戦略が存在する場合も，単一の戦略に限定せず評価できる．
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=\textwidth]{figures/fig2_bayesian_scoring.pdf}
-  \caption{Style Compatibility Scoring Moduleにおける候補応答の評価処理の模式例．前ターンまでの状態分布を遷移モデルにより予測し，候補応答から得た観測ラベルを用いてベイズ更新を行う．青色の経路は予測分布，橙色の経路は観測ラベルが更新式のどの項へ入力されるかを示す．例では，更新後の分布における対象状態ProcessingとSolutionsの確率を合計し，Score \(=0.88\)を得る．}
-  \Description{五つのパネルからなる処理図．前状態分布の例はEmotion disclosureが0.30，Emotion processingが0.45，Considering solutionsが0.25である．遷移モデルによる予測後，候補応答をLLMがEmpathy / validationと分類する．予測分布と観測ラベルは別々の矢印でベイズ更新式の対応する項へ入力され，更新後の分布はDisclosureが0.12，Processingが0.66，Solutionsが0.22となる．対象状態であるProcessingとSolutionsを合計し，スタイル適合度0.88を得る．}
-  \label{fig:bayesian_scoring}
-\end{figure*}
+
 
 \phantomsection
 \label{mod:preference_adaptation}
 \noindent\textbf{Preference Data Selection and DPO Adaptation Module（選好データ選別・DPO適応学習モジュール）}\par
 
 Preference Data Selection and DPO Adaptation Moduleは，Style Compatibility Scoring Moduleが算出した適合度スコアに基づいて，大規模汎用コーパスから学習に用いる応答を選別する．各会話文脈に対して構成された候補応答のうち，目的の会話スタイルへの適合度が高い応答を\emph{chosen}，低い応答を\emph{rejected}として選び，選好ペアを構築する．
-
 構築した選好ペアは，Direct Preference Optimization（DPO）\cite{rafailov2023dpo}によるローカルLLMの学習に用いる．DPOは，chosen応答がrejected応答よりも選択されやすくなるようにモデルを直接最適化する．本研究では，モデル全体のパラメータを更新するのではなく，Low-Rank Adaptation（LoRA）\cite{hu2021lora}を適用し，追加された低ランクパラメータのみを更新する．これにより，ローカルLLMが持つ一般的な言語生成能力を活用しながら，選別されたデータに含まれる目的の会話スタイルを効率的に反映する．
 
 
@@ -302,8 +298,7 @@ Preference Data Selection and DPO Adaptation Moduleは，Style Compatibility Sco
 \label{sec:eval_objectives}
 
 本実験の目的は二つである．第一の目的は，BASiSによって選別したデータを用いて学習したモデルが，小規模高品質コーパスに含まれる目的固有の会話スタイルを再現できるかを検証することである．このため，BASiSによる選別データで学習したモデルを，学習前のベースモデル，および目的コーパスの大まかな話題を表すキーワードで絞り込んだカテゴリから無作為に選別したデータで学習したモデルと比較する．これにより，BASiSを用いた学習によって目的の会話スタイルが強化されるか，また，その変化がDPO学習の有無だけでなく，粗い話題の一致を超えてBASiSが行うデータ選別と関係するかを検証する．
-
-第二の目的は，BASiSの有効性が特定の目的特化対話やコーパスの組み合わせに限られず，異なる目的の対話でも確認できるかを検証することである．本実験では，感情支援，数学チュータリング，医療問診の三種類の目的特化対話を対象とし，それぞれ異なる小規模高品質コーパスと大規模汎用コーパスを組み合わせて評価する．人間の評価者が目的固有の応答方針を望ましいと判断するかを人手評価によって検証するとともに，100件の対話例とTarget-only条件を含むOracle評価によって，傾向の広がりと学習条件ごとの差を確認する．
+第二の目的は，BASiSの有効性が特定の目的特化対話やコーパスの組み合わせに限られず，異なる目的の対話でも確認できるかを検証することである．本実験では，感情支援，数学チュータリング，医療問診の三種類の目的特化対話を対象とし，それぞれ異なる小規模高品質コーパスと大規模汎用コーパスを組み合わせて評価する．人間の評価者が目的固有の応答方針を望ましいと判断するかを人手評価によって検証するとともに，100件の対話例とLLMを用いたOracle評価によって，傾向の広がりと学習条件ごとの差を確認する．
 
 
 \subsection{実験方法}
@@ -311,7 +306,6 @@ Preference Data Selection and DPO Adaptation Moduleは，Style Compatibility Sco
 \label{sec:corpora}
 
 本実験では，表\ref{tab:corpus_pairs}に示す三種類のコーパスペアを用いた．各実験設定では，小規模高品質コーパスを目的の会話スタイルを抽出するための参照元として使用し，大規模汎用コーパスをBASiSによる選別対象の候補プールとして使用した．
-
 感情支援対話の実験では，支援を求める話者と支援者の対話を収録したESConv\cite{liu2021esconv}を小規模高品質コーパスとし，日常的な複数ターン対話からなるDailyDialog\cite{li2017dailydialog}を大規模汎用コーパスとした．数学チュータリング対話の実験では，教師とLLMが演じる学習者との一対一の数学対話を収録したMathDial\cite{macina2023mathdial}を小規模高品質コーパスとし，実環境におけるユーザとLLMの対話からなるWildChat-1M\cite{zhao2024wildchat}を大規模汎用コーパスとした．医療問診対話の実験では，医療従事者が作成した医師と患者の問診対話を収録するMediTOD\cite{saley2024meditod}を小規模高品質コーパスとし，MathDialの実験と同様にWildChat-1Mを大規模汎用コーパスとした．
 
 \begin{table}[t]
@@ -345,15 +339,13 @@ Preference Data Selection and DPO Adaptation Moduleは，Style Compatibility Sco
 \end{comment}
 
 
-各実験設定では，まず小規模高品質コーパスからベイズ的対話モデルを構築し，大規模汎用コーパスに含まれる候補応答をStyle Compatibility Scoring Moduleによって評価した．得られた適合度スコアに基づいて選好データを構築し，LoRAを適用したDPOによってローカルLLMを学習した．比較条件として，小規模高品質な目的コーパスのみで学習するTarget-only条件と，粗い話題カテゴリ内から学習データを無作為に選別するRandom条件を構築した．Random条件では，小規模高品質コーパスの主要な話題を表す大まかなキーワードを用いて大規模汎用コーパスをカテゴリ単位で絞り込み，そのカテゴリ内からBASiS条件と同数のデータを選別した．
-人手評価は，研究室メンバー9名を対象に実施した．実験参加者が回答するための負担を抑えるため，各領域の評価用対話を10件に絞り，Base，BASiS，Randomの三条件を比較した．Target-onlyは人手評価には含めていない．各対話について三つの応答をA--Cとしてモデル名を伏せて提示し，同じモデルが常に同じ記号にならないよう，応答と記号の対応を入れ替えた．
+各実験設定のBASiS条件では，まず小規模高品質コーパスからベイズ的対話モデルを構築し，大規模汎用コーパスに含まれる候補応答をStyle Compatibility Scoring Moduleによって評価した．得られた適合度スコアに基づいて選好データを構築し，LoRAを適用したDPOによってローカルLLMを学習した．比較条件として，小規模高品質な目的コーパスのみで学習するTarget-only条件と，粗い話題カテゴリ内から学習データを無作為に選別するRandom条件を構築した．Random条件では，小規模高品質コーパスの主要な話題を表す大まかなキーワードを用いて大規模汎用コーパスをカテゴリ単位で絞り込み，そのカテゴリ内からBASiS条件と同数のデータを選別した．
 
+人手評価は，研究室メンバー9名を対象に実施した．実験参加者が回答するための負担を抑えるため，各領域の評価用対話を10件に絞り，Base，BASiS，Randomの三条件を比較した．各対話について三つの応答をA--Cとしてモデル名を伏せて提示し，同じモデルが常に同じ記号にならないよう，応答と記号の対応を入れ替えた．
 評価者は，表\ref{tab:human_items}の各質問について，それぞれの応答がどの程度当てはまるかを1（全く当てはまらない）から7（非常によく当てはまる）までの7段階で評価した．さらに，各対話で目的に最も適した応答を一つ選択し，差を付けにくい場合は「ほぼ同じ」，評価できない場合は「判断できない」を選べるようにした．ESConvとMathDialでは9名全員の回答を用い，MediTODでは未完了回答者2名を除いた7名の完全な回答を分析した．
+また，軸ごとに各参加者の10件の平均値を算出し，参加者を分析単位とした．三条件の差をFriedman検定で検証してKendallの$W$を効果量として求め，有意差が認められた軸では，三組すべての対応あり置換検定にHolm補正を適用した．平均値の95\%信頼区間は，参加者単位のブートストラップを2,000回行って算出した．最終選択は同一参加者による反復回答であるため，件数と割合を記述統計として報告する．
 
-軸ごとに各参加者の10件の平均値を算出し，参加者を分析単位とした．三条件の差をFriedman検定で検証してKendallの$W$を効果量として求め，有意差が認められた軸では，三組すべての対応あり置換検定にHolm補正を適用した．平均値の95\%信頼区間は，参加者単位のブートストラップを2,000回行って算出した．最終選択は同一参加者による反復回答であるため，件数と割合を記述統計として報告する．
-
-Oracle評価では，各実験設定について100件の評価用対話を用意し，Base，Target-only，BASiS，Randomの各モデルから応答を生成した．四条件で同じ評価用対話を用いることで，対話の違いによる影響を抑えた対応のある比較とした．LLMを評価者として応答を比較し，評価時にはモデル名を提示せず，四条件の提示順をランダム化した．Oracle LLMにはGPT-5.4を使用し，temperatureを0に設定した．それまでの会話履歴と評価対象の応答に加え，表\ref{tab:oracle_axes}の各評価軸について，定義，高得点・低得点となる条件，および共通の採点基準を提示した．採点基準は，1--2点を明確に不適切または文脈を無視した応答，3--4点を評価軸への適合が弱い応答，5--6点を最低限満たす応答，7--8点を十分に満たす良い応答，9--10点を改善点が少ない非常に良い応答とし，10点はほぼ理想的な応答に限定した．モデル名や応答の長さだけで判断しないよう指示し，軸別の1--10の整数値，総合値，および1--2文の根拠をJSON形式で出力させた．
-
+Oracle評価では，各実験設定について100件の評価用対話を用意し，Base，Target-only，BASiS，Randomの各モデルから応答を生成した．四条件で同じ評価用対話を用いることで，対話の違いによる影響を抑えた対応のある比較とした．LLMを評価者として応答を比較し，評価時にはモデル名を提示せず，四条件の提示順をランダム化した．Oracle LLMにはGPT-5.4を使用し，temperatureを0に設定した．それまでの会話履歴と評価対象の応答に加え，表\ref{tab:oracle_axes}の各評価軸について，定義，高得点・低得点となる条件，および共通の採点基準を提示した．採点基準は，1--2点を明確に不適切または文脈を無視した応答，3--4点を評価軸への適合が弱い応答，5--6点を最低限満たす応答，7--8点を十分に満たす良い応答，9--10点を改善点が少ない非常に良い応答とし，10点はほぼ理想的な応答に限定した．モデル名や応答の長さだけで判断しないよう指示し，軸別の1--10の整数値，総合値，および1--2文の根拠を出力させた．
 Oracle評価の各軸について四条件間の差をFriedman検定で検証し，有意な場合は六組すべての対応あり置換検定に軸内Holm補正を適用した．有意水準は$\alpha=.05$とし，平均値にはブートストラップ95\%信頼区間を示した．
 
 
@@ -544,17 +536,20 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
 
 \begingroup
 \setlength{\emergencystretch}{4em}
-本章では，コーパスペアごとに人手評価とOracle評価の結果を示す．人手評価では，BASiSが三領域の全19軸で最高平均値を示し，BaseとRandomをそれぞれ16軸で有意に上回った．Oracle評価でも全21軸で最高平均値を示し，Base，Target-only，Randomに対して，それぞれ18軸，13軸，15軸で有意に高かった．図中の括弧とアスタリスクはHolm補正後のBASiSとの有意な対応比較を表し，$*$は$p<.05$，$**$は$p<.01$，$***$は$p<.001$を示す．
+本章では，実験条件ごとの人手評価とOracle評価の結果を示す．
+\begin{comment}
+  人手評価では，BASiSが三領域の全19軸で最高平均値を示し，BaseとRandomをそれぞれ16軸で有意に上回った．Oracle評価でも全21軸で最高平均値を示し，Base，Target-only，Randomに対して，それぞれ18軸，13軸，15軸で有意に高かった．図中の括弧とアスタリスクはHolm補正後のBASiSとの有意な対応比較を表し，$*$は$p<.05$，$**$は$p<.01$，$***$は$p<.001$を示す．
+\end{comment}
 
 \noindent\textbf{実験条件1：ESConv $\times$ DailyDialog}\par
-図\ref{fig:esconv_human}に人手評価の結果を示す．BASiSは七軸すべてで最高平均値を示し，助言のタイミングに関する軸を除く六軸でBaseとRandomの両方を有意に上回った（Holm補正後$p<.05$）．支援スタイルの強さはBase，BASiS，Randomの順に4.22，5.64，3.97，ESConvらしい語調は4.59，6.17，4.43であった．有意な軸のKendallの$W$は.479--.876であった．助言のタイミングもBASiSの平均値が最も高かったが，対応比較は有意ではなかった．最終選択では，BASiSが74.4\%で選ばれた．
+図\ref{fig:esconv_human}に実験条件1における人手評価の結果を示す．BASiSは七軸すべてで最高平均値を示し，助言のタイミングに関する軸を除く六軸でBaseとRandomの両方を有意に上回った（Holm補正後$p<.05$）．支援スタイルの強さはBase，BASiS，Randomの順に4.22，5.64，3.97，ESConvらしい語調は4.59，6.17，4.43であった．有意な軸のKendallの$W$は.479--.876であった．助言のタイミングもBASiSの平均値が最も高かったが，対応比較は有意ではなかった．最終選択では，BASiSが74.4\%で選ばれた．
 
-図\ref{fig:esconv_oracle}のOracle評価でも，BASiSは全七軸で最高平均値を示した．Style StrengthではBase，Target-only，BASiS，Randomの順に8.26，8.22，8.65，8.21，ESConv Tone Similarityでは8.21，8.25，8.52，8.13であり，BASiSは両軸で三条件すべてを有意に上回った．Premature Advice Avoidanceでも8.57，8.76，9.44，8.92となり，三条件すべてとの差が有意であった．NaturalnessはRandomを有意に上回り，Target-onlyはいずれの軸でもBaseを有意に上回らなかった．
+図\ref{fig:esconv_oracle}の実験条件1におけるOracle評価でも，BASiSは全七軸で最高平均値を示した．Style StrengthではBase，Target-only，BASiS，Randomの順に8.26，8.22，8.65，8.21，ESConv Tone Similarityでは8.21，8.25，8.52，8.13であり，BASiSは両軸で三条件すべてを有意に上回った．Premature Advice Avoidanceでも8.57，8.76，9.44，8.92となり，三条件すべてとの差が有意であった．NaturalnessはRandomを有意に上回り，Target-onlyはいずれの軸でもBaseを有意に上回らなかった．
 
 \noindent\textbf{実験条件2：MathDial $\times$ WildChat-1M}\par
-図\ref{fig:mathdial_human}に人手評価の結果を示す．BASiSは七軸すべてでBaseとRandomの両方を有意に上回った（Holm補正後$p<.05$）．Equitable Tutoringは4.28，5.42，3.73，Feedback Actionabilityは4.13，5.43，3.72であり，学習者自身の思考を促すことと，次に取る行動を明確にすることの双方で改善が確認された．各軸のKendallの$W$は.716--.939であった．最終選択では，BASiSが61.1\%で選ばれた．
+図\ref{fig:mathdial_human}に実験条件2における人手評価の結果を示す．BASiSは七軸すべてでBaseとRandomの両方を有意に上回った（Holm補正後$p<.05$）．Equitable Tutoringは4.28，5.42，3.73，Feedback Actionabilityは4.13，5.43，3.72であり，学習者自身の思考を促すことと，次に取る行動を明確にすることの双方で改善が確認された．各軸のKendallの$W$は.716--.939であった．最終選択では，BASiSが61.1\%で選ばれた．
 
-図\ref{fig:mathdial_oracle}のOracle評価では，BASiSが七軸すべてで三つの比較条件を上回り，全21比較が有意であった（すべて$p<.001$）．Equitable TutoringではBase，Target-only，BASiS，Randomの順に6.77，7.02，7.75，6.00であった．Learner Reasoning Diagnosisは7.38，7.76，8.70，6.97，Mistake Location and Targetingは7.53，7.74，8.85，7.27であった．Feedback ActionabilityにおけるBASiSとRandomの差は1.85ポイントで，七軸中最大であった．Target-onlyは全軸でBaseより高い平均値を示したが，差は有意ではなかった．
+図\ref{fig:mathdial_oracle}の実験条件2におけるOracle評価では，BASiSが七軸すべてで三つの比較条件を上回り，全21比較が有意であった（すべて$p<.001$）．Equitable TutoringではBase，Target-only，BASiS，Randomの順に6.77，7.02，7.75，6.00であった．Learner Reasoning Diagnosisは7.38，7.76，8.70，6.97，Mistake Location and Targetingは7.53，7.74，8.85，7.27であった．Feedback ActionabilityにおけるBASiSとRandomの差は1.85ポイントで，七軸中最大であった．Target-onlyは全軸でBaseより高い平均値を示したが，差は有意ではなかった．
 
 \begin{figure*}[t]
   \begin{minipage}[t]{0.485\textwidth}
@@ -574,9 +569,9 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
 \end{figure*}
 
 \noindent\textbf{実験条件3：MediTOD $\times$ WildChat-1M}\par
-図\ref{fig:meditod_human}に人手評価の結果を示す．BASiSは五軸すべてで最高平均値を示した．Premature Assessment Avoidance，Unsafe Medical Advice Avoidance，Unsupported Diagnosis Avoidanceでは，BaseとRandomの両方を有意に上回り（Holm補正後$p<.05$），Kendallの$W$は.799--.813であった．Coverage Without RedundancyとAppropriate UncertaintyではFriedman検定が有意ではなかった．最終選択では，BASiSが44.3\%と最も多く選ばれた．
+図\ref{fig:meditod_human}に実験条件3における人手評価の結果を示す．BASiSは五軸すべてで最高平均値を示した．Premature Assessment Avoidance，Unsafe Medical Advice Avoidance，Unsupported Diagnosis Avoidanceでは，BaseとRandomの両方を有意に上回り（Holm補正後$p<.05$），Kendallの$W$は.799--.813であった．Coverage Without RedundancyとAppropriate UncertaintyではFriedman検定が有意ではなかった．最終選択では，BASiSが44.3\%と最も多く選ばれた．
 
-図\ref{fig:meditod_oracle}のOracle評価でも，BASiSは全七軸で最高平均値を示した．Response RelevanceではBase，Target-only，BASiS，Randomの順に4.46，4.70，5.09，4.91，Overall Qualityでは5.16，5.26，5.69，5.46であった．Appropriate Uncertaintyでは7.84，7.96，8.26，7.92となり，BASiSは三条件すべてを有意に上回った．Unsafe Medical Advice AvoidanceはRandomを，Unsupported Diagnosis AvoidanceはBaseとRandomを有意に上回った．Target-onlyはMediTODでもBaseを有意に上回る軸がなかった．
+図\ref{fig:meditod_oracle}の実験条件3におけるOracle評価でも，BASiSは全七軸で最高平均値を示した．Response RelevanceではBase，Target-only，BASiS，Randomの順に4.46，4.70，5.09，4.91，Overall Qualityでは5.16，5.26，5.69，5.46であった．Appropriate Uncertaintyでは7.84，7.96，8.26，7.92となり，BASiSは三条件すべてを有意に上回った．Unsafe Medical Advice AvoidanceはRandomを，Unsupported Diagnosis AvoidanceはBaseとRandomを有意に上回った．Target-onlyはMediTODでもBaseを有意に上回る軸がなかった．
 
 \begin{figure*}[t]
   \begin{minipage}[t]{0.485\textwidth}
@@ -651,7 +646,7 @@ Oracle評価では，Target-onlyが21軸のいずれでもBaseを有意に上回
 
 \noindent\textbf{考察6：三つの目的特化対話への適用可能性}\par
 BASiSは，参照元と選別対象のコーパスを変更するだけで，同一のパイプラインを三領域へ適用した．人手評価とOracle評価の全評価軸で最高平均値を示し，最終選択でも三領域すべてで最も多く選ばれたことから，BASiSは特定の語調に限定されず，各目的コーパスに固有の応答方針を抽出してモデルへ反映できると考えられる．領域ごとに強く改善した側面が異なったことも，単一の固定ガイドラインではなく，各コーパスから状態・戦略を誘導する設計の利点を示している．
-人手評価は研究室メンバー9名，各領域10件であり，MediTODは完全回答者7名を分析した．したがって，今回の結果はBASiSの有効性を示す明確な初期的根拠である一方，利用者層全体への一般化には，外部評価者とより多くの対話例による検証が必要である．今後は対象を広げるとともに，目的ごとの状態・戦略・望ましい状態群の設計を洗練することで，BASiSの強みをより多様な目的特化対話へ展開できると考えられる．
+したがって，今回の結果はBASiSの有効性を示す明確な初期的根拠である一方，利用者層全体への一般化には，外部評価者とより多くの対話例による検証が必要である．今後は対象を広げるとともに，目的ごとの状態・戦略・望ましい状態群の設計を洗練することで，BASiSの強みをより多様な目的特化対話へ展開できると考えられる．
 \endgroup
 
 \begin{comment}
