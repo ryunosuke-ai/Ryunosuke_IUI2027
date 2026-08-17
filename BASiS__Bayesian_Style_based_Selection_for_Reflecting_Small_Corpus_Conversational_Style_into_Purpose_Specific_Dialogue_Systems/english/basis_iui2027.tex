@@ -69,7 +69,9 @@
 \renewcommand{\shortauthors}{Anonymous Author(s)}
 
 \begin{abstract}
-We propose BASiS (Bayesian Style-based Selection), a method that treats a small, high-quality dialogue corpus not merely as a collection of utterances, but as a source of implicit knowledge about how conversations unfold. BASiS models this knowledge through transitions among dialogue states and probability distributions over response strategies, then repurposes the model as a criterion for selecting training data from a large general-purpose corpus. We focus on settings where dialogue must progress according to the user’s state and interactional phase. In such settings, dialogue quality depends not only on utterance content, but also on procedural interactional knowledge: how to interpret the user’s situation and which dialogue strategy to use at what point. Although such knowledge is implicitly encoded in small, high-quality corpora, these corpora alone provide limited data for LLM training. BASiS extracts dialogue states, response strategies, and state transitions from the small corpus and represents them as a Bayesian dialogue model. It then scores dialogues in a large corpus by their compatibility with the target conversational style, selects training data, constructs preference pairs, and trains the LLM using Direct Preference Optimization (DPO). This uses knowledge from limited high-quality dialogues to guide training-data expansion. It also reduces the need for manually designed dialogue guidelines while incorporating response timing and multi-turn progression that generic quality or topical similarity cannot capture. By maintaining dialogue states probabilistically rather than choosing a single response strategy, BASiS can preserve multiple valid strategies for the same context. We evaluated BASiS in emotional support, mathematics tutoring, and medical interviewing against the base model and a model trained on randomly selected in-category data. BASiS achieved the highest mean score on all 21 evaluation dimensions, with broad statistically significant improvements in emotional support and mathematics tutoring.
+We propose BASiS (Bayesian Style-based Selection), a framework for scaling the interactional knowledge encoded in a small, high-quality dialogue corpus to large-scale LLM training. We focus on settings where dialogue must progress according to the user’s state and the stage of the interaction as exemplified in emotional support, education, and healthcare. In such settings, dialogue quality depends not only on utterance content but also on how the dialogue develops across turns, which involves procedural interactional knowledge of how to adapt response strategies as the interaction evolves. Although such knowledge is implicitly encoded in small, high-quality corpora, these corpora alone provide limited data for LLM training. To overcome this challenge, BASiS models the progression patterns in the high-quality corpus and uses the resulting model to guide training-data selection from a large general-purpose corpus. It extracts dialogue states, response strategies, and state transitions from the small corpus and represents the probabilistic relationships as a Bayesian dialogue model. The model scores candidate responses in a large corpus according to how well they support the dialogue progression exhibited in the high-quality corpus, and the scores are used to construct preference pairs for LLM fine-tuning with Direct Preference Optimization (DPO).
+%Compared with manually designed dialogue guidelines, this framework reduces the need for manually designed dialogue guidelines while incorporating response timing and multi-turn progression that generic quality or topical similarity cannot capture. By maintaining dialogue states probabilistically rather than choosing a single response strategy, BASiS can preserve multiple valid strategies for the same context. 
+We evaluated BASiS in emotional support, mathematics tutoring, and medical history-taking against the base model and a model trained on randomly selected in-category data. In the human evaluation, BASiS achieved the highest mean score on all 19 evaluation dimensions and was selected most often in all three domains. In the LLM-based oracle evaluation, BASiS achieved the highest mean score on all 21 evaluation dimensions, with broad statistically significant improvements in emotional support and mathematics tutoring.
 \end{abstract}
 
 \begin{CCSXML}
@@ -346,7 +348,8 @@ Table~\ref{tab:oracle_axes} summarizes the seven oracle-evaluation axes used in 
   \begin{tabularx}{\BasisOracleTableWidth}
     {@{}A@{\hspace{0.8em}}Q@{}}
     \toprule
-    \textbf{Evaluation axis} & \textbf{What the axis measures} \\
+    \multicolumn{1}{c}{\textbf{Evaluation axis}} &
+    \multicolumn{1}{c}{\textbf{What the axis measures}} \\
     \midrule
     \BasisCorpusHeader{Corpus pair: ESConv $\times$ DailyDialog}
     Style Strength &
@@ -422,7 +425,8 @@ The human evaluation uses questions that make the purpose-specific conversationa
   \renewcommand{\arraystretch}{1.1}
   \begin{tabularx}{\BasisHumanTableWidth}{@{}I@{\hspace{0.6em}}Q@{}}
     \toprule
-    \textbf{Item} & \textbf{Question} \\
+    \multicolumn{1}{c}{\textbf{Item}} &
+    \multicolumn{1}{c}{\textbf{Question}} \\
     \midrule
     \BasisCorpusHeader{Corpus pair: ESConv $\times$ DailyDialog}
     \addlinespace[0.15em]
@@ -534,26 +538,30 @@ In the oracle evaluation for Experimental Setting~3 shown in Figure~\ref{fig:med
     \Description{A bar chart comparing mean oracle scores for Base, Target-only, BASiS, and Random on seven medical history-taking dialogue axes. BASiS has the highest mean on every axis, although the significance pattern differs across axes.}
     \label{fig:meditod_oracle}
   \end{minipage}
-\end{figure*}
 
-\begin{table}[t]
-  \centering
-  \caption{Counts and percentages of final choices in the human evaluation}
-  \label{tab:human_final_choice}
-  \small
-  \renewcommand{\arraystretch}{1.12}
-  \begin{tabular}{@{}lccc@{}}
-    \toprule
-    \textbf{Choice} & \textbf{ESConv} & \textbf{MathDial} & \textbf{MediTOD} \\
-    \midrule
-    Base           & 14 (15.6\%) & 16 (17.8\%) & 11 (15.7\%) \\
-    BASiS          & 67 (74.4\%) & 55 (61.1\%) & 31 (44.3\%) \\
-    Random         &  6 ( 6.7\%) & 12 (13.3\%) & 19 (27.1\%) \\
-    Almost the same & 2 ( 2.2\%) &  3 ( 3.3\%) &  8 (11.4\%) \\
-    Cannot judge   &  1 ( 1.1\%) &  4 ( 4.4\%) &  1 ( 1.4\%) \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+  \par\vspace{0.8em}
+  \begin{minipage}{0.68\textwidth}
+    \centering
+    \makeatletter
+    \def\@captype{table}
+    \makeatother
+    \caption{Counts and percentages of final choices in the human evaluation}
+    \label{tab:human_final_choice}
+    \small
+    \renewcommand{\arraystretch}{1.18}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lccc@{}}
+      \toprule
+      \multicolumn{1}{c}{\textbf{Choice}} & \textbf{ESConv} & \textbf{MathDial} & \textbf{MediTOD} \\
+      \midrule
+      Base           & 14 (15.6\%) & 16 (17.8\%) & 11 (15.7\%) \\
+      \textbf{BASiS} & \textbf{67 (74.4\%)} & \textbf{55 (61.1\%)} & \textbf{31 (44.3\%)} \\
+      Random         & 6 (6.7\%) & 12 (13.3\%) & 19 (27.1\%) \\
+      Almost the same & 2 (2.2\%) & 3 (3.3\%) & 8 (11.4\%) \\
+      Cannot judge   & 1 (1.1\%) & 4 (4.4\%) & 1 (1.4\%) \\
+      \bottomrule
+    \end{tabular*}
+  \end{minipage}
+\end{figure*}
 
 Table~\ref{tab:human_final_choice} summarizes the final-choice distribution. BASiS was selected most often in every domain: 74.4\% for ESConv, 61.1\% for MathDial, and 44.3\% for MediTOD. In MediTOD, this share was not a majority but exceeded Random by 17.2 percentage points.
 

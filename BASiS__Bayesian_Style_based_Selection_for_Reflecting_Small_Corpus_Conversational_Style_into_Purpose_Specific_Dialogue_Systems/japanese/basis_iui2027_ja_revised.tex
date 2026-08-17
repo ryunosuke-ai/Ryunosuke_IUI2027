@@ -94,7 +94,7 @@
 \begin{abstract}
 本論文では，小規模高品質な対話コーパスを単なる発話例の集合として利用するのではなく，そこに暗黙に含まれる対話の進め方を，会話状態の遷移と各状態における応答戦略の確率分布としてモデル化し，このモデルを大規模汎用コーパスから学習データを選ぶ基準へ転用する手法BASiS（Bayesian Style-based Selection）を提案する．本研究は，相手の状態や対話局面に応じて対話を進行させる必要がある場面に着目する．こうした対話の質を支えるのは，個々の発話内容だけではなく，相手の状況をどのように捉え，どのタイミングでどの対話方策を用いるかという、インタラクションにおける手続き的知識である．しかし，このような知識は小規模な高品質対話コーパスに暗黙的に含まれている一方，そのままでは大規模なLLM学習に十分なデータ量を確保できない．BASiSは，この知識を会話状態・応答戦略・状態遷移の確率モデルとして抽出し，大規模汎用コーパスの学習データ選別基準へ変換することで，少量の高品質対話に含まれる知識を大規模学習へスケールさせる．
 BASiSでは，小規模コーパスから会話状態，応答戦略，状態遷移を抽出し，それらをベイズ的対話モデルとして表現する．次に，大規模コーパスに含まれる対話を，目的の会話スタイルへの適合度に基づいてスコアリングし，学習データを選別する．さらに，選別したデータから選好ペアを構築し，Direct Preference Optimization（DPO）を用いてLLMを学習する．これにより，詳細な対話ガイドラインを人手で設計する負担を軽減しながら，一般的な品質や話題の類似性だけでは捉えにくい応答のタイミングや複数ターンにわたる対話の進行を，データ選別に反映できる．また，単一の応答戦略に固定するのではなく，会話状態を確率分布として保持することで，同一の文脈に対する複数の妥当な応答戦略を維持できる．
-感情支援，数学チュータリング，医療問診を対象として，学習前のベースモデル，BASiSによる選別データで学習したモデル，および目的コーパスのカテゴリ内から無作為に選別したデータで学習したモデルを比較することで，BASiSを評価した．その結果，BASiSは三領域の全21評価軸で最高の平均値を示し，感情支援と数学チュータリングでは広範な有意改善が確認された．
+感情支援，数学チュータリング，医療問診を対象として，学習前のベースモデル，BASiSによる選別データで学習したモデル，および目的コーパスのカテゴリ内から無作為に選別したデータで学習したモデルを比較することで，BASiSを評価した．人手評価では，BASiSは全19評価軸で最高平均値を示し，三領域すべてで最終選択として最も多く選ばれた．LLMを用いたOracle評価では，BASiSは全21評価軸で最高平均値を示し，感情支援と数学チュータリングでは広範な有意改善が確認された．
 \end{abstract}
 
 \begin{CCSXML}
@@ -397,7 +397,8 @@ DPOの学習率は$5\times10^{-6}$，$\beta=0.1$とした．LoRAはランク$r=8
   \begin{tabularx}{\BasisOracleTableWidth}
     {@{}A@{\hspace{0.8em}}Q@{}}
     \toprule
-    \textbf{評価軸} & \textbf{評価内容} \\
+    \multicolumn{1}{c}{\textbf{評価軸}} &
+    \multicolumn{1}{c}{\textbf{評価内容}} \\
     \midrule
     \BasisCorpusHeader{コーパスペア：ESConv $\times$ DailyDialog}
     Style Strength &
@@ -474,7 +475,8 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
   \renewcommand{\arraystretch}{1.08}
   \begin{tabularx}{\BasisHumanTableWidth}{@{}I@{\hspace{0.8em}}Q@{}}
     \toprule
-    \textbf{項目} & \textbf{質問文} \\
+    \multicolumn{1}{c}{\textbf{項目}} &
+    \multicolumn{1}{c}{\textbf{質問文}} \\
     \midrule
     \BasisCorpusHeader{コーパスペア：ESConv $\times$ DailyDialog}
     \addlinespace[0.15em]
@@ -595,18 +597,18 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
   \caption{人手評価における最終選択の件数と割合}
   \label{tab:human_final_choice}
   \small
-  \renewcommand{\arraystretch}{1.12}
-  \begin{tabular}{@{}lccc@{}}
+  \renewcommand{\arraystretch}{1.18}
+  \begin{tabular*}{0.68\textwidth}{@{\extracolsep{\fill}}lccc@{}}
     \toprule
-    \textbf{選択} & \textbf{ESConv} & \textbf{MathDial} & \textbf{MediTOD} \\
+    \multicolumn{1}{c}{\textbf{選択}} & \textbf{ESConv} & \textbf{MathDial} & \textbf{MediTOD} \\
     \midrule
     Base       & 14 (15.6\%) & 16 (17.8\%) & 11 (15.7\%) \\
-    BASiS      & 67 (74.4\%) & 55 (61.1\%) & 31 (44.3\%) \\
-    Random     &  6 ( 6.7\%) & 12 (13.3\%) & 19 (27.1\%) \\
-    ほぼ同じ   &  2 ( 2.2\%) &  3 ( 3.3\%) &  8 (11.4\%) \\
-    判断できない & 1 ( 1.1\%) &  4 ( 4.4\%) &  1 ( 1.4\%) \\
+    \textbf{BASiS} & \textbf{67 (74.4\%)} & \textbf{55 (61.1\%)} & \textbf{31 (44.3\%)} \\
+    Random     & 6 (6.7\%) & 12 (13.3\%) & 19 (27.1\%) \\
+    ほぼ同じ   & 2 (2.2\%) & 3 (3.3\%) & 8 (11.4\%) \\
+    判断できない & 1 (1.1\%) & 4 (4.4\%) & 1 (1.4\%) \\
     \bottomrule
-  \end{tabular}
+  \end{tabular*}
 \end{table}
 
 表\ref{tab:human_final_choice}に最終選択の分布をまとめる．BASiSの選択率はESConvで74.4\%，MathDialで61.1\%，MediTODで44.3\%となり，三領域すべてで最も多く選ばれた．MediTODでは過半数には達していないが，Randomを17.2ポイント上回った．
