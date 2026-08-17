@@ -395,9 +395,9 @@ def build_architecture_slide(prs):
         slide,
         0.50,
         0.41,
-        2.64,
+        3.68,
         0.34,
-        "A   STYLE MODEL INDUCTION",
+        "A   DIALOGUE PROGRESSION MODEL INDUCTION",
         BLUE,
         BLUE_FILL,
         size=9,
@@ -425,7 +425,7 @@ def build_architecture_slide(prs):
         1.53,
         1.28,
         0.25,
-        "STYLE REFERENCE",
+        "PROGRESSION REFERENCE",
         size=8.1,
         color=INK,
         name="Small corpus role",
@@ -556,7 +556,7 @@ def build_architecture_slide(prs):
         4.72,
         1.74,
         0.68,
-        "Style Compatibility\nScoring",
+        "Dialogue Progression\nScoring",
         size=13.1,
         bold=True,
         font=FONT_DISPLAY,
@@ -638,7 +638,7 @@ def build_architecture_slide(prs):
         5.20,
         1.74,
         0.57,
-        "Style-adapted\nlocal LLM",
+        "Progression-adapted\nlocal LLM",
         size=13.0,
         color=WHITE,
         bold=True,
@@ -742,7 +742,7 @@ def build_scoring_slide(prs):
     add_panel(slide, predict_x, panel_y, small_w, panel_h, 2, "PREDICT", BLUE, "Predict")
     add_panel(slide, observe_x, panel_y, small_w, panel_h, 3, "LABEL RESPONSE", ORANGE, "Observe")
     add_panel(slide, update_x, panel_y, update_w, panel_h, 4, "BAYESIAN UPDATE", TEAL, "Update")
-    add_panel(slide, score_x, panel_y, small_w, panel_h, 5, "STYLE SCORE", TEAL, "Score")
+    add_panel(slide, score_x, panel_y, small_w, panel_h, 5, "PROGRESSION SCORE", TEAL, "Score")
 
     # Prior state distribution
     add_text(
@@ -974,7 +974,7 @@ def build_scoring_slide(prs):
         "Score(rₜ) =  ∑  bₜ(s)\n                  s∈Sₜₐᵣɡₑₜ",
         size=11.4,
         font=FONT_MATH,
-        name="Style score equation",
+        name="Progression score equation",
     )
     add_chip(
         slide,
@@ -1010,7 +1010,7 @@ def build_scoring_slide(prs):
         color=TEAL,
         bold=True,
         font=FONT_MATH,
-        name="Style compatibility score",
+        name="Progression compatibility score",
     )
     add_text(
         slide,
@@ -1018,10 +1018,10 @@ def build_scoring_slide(prs):
         5.22,
         1.48,
         0.28,
-        "style compatibility",
+        "progression compatibility",
         size=8.6,
         color=MUTED,
-        name="Style compatibility label",
+        name="Progression compatibility label",
     )
 
     # Non-overlapping variable rails above the five panels

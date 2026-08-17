@@ -117,7 +117,7 @@
     inner xsep=4pt,
     inner ysep=1.5pt,
     font=\sffamily\bfseries\scriptsize
-  ] at (0.22,4.47) {A \quad STYLE MODEL INDUCTION};
+  ] at (0.22,4.47) {A \quad DIALOGUE PROGRESSION MODEL INDUCTION};
   \node[
     anchor=west,
     text=teal,
@@ -130,7 +130,7 @@
 
   \node[corpus, text width=2.35cm] (small) at (1.48,2.62) {%
     {\color{blue}\large\faDatabase}\\[-1pt]
-    {\scriptsize STYLE REFERENCE}\\[-1pt]
+    {\scriptsize PROGRESSION REFERENCE}\\[-1pt]
     {\bfseries\footnotesize Small,\\high-quality\\dialogue corpus}
   };
 
@@ -151,7 +151,7 @@
   };
 
   \node[scorecard, text width=3.45cm] (scoring) at (6.95,-0.62) {%
-    {\bfseries\small Style Compatibility\\Scoring}\\[2pt]
+    {\bfseries\small Dialogue Progression\\Scoring}\\[2pt]
     {\scriptsize \(\mathrm{Score}(r_t)\in[0,1]\)}
   };
 
@@ -173,7 +173,7 @@
     inner ysep=5pt
   ] (local) at (17.65,-0.62) {%
     {\large\faMicrochip}\\[-1pt]
-    \textbf{Style-adapted\\local LLM}
+    \textbf{Progression-adapted\\local LLM}
   };
 
   % Number badges make the four modules easy to map to the method text.
@@ -182,7 +182,7 @@
   \node[badge, fill=teal] at ($(scoring.north west)+(-0.05,0.00)$) {3};
   \node[badge, fill=orange] at ($(adaptation.north west)+(-0.05,0.00)$) {4};
 
-  % Style-reference path.
+  % Progression-reference path.
   \draw[flow]
     (small.east)
     -- node[arrowlabel, midway, yshift=2.5pt] {dialogue data}

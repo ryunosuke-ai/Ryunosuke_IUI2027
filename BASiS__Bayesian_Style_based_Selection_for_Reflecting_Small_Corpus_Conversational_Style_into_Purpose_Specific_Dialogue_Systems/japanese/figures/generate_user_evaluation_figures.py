@@ -55,7 +55,7 @@ EXPERIMENT_SPECS = (
             "Naturalness",
         ),
         "labels": (
-            "Style strength",
+            "Support behavior",
             "Tone similarity",
             "Role consistency",
             "Non-directive",

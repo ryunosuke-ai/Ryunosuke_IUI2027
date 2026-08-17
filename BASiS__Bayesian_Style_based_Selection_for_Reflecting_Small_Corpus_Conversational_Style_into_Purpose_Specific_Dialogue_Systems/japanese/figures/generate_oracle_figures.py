@@ -55,7 +55,7 @@ EXPERIMENT_SPECS = (
             "text_style_transfer.naturalness",
         ),
         "labels": (
-            "Style strength",
+            "Support behavior",
             "Tone similarity",
             "Role consistency",
             "Non-directive",
