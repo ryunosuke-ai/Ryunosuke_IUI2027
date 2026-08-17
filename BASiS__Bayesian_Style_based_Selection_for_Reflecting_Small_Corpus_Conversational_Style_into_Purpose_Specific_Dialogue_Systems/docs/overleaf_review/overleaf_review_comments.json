@@ -1,0 +1,2306 @@
+[
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "長くてしんどいから思い切って全カットしたい",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786852123024",
+    "raw_hint": {
+      "id": "6a81331b5a4f0221dce0d9ef",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "これに関する言及は2章でも無くした（はず？）なので、取り除く。これが活きていることが実証されていないし、なくても十分新規性がある。",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786859614110",
+    "raw_hint": {
+      "id": "6a81505ebc9e0241845d5d22",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "local LLM -> LLM 他も同様",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786859643080",
+    "raw_hint": {
+      "id": "6a81507b149dca017d3cc202",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "trainingと呼ぶのは、間違ってはいないが、多義的（ベイズモデルの構築とLLMのファインチューニング）だし、data selectionとかの部分が抜ける感じがするし、微妙な感じ。 シンプルにBASiS Pipelineとかでどうか。他の部分も全部。",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786859855861",
+    "raw_hint": {
+      "id": "6a81514f149dca017d3cc20f",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "moduleを排除してstepに統一 パイプラインがモジュールから構成されるという表現は違和感。パイプラインは、工程。モジュールの寄せ集めでできるのは、システム。",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786860082380",
+    "raw_hint": {
+      "id": "6a815232bc9e0241845d5d33",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "LLMっぽい造語感が気に食わない Dialogue Progression Modeling",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786860321300",
+    "raw_hint": {
+      "id": "6a8153215a4f0221dce0dbcc",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "LLMっぽい造語。おそらく、用語を新たに導入する必要はない。",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786860658083",
+    "raw_hint": {
+      "id": "6a815472bc9e0241845d5d57",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "引用",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786860855174",
+    "raw_hint": {
+      "id": "6a81553764119677b6a6b78c",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "数字で書こう",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786861055583",
+    "raw_hint": {
+      "id": "6a8155ff64119677b6a6b7a7",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "こういう実装レベルの話は評価の章へ",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786861077260",
+    "raw_hint": {
+      "id": "6a81561564119677b6a6b7ac",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "初出？ESConvってなんだっけ。データセット？",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786861142482",
+    "raw_hint": {
+      "id": "6a815656bc9e0241845d5d7a",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "各ステップについて、入力が何で出力が何か説明して。",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786861551664",
+    "raw_hint": {
+      "id": "6a8157efbc9e0241845d5d9e",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "うーんわからん。造語が多すぎる？conversational states, response strategies、off-purpose state、全部わかんない",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786861666160",
+    "raw_hint": {
+      "id": "6a815862149dca017d3cc2aa",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "まずstateを定義しよう",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862217024",
+    "raw_hint": {
+      "id": "6a815a89149dca017d3cc2d5",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "やっていることは、LLMによる各応答のラベルづけ？そのラベルがstate?",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862506299",
+    "raw_hint": {
+      "id": "6a815baa149dca017d3cc2f0",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "どういう意味？",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862285079",
+    "raw_hint": {
+      "id": "6a815acd149dca017d3cc2da",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "具体的なモデル名は3章に出さない",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862563709",
+    "raw_hint": {
+      "id": "6a815be364119677b6a6b81e",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "なんかさっきも見たな。冗長性チェックして",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862594183",
+    "raw_hint": {
+      "id": "6a815c02bc9e0241845d5df0",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "形式とかどうでもいい",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786862603162",
+    "raw_hint": {
+      "id": "6a815c0b05ffd569abc002fb",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "network:https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "text": "本当にこの整理が正しいのか？bayesian updateはscoringなのか？モデル作るところだけで1ステップ使ったら？ でも前のステップもモデル作ってた。このステップとの違いは？",
+    "author": "fukuchi@ailab.ics.keio.ac.jp",
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": "1786863122943",
+    "raw_hint": {
+      "id": "6a815e12bc9e0241845d5e26",
+      "user": {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "edit edit edit edit edit edit edit edit edit edit edit edit edit edit edit edit edit comment",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[data-testid*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-container review-panel-mini",
+        "data-testid": "review-panel",
+        "style": "--review-panel-top: 109px; --review-panel-height: 22541px;"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_commentAdd comment",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[aria-label*=\"comment\" i]",
+      "tag": "BUTTON",
+      "attrs": {
+        "class": "ol-cm-toolbar-button",
+        "aria-label": "Add comment",
+        "aria-disabled": "false",
+        "type": "button"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "invert_colors",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[aria-label*=\"review\" i]",
+      "tag": "BUTTON",
+      "attrs": {
+        "type": "button",
+        "aria-label": "Showing PDF preview with inverted colors",
+        "data-ol-loading": "false",
+        "class": "d-inline-grid pdf-toolbar-btn toolbar-item theme-toggle-btn icon-button btn active btn-link",
+        "style": "position: relative;"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% ------------------------------------------------------------------",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% BASiS: Bayesian Style-based Selection",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% IUI 2027 double-blind submission draft",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% Compile with pdflatex (or latexmk -pdf) + bibtex.",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% Long-table layout switch. Change only the following line to",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% \\BasisPolishedTablesfalse to restore the previous centered layout with",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% underlined corpus-pair headings in Tables 3 and 4.",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% Uncomment once the submission ID has been issued by PCS.",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "%% \\acmSubmissionID{123-A45-B67}",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "Compared with manually designed dialogue guidelines, this framework",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "reduces the need for manually designed dialogue guidelines while incorporating response timing and multi-turn progression that generic quality or topical similarity cannot capture. By maintaining dialogue states probabilistically rather than choosing a single response strategy, BASiS can preserve multiple valid strategies for the same context.",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "tok-comment"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:48 pmcheckResolve commentmore_vertMore options長くてしんどいから思い切って全カットしたい",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"comment\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-comment-wrapper"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "edit Editing keyboard_arrow_down",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-mode-switcher dropdown"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "Editing",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-mode-switcher-toggle-label"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 9:41 amcheckAccept changecloseReject changeeditChanged: We propose BASiS (Bayesian Style-based Selection),...show more to We propose BASiS (Bayesian Style-based Selection),...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 9:41 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-user",
+        "translate": "no"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 9:41 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "checkAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-actions"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "check",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "material-symbols review-panel-entry-actions-icon",
+        "aria-hidden": "true",
+        "translate": "no"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "close",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "material-symbols review-panel-entry-actions-icon",
+        "aria-hidden": "true",
+        "translate": "no"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: We propose BASiS (Bayesian Style-based Selection),...show more to We propose BASiS (Bayesian Style-based Selection),...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "We propose BASiS (Bayesian Style-based Selection),...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "We propose BASiS (Bayesian Style-based Selection),...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-links review-panel-expandable-inline"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:47 amcheckAccept changecloseReject changeeditChanged: interactional phase to the stage of the interaction as exemplified in",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:47 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 10:47 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: interactional phase to the stage of the interaction as exemplified in",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "interactional phase",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "the stage of the interaction as exemplified in",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 9:45 amcheckAccept changecloseReject changeadd_circleAdded: emotional support, education, and healthcare",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 9:45 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 9:45 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circleAdded: emotional support, education, and healthcare",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circle",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "material-symbols review-panel-entry-icon review-panel-entry-change-icon review-panel-entry-icon-accept",
+        "aria-hidden": "true",
+        "translate": "no"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "emotional support, education, and healthcare",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "INS",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:56 amcheckAccept changecloseReject changedeleteDeleted: ,",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:56 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 10:56 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "deleteDeleted: ,",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:54 amcheckAccept changecloseReject changeeditChanged: procedural interactional knowledge: to how the dialogue develops across turns, which invo...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 10:54 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 10:54 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: procedural interactional knowledge: to how the dialogue develops across turns, which invo...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "procedural interactional knowledge:",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "how the dialogue develops across turns, which invo...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 11:01 amcheckAccept changecloseReject changeeditChanged: how to interpret the user’s situation and which di...show more to how to adapt response strategies as the interactio...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 11:01 amcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 11:01 am",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: how to interpret the user’s situation and which di...show more to how to adapt response strategies as the interactio...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "how to interpret the user’s situation and which di...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "how to interpret the user’s situation and which di...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "how to adapt response strategies as the interactio...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:21 pmcheckAccept changecloseReject changeadd_circleAdded: To overcome this challenge,",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:21 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:21 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circleAdded: To overcome this challenge,",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "To overcome this challenge,",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "INS",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:34 pmcheckAccept changecloseReject changeadd_circleAdded: models the progression patterns in the high-qualit...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:34 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:34 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circleAdded: models the progression patterns in the high-qualit...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "models the progression patterns in the high-qualit...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "INS",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "models the progression patterns in the high-qualit...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:35 pmcheckAccept changecloseReject changeeditChanged: them to the probabilistic relationships",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:35 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:35 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: them to the probabilistic relationships",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "them",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "the probabilistic relationships",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:36 pmcheckAccept changecloseReject changeeditChanged: It then to The model",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:36 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:36 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: It then to The model",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "It then",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "The model",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:38 pmcheckAccept changecloseReject changeeditChanged: dialogues to candidate responses",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:38 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:38 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: dialogues to candidate responses",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "dialogues",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "candidate responses",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:39 pmcheckAccept changecloseReject changeeditChanged: by their compatibility with the target conversatio...show more to according to how well they support the dialogue pr...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:39 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:39 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: by their compatibility with the target conversatio...show more to according to how well they support the dialogue pr...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "by their compatibility with the target conversatio...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "by their compatibility with the target conversatio...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "according to how well they support the dialogue pr...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:40 pmcheckAccept changecloseReject changedeleteDeleted: s",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:40 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:40 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "deleteDeleted: s",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:40 pmcheckAccept changecloseReject changeeditChanged: , and trains the LLM using to for LLM fine-tuning with",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: , and trains the LLM using to for LLM fine-tuning with",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": ", and trains the LLM using",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "for LLM fine-tuning with",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:44 pmcheckAccept changecloseReject changeadd_circleAdded: %",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:44 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:44 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circleAdded: %",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:43 pmcheckAccept changecloseReject changeeditChanged: This uses knowledge from limited high-quality dial...show more to Compared with manually designed dialogue guideline...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:43 pmcheckAccept changecloseReject change",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:43 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "editChanged: This uses knowledge from limited high-quality dial...show more to Compared with manually designed dialogue guideline...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "This uses knowledge from limited high-quality dial...show more",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DEL",
+      "attrs": {
+        "class": "review-panel-content-highlight"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "This uses knowledge from limited high-quality dial...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "Compared with manually designed dialogue guideline...",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-expandable-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:44 pmcheckAccept changecloseReject changeadd_circleAdded:",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-content"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "add_circleAdded:",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-change-body"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "fukuchi16 August, 12:48 pmcheckResolve commentmore_vertMore options",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-header"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "16 August, 12:48 pm",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-time"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "checkResolve commentmore_vertMore options",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-entry-actions"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "more_vert",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "SPAN",
+      "attrs": {
+        "class": "material-symbols review-panel-entry-actions-icon",
+        "aria-hidden": "true",
+        "translate": "no"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "descriptionCurrent filelistOverview",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "DIV",
+      "attrs": {
+        "class": "review-panel-footer",
+        "id": "review-panel-tabs",
+        "role": "tablist"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "descriptionCurrent file",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "BUTTON",
+      "attrs": {
+        "role": "tab",
+        "aria-selected": "true",
+        "aria-controls": "review-panel-current-file",
+        "id": "review-panel-tab-button-current-file",
+        "class": "review-panel-tab review-panel-tab-active"
+      }
+    }
+  },
+  {
+    "source": "dom",
+    "text": "listOverview",
+    "author": null,
+    "resolved": null,
+    "file": null,
+    "anchor_text": null,
+    "created_at": null,
+    "raw_hint": {
+      "selector": "[class*=\"review\" i]",
+      "tag": "BUTTON",
+      "attrs": {
+        "role": "tab",
+        "aria-selected": "false",
+        "aria-controls": "review-panel-overview",
+        "id": "review-panel-tab-button-overview",
+        "class": "review-panel-tab"
+      }
+    }
+  }
+]

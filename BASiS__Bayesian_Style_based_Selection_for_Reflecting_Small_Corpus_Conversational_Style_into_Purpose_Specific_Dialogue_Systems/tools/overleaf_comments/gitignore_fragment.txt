@@ -1,0 +1,4 @@
+.overleaf_playwright_profile/
+docs/overleaf_review/overleaf_page_snapshot.html
+docs/overleaf_review/overleaf_page_snapshot.png
+docs/overleaf_review/captured_network_payloads.json

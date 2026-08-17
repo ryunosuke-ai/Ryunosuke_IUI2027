@@ -1,0 +1,331 @@
+[
+  {
+    "url": "https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/changes/users",
+    "payload": [
+      {
+        "id": "5c0a1423a372cf7320a8fea1",
+        "first_name": "fukuchi",
+        "email": "fukuchi@ailab.ics.keio.ac.jp"
+      }
+    ]
+  },
+  {
+    "url": "https://www.overleaf.com/project/6a8106fcdfb740c05a85abe6/threads",
+    "payload": {
+      "6a81331a00a92b628c000001": {
+        "messages": [
+          {
+            "id": "6a81331b5a4f0221dce0d9ef",
+            "content": "長くてしんどいから思い切って全カットしたい",
+            "timestamp": 1786852123024,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a81505efc45e82a11000001": {
+        "messages": [
+          {
+            "id": "6a81505ebc9e0241845d5d22",
+            "content": "これに関する言及は2章でも無くした（はず？）なので、取り除く。これが活きていることが実証されていないし、なくても十分新規性がある。",
+            "timestamp": 1786859614110,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a81507a4503f10a78000001": {
+        "messages": [
+          {
+            "id": "6a81507b149dca017d3cc202",
+            "content": "local LLM -> LLM 他も同様",
+            "timestamp": 1786859643080,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a81514f7ded1f5dcf000001": {
+        "messages": [
+          {
+            "id": "6a81514f149dca017d3cc20f",
+            "content": "trainingと呼ぶのは、間違ってはいないが、多義的（ベイズモデルの構築とLLMのファインチューニング）だし、data selectionとかの部分が抜ける感じがするし、微妙な感じ。\nシンプルにBASiS Pipelineとかでどうか。他の部分も全部。",
+            "timestamp": 1786859855861,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786859985129,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815232981306721d000001": {
+        "messages": [
+          {
+            "id": "6a815232bc9e0241845d5d33",
+            "content": "moduleを排除してstepに統一\n\nパイプラインがモジュールから構成されるという表現は違和感。パイプラインは、工程。モジュールの寄せ集めでできるのは、システム。",
+            "timestamp": 1786860082380,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786860232232,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a8153214ac28b0f74000001": {
+        "messages": [
+          {
+            "id": "6a8153215a4f0221dce0dbcc",
+            "content": "LLMっぽい造語感が気に食わない\nDialogue Progression Modeling",
+            "timestamp": 1786860321300,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815471fc1ea66a4f000001": {
+        "messages": [
+          {
+            "id": "6a815472bc9e0241845d5d57",
+            "content": "LLMっぽい造語。おそらく、用語を新たに導入する必要はない。",
+            "timestamp": 1786860658083,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a81553748dcf6227b000001": {
+        "messages": [
+          {
+            "id": "6a81553764119677b6a6b78c",
+            "content": "引用",
+            "timestamp": 1786860855174,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815558d700c6776c000001": {
+        "messages": [
+          {
+            "id": "6a81555805ffd569abc0026f",
+            "content": "引用",
+            "timestamp": 1786860888201,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a8155ff90894f51ec000001": {
+        "messages": [
+          {
+            "id": "6a8155ff64119677b6a6b7a7",
+            "content": "数字で書こう",
+            "timestamp": 1786861055583,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786861061823,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815615dc6c3d3e31000001": {
+        "messages": [
+          {
+            "id": "6a81561564119677b6a6b7ac",
+            "content": "こういう実装レベルの話は評価の章へ\n",
+            "timestamp": 1786861077260,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815656feb8de7c1a000001": {
+        "messages": [
+          {
+            "id": "6a815656bc9e0241845d5d7a",
+            "content": "初出？ESConvってなんだっけ。データセット？",
+            "timestamp": 1786861142482,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786861156312,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a8157efb81a8e4abc000001": {
+        "messages": [
+          {
+            "id": "6a8157efbc9e0241845d5d9e",
+            "content": "各ステップについて、入力が何で出力が何か説明して。",
+            "timestamp": 1786861551664,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a8158629bf97932cd000001": {
+        "messages": [
+          {
+            "id": "6a815862149dca017d3cc2aa",
+            "content": "うーんわからん。造語が多すぎる？conversational states, response strategies、off-purpose state、全部わかんない",
+            "timestamp": 1786861666160,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786861801929,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          },
+          {
+            "id": "6a815a89149dca017d3cc2d5",
+            "content": "まずstateを定義しよう",
+            "timestamp": 1786862217024,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          },
+          {
+            "id": "6a815baa149dca017d3cc2f0",
+            "content": "やっていることは、LLMによる各応答のラベルづけ？そのラベルがstate?",
+            "timestamp": 1786862506299,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786862518750,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815acc2637ac1356000001": {
+        "messages": [
+          {
+            "id": "6a815acd149dca017d3cc2da",
+            "content": "どういう意味？",
+            "timestamp": 1786862285079,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815be3f0ab411a5f000001": {
+        "messages": [
+          {
+            "id": "6a815be364119677b6a6b81e",
+            "content": "具体的なモデル名は3章に出さない",
+            "timestamp": 1786862563709,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "edited_at": 1786862571334,
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815c02b6a2ab2770000001": {
+        "messages": [
+          {
+            "id": "6a815c02bc9e0241845d5df0",
+            "content": "なんかさっきも見たな。冗長性チェックして",
+            "timestamp": 1786862594183,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815c0b793a0d49db000001": {
+        "messages": [
+          {
+            "id": "6a815c0b05ffd569abc002fb",
+            "content": "形式とかどうでもいい",
+            "timestamp": 1786862603162,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      },
+      "6a815e1205aade3214000001": {
+        "messages": [
+          {
+            "id": "6a815e12bc9e0241845d5e26",
+            "content": "本当にこの整理が正しいのか？bayesian updateはscoringなのか？モデル作るところだけで1ステップ使ったら？\nでも前のステップもモデル作ってた。このステップとの違いは？",
+            "timestamp": 1786863122943,
+            "user_id": "5c0a1423a372cf7320a8fea1",
+            "user": {
+              "id": "5c0a1423a372cf7320a8fea1",
+              "first_name": "fukuchi",
+              "email": "fukuchi@ailab.ics.keio.ac.jp"
+            }
+          }
+        ]
+      }
+    }
+  }
+]
