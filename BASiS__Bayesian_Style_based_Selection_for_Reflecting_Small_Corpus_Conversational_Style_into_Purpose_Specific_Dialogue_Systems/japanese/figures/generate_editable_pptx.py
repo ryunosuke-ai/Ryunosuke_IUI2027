@@ -165,7 +165,7 @@ def add_panel(slide, x, y, w, h, step, title, badge_color, name):
         font=FONT_DISPLAY,
         name=f"{name} title",
     )
-    add_badge(slide, x - 0.06, y - 0.06, step, badge_color, f"{name} step")
+    add_panel_badge(slide, x - 0.06, y - 0.04, step, badge_color, f"{name} operation")
 
 
 def add_badge(slide, x, y, number, color, name):
@@ -187,6 +187,34 @@ def add_badge(slide, x, y, number, color, name):
     run = paragraph.runs[0]
     run.font.name = FONT
     run.font.size = Pt(9)
+    run.font.bold = True
+    run.font.color.rgb = rgb(WHITE)
+    return shape
+
+
+def add_panel_badge(slide, x, y, label, color, name):
+    shape = slide.shapes.add_shape(
+        MSO_AUTO_SHAPE_TYPE.ROUNDED_RECTANGLE,
+        Inches(x),
+        Inches(y),
+        Inches(0.46),
+        Inches(0.32),
+    )
+    set_shape_name(shape, name)
+    shape.fill.solid()
+    shape.fill.fore_color.rgb = rgb(color)
+    shape.line.color.rgb = rgb(color)
+    frame = shape.text_frame
+    frame.clear()
+    frame.margin_left = frame.margin_right = Inches(0)
+    frame.margin_top = frame.margin_bottom = Inches(0)
+    frame.vertical_anchor = MSO_ANCHOR.MIDDLE
+    paragraph = frame.paragraphs[0]
+    paragraph.text = f"({label})"
+    paragraph.alignment = PP_ALIGN.CENTER
+    run = paragraph.runs[0]
+    run.font.name = FONT
+    run.font.size = Pt(8.5)
     run.font.bold = True
     run.font.color.rgb = rgb(WHITE)
     return shape
@@ -397,7 +425,7 @@ def build_architecture_slide(prs):
         0.41,
         3.68,
         0.34,
-        "A   DIALOGUE PROGRESSION MODEL INDUCTION",
+        "A   DIALOGUE PROGRESSION MODELING",
         BLUE,
         BLUE_FILL,
         size=9,
@@ -416,7 +444,7 @@ def build_architecture_slide(prs):
         name="Phase B label",
     )
 
-    # Corpus and module cards
+    # Corpus and step cards
     add_box(slide, 0.55, 0.96, 1.62, 2.05, WHITE, LINE, 1.35, name="Small corpus")
     add_database_icon(slide, 1.19, 1.14, BLUE, "Small corpus database icon")
     add_text(
@@ -452,9 +480,9 @@ def build_architecture_slide(prs):
         BLUE_FILL,
         BLUE,
         1.35,
-        name="Module 1 card",
+        name="Step 1 card",
     )
-    add_badge(slide, 2.42, 1.08, 1, BLUE, "Module 1 badge")
+    add_badge(slide, 2.42, 1.08, 1, BLUE, "Step 1 badge")
     add_text(
         slide,
         2.73,
@@ -465,7 +493,7 @@ def build_architecture_slide(prs):
         size=13.1,
         bold=True,
         font=FONT_DISPLAY,
-        name="Module 1 title",
+        name="Step 1 title",
     )
     add_text(
         slide,
@@ -475,7 +503,7 @@ def build_architecture_slide(prs):
         0.30,
         "states  •  strategies  •  transitions",
         size=7.7,
-        name="Module 1 details",
+        name="Step 1 details",
     )
 
     add_box(
@@ -487,9 +515,9 @@ def build_architecture_slide(prs):
         BLUE_FILL,
         BLUE,
         1.35,
-        name="Module 2 card",
+        name="Step 2 card",
     )
-    add_badge(slide, 5.08, 1.08, 2, BLUE, "Module 2 badge")
+    add_badge(slide, 5.08, 1.08, 2, BLUE, "Step 2 badge")
     add_text(
         slide,
         5.38,
@@ -500,7 +528,7 @@ def build_architecture_slide(prs):
         size=13.1,
         bold=True,
         font=FONT_DISPLAY,
-        name="Module 2 title",
+        name="Step 2 title",
     )
     add_text(
         slide,
@@ -510,7 +538,7 @@ def build_architecture_slide(prs):
         0.38,
         "transition & observation\nprobabilities",
         size=7.9,
-        name="Module 2 details",
+        name="Step 2 details",
     )
 
     add_box(slide, 0.55, 4.31, 1.92, 2.15, WHITE, LINE, 1.35, name="Large corpus")
@@ -547,9 +575,9 @@ def build_architecture_slide(prs):
         TEAL_FILL,
         TEAL,
         1.35,
-        name="Module 3 card",
+        name="Step 3 card",
     )
-    add_badge(slide, 3.20, 4.47, 3, TEAL, "Module 3 badge")
+    add_badge(slide, 3.20, 4.47, 3, TEAL, "Step 3 badge")
     add_text(
         slide,
         3.53,
@@ -560,7 +588,7 @@ def build_architecture_slide(prs):
         size=13.1,
         bold=True,
         font=FONT_DISPLAY,
-        name="Module 3 title",
+        name="Step 3 title",
     )
     add_text(
         slide,
@@ -571,7 +599,7 @@ def build_architecture_slide(prs):
         "Score(rₜ) ∈ [0, 1]",
         size=9.2,
         font=FONT_MATH,
-        name="Module 3 details",
+        name="Step 3 details",
     )
 
     add_box(
@@ -583,9 +611,9 @@ def build_architecture_slide(prs):
         ORANGE_FILL,
         ORANGE,
         1.35,
-        name="Module 4 card",
+        name="Step 4 card",
     )
-    add_badge(slide, 6.08, 4.47, 4, ORANGE, "Module 4 badge")
+    add_badge(slide, 6.08, 4.47, 4, ORANGE, "Step 4 badge")
     add_text(
         slide,
         6.43,
@@ -596,7 +624,7 @@ def build_architecture_slide(prs):
         size=13.0,
         bold=True,
         font=FONT_DISPLAY,
-        name="Module 4 title",
+        name="Step 4 title",
     )
     add_text(
         slide,
@@ -607,7 +635,7 @@ def build_architecture_slide(prs):
         "chosen  ≻  rejected",
         size=9.1,
         font=FONT_MATH,
-        name="Module 4 details",
+        name="Step 4 details",
     )
 
     add_box(
@@ -619,7 +647,7 @@ def build_architecture_slide(prs):
         INK,
         INK,
         1.2,
-        name="Output LLM card",
+        name="Output adapter card",
     )
     chip = slide.shapes.add_shape(
         MSO_AUTO_SHAPE_TYPE.FLOWCHART_MAGNETIC_DISK,
@@ -628,7 +656,7 @@ def build_architecture_slide(prs):
         Inches(0.34),
         Inches(0.30),
     )
-    set_shape_name(chip, "Output LLM chip icon")
+    set_shape_name(chip, "Output adapter chip icon")
     chip.fill.solid()
     chip.fill.fore_color.rgb = rgb(WHITE)
     chip.line.color.rgb = rgb(WHITE)
@@ -638,17 +666,17 @@ def build_architecture_slide(prs):
         5.20,
         1.74,
         0.57,
-        "Progression-adapted\nlocal LLM",
+        "DPO-trained\nLoRA adapter",
         size=13.0,
         color=WHITE,
         bold=True,
         font=FONT_DISPLAY,
-        name="Output LLM label",
+        name="Output adapter label",
     )
 
     # Main flows. Labels sit in dedicated whitespace above each connector.
-    add_connector(slide, 2.17, 1.99, 2.52, 1.99, width=1.6, name="Small corpus to Module 1")
-    add_connector(slide, 4.68, 1.99, 5.18, 1.99, width=1.6, name="Module 1 to Module 2")
+    add_connector(slide, 2.17, 1.99, 2.52, 1.99, width=1.6, name="Small corpus to Step 1")
+    add_connector(slide, 4.68, 1.99, 5.18, 1.99, width=1.6, name="Step 1 to Step 2")
     add_line_label(slide, 4.66, 1.66, 0.58, 0.25, "features", name="Dialogue features label")
 
     add_polyline(
@@ -692,17 +720,17 @@ def build_architecture_slide(prs):
         size=7.4,
         name="Scored candidates label",
     )
-    add_connector(slide, 9.22, 5.32, 10.23, 5.32, color=ORANGE, width=1.6, name="DPO to output LLM")
+    add_connector(slide, 9.22, 5.32, 10.23, 5.32, color=ORANGE, width=1.6, name="DPO to output adapter")
     add_line_label(
         slide,
         9.39,
         5.01,
         0.78,
         0.24,
-        "LoRA–DPO",
+        "trained adapter",
         color=ORANGE,
         size=7.8,
-        name="LoRA DPO label",
+        name="Trained adapter label",
     )
     return slide
 
@@ -738,11 +766,11 @@ def build_scoring_slide(prs):
     prior_x, predict_x, observe_x, update_x, score_x = 0.26, 2.68, 5.10, 7.52, 10.82
     small_w, update_w = 2.20, 3.08
 
-    add_panel(slide, prior_x, panel_y, small_w, panel_h, 1, "PRIOR STATE", BLUE, "Prior")
-    add_panel(slide, predict_x, panel_y, small_w, panel_h, 2, "PREDICT", BLUE, "Predict")
-    add_panel(slide, observe_x, panel_y, small_w, panel_h, 3, "LABEL RESPONSE", ORANGE, "Observe")
-    add_panel(slide, update_x, panel_y, update_w, panel_h, 4, "BAYESIAN UPDATE", TEAL, "Update")
-    add_panel(slide, score_x, panel_y, small_w, panel_h, 5, "PROGRESSION SCORE", TEAL, "Score")
+    add_panel(slide, prior_x, panel_y, small_w, panel_h, "a", "PRIOR STATE", BLUE, "Prior")
+    add_panel(slide, predict_x, panel_y, small_w, panel_h, "b", "PREDICT", BLUE, "Predict")
+    add_panel(slide, observe_x, panel_y, small_w, panel_h, "c", "LABEL RESPONSE", ORANGE, "Observe")
+    add_panel(slide, update_x, panel_y, update_w, panel_h, "d", "BAYESIAN UPDATE", TEAL, "Update")
+    add_panel(slide, score_x, panel_y, small_w, panel_h, "e", "PROGRESSION SCORE", TEAL, "Score")
 
     # Prior state distribution
     add_text(

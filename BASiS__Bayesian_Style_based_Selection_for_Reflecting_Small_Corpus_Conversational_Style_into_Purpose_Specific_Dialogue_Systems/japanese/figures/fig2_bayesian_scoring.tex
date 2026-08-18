@@ -31,8 +31,9 @@
     inner sep=0pt
   },
   stepbadge/.style={
-    circle,
-    minimum size=5.0mm,
+    rounded corners=2pt,
+    minimum width=7.0mm,
+    minimum height=5.0mm,
     inner sep=0pt,
     text=white,
     font=\sffamily\bfseries\scriptsize
@@ -109,14 +110,14 @@
 
 \begin{document}
 \begin{tikzpicture}[font=\sffamily, every node/.append style={outer sep=0pt}]
-  % Five compact panels mirror the five operations described in the paper.
+  % Five compact panels mirror the internal operations of Step 3.
   \node[panel, minimum width=3.20cm] (prior) at (1.65,3.125) {};
   \node[panel, minimum width=5.00cm] (predict) at (5.90,3.125) {};
   \node[panel, minimum width=3.00cm] (observe) at (10.05,3.125) {};
   \node[panel, minimum width=4.50cm] (update) at (13.95,3.125) {};
   \node[panel, minimum width=4.00cm] (score) at (18.35,3.125) {};
 
-  % Panel titles and numbered badges.
+  % Panel titles and lettered badges distinguish these operations from Steps 1--4.
   \node[anchor=north, font=\sffamily\bfseries\scriptsize, text=ink]
     at ($(prior.north)+(0,-0.20)$) {PRIOR STATE};
   \node[anchor=north, font=\sffamily\bfseries\scriptsize, text=ink]
@@ -128,13 +129,13 @@
   \node[anchor=north, font=\sffamily\bfseries\scriptsize, text=ink]
     at ($(score.north)+(0,-0.20)$) {PROGRESSION SCORE};
 
-  \node[stepbadge, fill=blue] at ($(prior.north west)+(0.17,-0.17)$) {1};
-  \node[stepbadge, fill=blue] at ($(predict.north west)+(0.17,-0.17)$) {2};
-  \node[stepbadge, fill=orange] at ($(observe.north west)+(0.17,-0.17)$) {3};
-  \node[stepbadge, fill=teal] at ($(update.north west)+(0.17,-0.17)$) {4};
-  \node[stepbadge, fill=teal] at ($(score.north west)+(0.17,-0.17)$) {5};
+  \node[stepbadge, fill=blue] at ($(prior.north west)+(0.22,-0.17)$) {(a)};
+  \node[stepbadge, fill=blue] at ($(predict.north west)+(0.22,-0.17)$) {(b)};
+  \node[stepbadge, fill=orange] at ($(observe.north west)+(0.22,-0.17)$) {(c)};
+  \node[stepbadge, fill=teal] at ($(update.north west)+(0.22,-0.17)$) {(d)};
+  \node[stepbadge, fill=teal] at ($(score.north west)+(0.22,-0.17)$) {(e)};
 
-  % Step 1: prior state distribution b_{t-1}.
+  % Panel (a): prior state distribution b_{t-1}.
   \node[font=\scriptsize, text=muted] at (1.65,4.65)
     {state belief \(b_{t-1}(s)\)};
   \draw[draw=line, line width=0.6pt] (1.65,0.85) -- (1.65,4.20);
@@ -154,7 +155,7 @@
   \fill[blue] (1.69,1.13) rectangle ++(0.50,0.24);
   \node[anchor=west, font=\scriptsize] at (2.30,1.25) {0.25};
 
-  % Step 2: transition-model prediction.
+  % Panel (b): transition-model prediction.
   \node[chipblue, align=center] at (5.90,4.92)
     {transition model\\[-1pt]\(P(s_t\mid s_{t-1})\)};
   \node[statebox] (s1) at (4.55,3.10)
@@ -208,7 +209,7 @@
   \node[chipblue] (predout) at (5.90,0.88)
     {predicted distribution \(\hat b_t(s_t)\)};
 
-  % Step 3: candidate response is mapped to an observation label.
+  % Panel (c): candidate response is mapped to an observation label.
   \node[
     rounded corners=3pt,
     draw=orange,
@@ -240,7 +241,7 @@
     {observed label \(o_t\)\\[-1pt]\textbf{Empathy / validation}};
   \draw[orangeflow] (llm.south) -- (obsout.north);
 
-  % Step 4: the two variables enter separate terms in the Bayesian update.
+  % Panel (d): the two variables enter separate terms in the Bayesian update.
   \node[chiporange] (obsport) at (13.45,4.40)
     {observation \(o_t\)};
   \node[chipblue] (predport) at (15.25,4.40)
@@ -293,7 +294,7 @@
     -- (13.45,4.90)
     -- (obsport.north);
 
-  % Step 5: sum only the target-state posterior mass.
+  % Panel (e): sum only the target-state posterior mass.
   \node[align=center, font=\scriptsize] at (18.35,4.55) {%
     \(\displaystyle
       \mathrm{Score}(r_t)=

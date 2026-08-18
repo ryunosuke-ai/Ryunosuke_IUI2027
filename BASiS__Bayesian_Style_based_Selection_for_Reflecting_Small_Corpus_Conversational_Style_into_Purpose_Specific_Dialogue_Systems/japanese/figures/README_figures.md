@@ -4,8 +4,8 @@
 
 | 掲載図 | 編集用ソース | LaTeXから参照するPDF |
 |---|---|---|
-| 図1：BASiSの全体構成 | `fig1_basis_architecture.tex` | `fig1_basis_architecture.pdf` |
-| 図2：ベイズ的スコアリング | `fig2_bayesian_scoring.tex` | `fig2_bayesian_scoring.pdf` |
+| 図1：BASiSの4工程からなるパイプライン | `fig1_basis_architecture.tex` | `fig1_basis_architecture.pdf` |
+| 図2：工程3内部のベイズ的スコアリング | `fig2_bayesian_scoring.tex` | `fig2_bayesian_scoring.pdf` |
 
 ## 再生成
 

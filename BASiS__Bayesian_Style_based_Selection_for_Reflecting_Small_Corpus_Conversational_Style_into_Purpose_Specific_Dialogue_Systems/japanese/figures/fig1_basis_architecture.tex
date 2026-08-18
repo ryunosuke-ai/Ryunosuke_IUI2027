@@ -117,7 +117,7 @@
     inner xsep=4pt,
     inner ysep=1.5pt,
     font=\sffamily\bfseries\scriptsize
-  ] at (0.22,4.47) {A \quad DIALOGUE PROGRESSION MODEL INDUCTION};
+  ] at (0.22,4.47) {A \quad DIALOGUE PROGRESSION MODELING};
   \node[
     anchor=west,
     text=teal,
@@ -173,10 +173,10 @@
     inner ysep=5pt
   ] (local) at (17.65,-0.62) {%
     {\large\faMicrochip}\\[-1pt]
-    \textbf{Progression-adapted\\local LLM}
+    \textbf{DPO-trained\\LoRA adapter}
   };
 
-  % Number badges make the four modules easy to map to the method text.
+  % Number badges make the four steps easy to map to the method text.
   \node[badge, fill=blue] at ($(analysis.north west)+(-0.05,0.00)$) {1};
   \node[badge, fill=blue] at ($(modeling.north west)+(-0.05,0.00)$) {2};
   \node[badge, fill=teal] at ($(scoring.north west)+(-0.05,0.00)$) {3};
@@ -212,7 +212,7 @@
     (adaptation.west);
   \draw[flow, draw=orange]
     (adaptation.east)
-    -- node[arrowlabel, midway, yshift=2.5pt] {LoRA--DPO}
+    -- node[arrowlabel, midway, yshift=2.5pt] {trained adapter}
     (local.west);
 \end{tikzpicture}
 \end{document}
