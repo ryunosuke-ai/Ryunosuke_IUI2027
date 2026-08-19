@@ -32,11 +32,11 @@
   },
   stepbadge/.style={
     rounded corners=2pt,
-    minimum width=7.0mm,
-    minimum height=5.0mm,
+    minimum width=5.4mm,
+    minimum height=4.5mm,
     inner sep=0pt,
     text=white,
-    font=\sffamily\bfseries\scriptsize
+    font=\sffamily\bfseries\fontsize{6.2}{6.5}\selectfont
   },
   flow/.style={
     -{Latex[length=2.1mm,width=1.45mm]},
@@ -129,11 +129,11 @@
   \node[anchor=north, font=\sffamily\bfseries\scriptsize, text=ink]
     at ($(score.north)+(0,-0.20)$) {PROGRESSION SCORE};
 
-  \node[stepbadge, fill=blue] at ($(prior.north west)+(0.22,-0.17)$) {(a)};
-  \node[stepbadge, fill=blue] at ($(predict.north west)+(0.22,-0.17)$) {(b)};
-  \node[stepbadge, fill=orange] at ($(observe.north west)+(0.22,-0.17)$) {(c)};
-  \node[stepbadge, fill=teal] at ($(update.north west)+(0.22,-0.17)$) {(d)};
-  \node[stepbadge, fill=teal] at ($(score.north west)+(0.22,-0.17)$) {(e)};
+  \node[stepbadge, fill=blue] at ($(prior.north west)+(0.14,-0.15)$) {(a)};
+  \node[stepbadge, fill=blue] at ($(predict.north west)+(0.14,-0.15)$) {(b)};
+  \node[stepbadge, fill=orange] at ($(observe.north west)+(0.14,-0.15)$) {(c)};
+  \node[stepbadge, fill=teal] at ($(update.north west)+(0.14,-0.15)$) {(d)};
+  \node[stepbadge, fill=teal] at ($(score.north west)+(0.14,-0.15)$) {(e)};
 
   % Panel (a): prior state distribution b_{t-1}.
   \node[font=\scriptsize, text=muted] at (1.65,4.65)

@@ -153,11 +153,12 @@ def add_panel(slide, x, y, w, h, step, title, badge_color, name):
         border_width=1.2,
         name=f"{name} panel",
     )
+    title_offset = 0.22
     add_text(
         slide,
-        x + 0.22,
+        x + title_offset,
         y + 0.16,
-        w - 0.44,
+        w - title_offset - 0.22,
         0.30,
         title,
         size=9.4,
@@ -165,7 +166,7 @@ def add_panel(slide, x, y, w, h, step, title, badge_color, name):
         font=FONT_DISPLAY,
         name=f"{name} title",
     )
-    add_panel_badge(slide, x - 0.06, y - 0.04, step, badge_color, f"{name} operation")
+    add_panel_badge(slide, x - 0.04, y - 0.03, step, badge_color, f"{name} operation")
 
 
 def add_badge(slide, x, y, number, color, name):
@@ -197,8 +198,8 @@ def add_panel_badge(slide, x, y, label, color, name):
         MSO_AUTO_SHAPE_TYPE.ROUNDED_RECTANGLE,
         Inches(x),
         Inches(y),
-        Inches(0.46),
-        Inches(0.32),
+        Inches(0.36),
+        Inches(0.27),
     )
     set_shape_name(shape, name)
     shape.fill.solid()
@@ -214,7 +215,7 @@ def add_panel_badge(slide, x, y, label, color, name):
     paragraph.alignment = PP_ALIGN.CENTER
     run = paragraph.runs[0]
     run.font.name = FONT
-    run.font.size = Pt(8.5)
+    run.font.size = Pt(7.3)
     run.font.bold = True
     run.font.color.rgb = rgb(WHITE)
     return shape
@@ -422,7 +423,7 @@ def build_architecture_slide(prs):
     add_chip(
         slide,
         0.50,
-        0.41,
+        0.51,
         3.68,
         0.34,
         "A   DIALOGUE PROGRESSION MODELING",
@@ -434,7 +435,7 @@ def build_architecture_slide(prs):
     add_chip(
         slide,
         0.50,
-        3.76,
+        3.86,
         3.11,
         0.34,
         "B   DATA SELECTION & ADAPTATION",
@@ -723,13 +724,13 @@ def build_architecture_slide(prs):
     add_connector(slide, 9.22, 5.32, 10.23, 5.32, color=ORANGE, width=1.6, name="DPO to output adapter")
     add_line_label(
         slide,
-        9.39,
+        9.37,
         5.01,
-        0.78,
+        0.72,
         0.24,
         "trained adapter",
         color=ORANGE,
-        size=7.8,
+        size=7.0,
         name="Trained adapter label",
     )
     return slide
