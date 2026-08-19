@@ -139,7 +139,7 @@ Corpus-based dialogue modeling and data-centric adaptation together suggest a br
 \subsection{Concept}
 \label{sec:method_concept}
 
-We propose BASiS, which adapts an LLM to the response strategies and dialogue progression encoded in a small, high-quality corpus through Bayesian data selection. BASiS converts these interactional patterns into a probabilistic dialogue model. Instead of training directly on the small corpus, it uses the model as a criterion for selecting data from a large general-purpose corpus.
+We propose BASiS, which adapts an LLM to the response strategies and dialogue progression encoded in a small, high-quality corpus through Bayesian data selection. BASiS converts these interactional patterns into a probabilistic dialogue model. Instead of training directly on the small corpus, BASiS uses the model as a criterion for selecting data from a large general-purpose corpus.
 BASiS evaluates each dialogue instance in the large corpus according to its compatibility with the target corpus's dialogue progression. It thereby incorporates the interactional knowledge in the small corpus into training data without requiring detailed dialogue guidelines to be written manually for each setting.
 The selected data are ultimately used for DPO training, which adapts the LLM to the response strategies and progression patterns of the small corpus.
 
@@ -179,8 +179,7 @@ Step~2 normalizes the estimates from Step~1 into valid probability distributions
 
 Step~3 takes the fixed Bayesian dialogue model from Step~2 together with dialogue histories and candidate responses from the large general-purpose corpus as input. Without rebuilding or fitting the model, it applies Bayesian inference to each candidate and outputs a progression-compatibility score. Figure~\ref{fig:bayesian_scoring} expands this step into five internal operations: (a) specifying the prior state distribution, (b) predicting the next-state distribution, (c) labeling the candidate response, (d) updating the state distribution, and (e) computing the score.
 
-To construct the state distribution for each candidate, we group the large corpus by conversation ID and process responses from the beginning of each conversation in the order indicated by the turn index. The first evaluated response starts from the initial-state distribution produced in Step~2. Each preceding response is assigned one of the response-strategy labels and used to update the Bayesian state distribution; the resulting posterior is carried forward as the prior for the next response. The LLM receives the complete dialogue history from the beginning of the conversation when assigning a response label. When a \emph{chosen} response and its generated \emph{rejected} alternatives are compared for the same context, all candidates use the same state distribution immediately before that response.
-
+To construct the state distribution for each candidate, we group the large corpus by conversation ID and process responses from the beginning of each conversation in the order indicated by the turn index. The first evaluated response starts from the initial-state distribution produced in Step~2. Each preceding response is assigned one of the response-strategy labels and used to update the Bayesian state distribution; the resulting posterior is carried forward as the prior for the next response. The LLM receives the complete dialogue history from the beginning of the conversation when assigning a response label.
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/fig2_bayesian_scoring.pdf}
