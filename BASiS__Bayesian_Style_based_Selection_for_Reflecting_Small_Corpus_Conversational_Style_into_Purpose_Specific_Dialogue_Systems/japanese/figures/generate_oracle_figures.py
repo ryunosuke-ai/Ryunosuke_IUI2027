@@ -1,4 +1,4 @@
-"""Generate the publication Oracle-evaluation figures from the result file.
+"""Generate the publication LLM-evaluation figures from the result file.
 
 ``all_dataset_score.txt`` is the single source of truth for the means,
 bootstrap 95% confidence intervals, and Holm-corrected pairwise tests.  The
@@ -313,7 +313,7 @@ def make_figure(spec):
                 stars_by_index[comparison_index],
             )
 
-    ax.set_ylabel("Oracle score (1–10)")
+    ax.set_ylabel("LLM-based score (1–10)")
     ax.set_xticks(x, labels, rotation=35, ha="right", rotation_mode="anchor")
     ax.set_xlim(-1.2, len(labels) - 0.35)
     ax.set_ylim(0, 12.8)

@@ -62,7 +62,14 @@
 \DeclareFontShape{C70}{min}{b}{n}{<->ssub*min/bx/n}{}
 \DeclareFontShape{C70}{min}{m}{it}{<->ssub*min/m/n}{}
 \DeclareFontShape{C70}{min}{b}{it}{<->ssub*min/bx/n}{}
-
+%% A compact numbered run-in heading that keeps CJK body text out of
+%% acmart's Latin italic heading family under pdfLaTeX.
+\newcommand{\BasisSubsubsection}[1]{%
+  \refstepcounter{subsubsection}%
+  \par\noindent
+  {\bfseries\thesubsubsection\enspace #1.}\enspace
+  \normalfont\CJKfamily{min}%
+}
 %% Activate CJK decoding for the whole document without opening a nested
 %% environment. This keeps acmart's title/keyword metadata assignments global
 %% and also keeps CJK active while deferred floats and end-document hooks run.
@@ -96,7 +103,7 @@
 \begin{abstract}
 本論文では，小規模高品質な対話コーパスを単なる発話例の集合として利用するのではなく，そこに暗黙に含まれる対話の進め方を，会話状態の遷移と各状態における応答戦略の確率分布としてモデル化し，このモデルを大規模汎用コーパスから学習データを選ぶ基準へ転用する手法BASiS（Bayesian Style-based Selection）を提案する．本研究は，相手の状態や対話局面に応じて対話を進行させる必要がある場面に着目する．こうした対話の質を支えるのは，個々の発話内容だけではなく，相手の状況をどのように捉え，どのタイミングでどの対話方策を用いるかという、インタラクションにおける手続き的知識である．しかし，このような知識は小規模な高品質対話コーパスに暗黙的に含まれている一方，そのままでは大規模なLLM学習に十分なデータ量を確保できない．BASiSは，この知識を会話状態・応答戦略・状態遷移の確率モデルとして抽出し，大規模汎用コーパスの学習データ選別基準へ変換することで，少量の高品質対話に含まれる知識を大規模学習へスケールさせる．
 BASiSでは，小規模コーパスから会話状態，応答戦略，状態遷移を抽出し，それらをベイズ的対話モデルとして表現する．次に，大規模コーパスに含まれる対話を，参照コーパスの対話進行との適合度に基づいてスコアリングし，学習データを選別する．さらに，選別したデータから選好ペアを構築し，Direct Preference Optimization（DPO）を用いてLLMを学習する．これにより，詳細な対話ガイドラインを人手で設計する負担を軽減しながら，一般的な品質や話題の類似性だけでは捉えにくい応答のタイミングや複数ターンにわたる対話の進行を，データ選別に反映できる．また，単一の応答戦略に固定するのではなく，会話状態を確率分布として保持することで，同一の文脈に対する複数の妥当な応答戦略を維持できる．
-感情支援，数学チュータリング，医療問診を対象として，学習前のベースモデル，BASiSによる選別データで学習したモデル，および目的コーパスのカテゴリ内から無作為に選別したデータで学習したモデルを比較することで，BASiSを評価した．人手評価では，BASiSは全19評価軸で最高平均値を示し，三領域すべてで最終選択として最も多く選ばれた．LLMを用いたOracle評価では，BASiSは全21評価軸で最高平均値を示し，感情支援と数学チュータリングでは広範な有意改善が確認された．
+感情支援，数学チュータリング，医療問診を対象として，学習前のベースモデル，BASiSによる選別データで学習したモデル，および目的コーパスのカテゴリ内から無作為に選別したデータで学習したモデルを比較することで，BASiSを評価した．人手評価では，BASiSは全19評価軸で最高平均値を示し，三領域すべてで最終選択として最も多く選ばれた．LLMによる大規模評価では，BASiSは全21評価軸で最高平均値を示し，感情支援と数学チュータリングでは広範な有意改善が確認された．
 \end{abstract}
 
 \begin{CCSXML}
@@ -154,7 +161,7 @@ LLMによる応答生成では，この要件に対して主に二つの方法�
 
 これら二つの研究系統を統合するため，本研究では，小規模高品質コーパスの対話進行をLLMへ反映する手法BASiS（Bayesian Style-based Selection）を提案する．BASiSは，まず小規模コーパスから，会話状態，応答戦略，状態遷移，およびそれらの確率的関係からなる対話進行モデルを誘導する．次に，その進行との適合性に基づいて大規模汎用コーパスの候補応答をスコアリングし，選好ペアを構築する．最後に，Direct Preference Optimization（DPO）\cite{rafailov2023dpo}とLow-Rank Adaptation（LoRA）\cite{hu2021lora}を用いてLLMを適応させる．これにより，小規模コーパスに含まれる相互作用上の知識を大規模コーパスの選別を通じて拡張するとともに，詳細な対話ガイドラインを人手で設計する負担を軽減する．また，会話状態を確率分布として保持することで，会話履歴と複数の妥当な応答戦略を考慮できる．参照コーパスと候補プールを変更し，同一のパイプラインを感情支援，数学チュータリング，医療問診の三領域で評価する．
 
-本論文の構成は以下の通りである．第\ref{sec:relwork}章では，ガイドラインに基づく応答制御，対話履歴に基づく対話行動・応答戦略予測，およびLLMの学習データ選別に関する関連研究を紹介する．第\ref{sec:method}章では，提案手法BASiSのパイプラインを構成する4つの工程を述べる．第\ref{sec:evaluation}章では，BASiSの有効性を検証する実験，実験結果，および考察について述べる．最後に，第\ref{sec:conclusion}章で本研究をまとめる．
+本論文の構成は以下の通りである．第\ref{sec:relwork}章では，ガイドラインに基づく応答制御，対話履歴に基づく対話行動・応答戦略予測，およびLLMの学習データ選別に関する関連研究を紹介する．第\ref{sec:method}章では，提案手法BASiSのパイプラインを構成する4つの工程を述べる．第\ref{sec:evaluation}章では，評価設計，結果，および考察について述べる．最後に，第\ref{sec:conclusion}章で本研究をまとめる．
 
 
 \section{関連研究}
@@ -290,23 +297,29 @@ BASiSの選好ペアには，chosenのスコアが0.70以上，rejectedのスコ
 \endgroup
 
 
-\section{評価実験}
+\section{評価}
 \label{sec:evaluation}
 \label{sec:setup}
 
-\subsection{実験目的}
+\subsection{研究質問}
 \label{sec:eval_objectives}
 
-本実験の目的は二つである．第一の目的は，BASiSによって選別したデータを用いて学習したモデルが，小規模高品質コーパスに含まれる対話進行を再現できるかを検証することである．このため，BASiSによる選別データで学習したモデルを，学習前のベースモデル，および目的コーパスの大まかな話題を表すキーワードで絞り込んだカテゴリから無作為に選別したデータで学習したモデルと比較する．これにより，BASiSを用いた学習によって目的コーパスの応答戦略が強化されるか，また，その変化がDPO学習の有無だけでなく，粗い話題の一致を超えてBASiSが行うデータ選別と関係するかを検証する．
-第二の目的は，BASiSの有効性が特定の対話領域やコーパスの組み合わせに限られず，異なる領域でも確認できるかを検証することである．本実験では，感情支援，数学チュータリング，医療問診の三領域を対象とし，それぞれ異なる小規模高品質コーパスと大規模汎用コーパスを組み合わせて評価する．人間の評価者がコーパス固有の応答戦略を望ましいと判断するかを人手評価によって検証するとともに，100件の対話例とLLMを用いたOracle評価によって，傾向の広がりと学習条件ごとの差を確認する．
+BASiSを評価するため，以下の二つの研究質問を設定する．
+
+\noindent\textbf{RQ1（有効性）：}BASiSは，小規模高品質な参照コーパスに含まれる対話進行を，生成応答へより適切に反映できるか．
+
+\noindent\textbf{RQ2（データ選別の寄与）：}コーパスから得た対話進行を適応用データの選別基準とすることで，この基準を用いない適応方法に対して，どのような追加効果が得られるか．
+
+両研究質問を感情支援，数学チュータリング，医療問診で検証し，異なる対話進行の下でも同じ傾向が確認されるかを調べる．これらは性質の異なる三つの評価設定であり，未知の対話設定への一般化を主張するものではない．
 
 
-\subsection{実験方法}
+\subsection{評価設計}
 \label{sec:eval_methodology}
-\label{sec:corpora}
+RQ1とRQ2に答えるため，三つの対話設定でBASiSを構築し，四つのモデル条件を二つの評価によって検証する．人手評価では，各設定に対して生成応答が適切であると人間が判断するかを直接調べる．LLMによる大規模評価では，各設定100件の対話文脈へ評価範囲を広げ，小規模コーパスを直接学習した条件も加えて比較する．以下では，三つの対話設定とモデル条件を示した後，各評価の設計を説明する．
 
-本実験では，表\ref{tab:corpus_pairs}に示す三種類のコーパスペアを用いた．各実験設定では，小規模高品質コーパスを目的コーパスの対話進行を抽出するための参照元として使用し，大規模汎用コーパスをBASiSによる選別対象の候補プールとして使用した．
-感情支援対話の実験では，支援を求める話者と支援者の対話を収録したESConv\cite{liu2021esconv}を小規模高品質コーパスとし，日常的な複数ターン対話からなるDailyDialog\cite{li2017dailydialog}を大規模汎用コーパスとした．数学チュータリング対話の実験では，教師とLLMが演じる学習者との一対一の数学対話を収録したMathDial\cite{macina2023mathdial}を小規模高品質コーパスとし，実環境におけるユーザとLLMの対話からなるWildChat-1M\cite{zhao2024wildchat}を大規模汎用コーパスとした．医療問診対話の実験では，医療従事者が作成した医師と患者の問診対話を収録するMediTOD\cite{saley2024meditod}を小規模高品質コーパスとし，MathDialの実験と同様にWildChat-1Mを大規模汎用コーパスとした．工程1では，各参照コーパスから80会話を抽出した．抽出時には，ESConvではstrategy・emotion・problem，MathDialではteacher move，MediTODでは会話長・slotを広く含むようにした．
+\BasisSubsubsection{対話設定とコーパス}\label{sec:corpora}
+表\ref{tab:corpus_pairs}に示す三種類のコーパスペアを用いた．各設定では，小規模高品質コーパスを対話進行の参照元とし，大規模汎用コーパスをBASiSによる選別対象の候補プールとした．
+感情支援では，支援を求める話者と支援者の対話を収録したESConv\cite{liu2021esconv}を小規模高品質コーパスとし，日常的な複数ターン対話からなるDailyDialog\cite{li2017dailydialog}を大規模汎用コーパスとした．数学チュータリングでは，教師とLLMが演じる学習者との一対一の数学対話を収録したMathDial\cite{macina2023mathdial}を小規模高品質コーパスとし，実環境におけるユーザとLLMの対話からなるWildChat-1M\cite{zhao2024wildchat}を大規模汎用コーパスとした．医療問診では，医療従事者が作成した医師と患者の問診対話を収録するMediTOD\cite{saley2024meditod}を小規模高品質コーパスとし，数学チュータリングと同様にWildChat-1Mを大規模汎用コーパスとした．工程1では，各参照コーパスから80会話を抽出した．抽出時には，ESConvではstrategy・emotion・problem，MathDialではteacher move，MediTODでは会話長・slotを広く含むようにした．
 
 \begin{table}[t]
   \centering
@@ -317,7 +330,7 @@ BASiSの選好ペアには，chosenのスコアが0.70以上，rejectedのスコ
   \begin{tabular}
     {@{}c@{\hspace{1.5em}}c@{\hspace{1.5em}}c@{}}
     \toprule
-    \textbf{対話目的} &
+    \textbf{対話設定} &
     \textbf{小規模高品質コーパス} &
     \textbf{大規模汎用コーパス} \\
     \midrule
@@ -334,47 +347,22 @@ BASiSの選好ペアには，chosenのスコアが0.70以上，rejectedのスコ
   \end{tabular}
 \end{table}
 
-\begin{comment}
-  これら三つのコーパスペアは，いずれもBASiSの有効性を検証するための独立した実験設定として同等に扱った．MathDialとMediTODの実験では同一のWildChat-1Mを選別対象として使用するが，参照元となる小規模高品質コーパスが異なるため，構築される会話状態，応答戦略，状態遷移，およびベイズ的対話モデルも異なる．その結果，同一の大規模汎用コーパスに対しても，各候補応答に付与されるScoreと選別される学習データは実験設定ごとに異なる．
-\end{comment}
-
+\BasisSubsubsection{モデル条件と主要な比較}
 \begingroup
 \setlength{\emergencystretch}{2em}
 
-各実験設定のBASiS条件では，第\ref{sec:method}章の4工程によって選好ペアを構築した．ペア数はESConvとMathDialが各2,500組，MediTODが2,324組である．比較条件として，小規模高品質な目的コーパスから選好ペアを構築するTarget-only条件と，chosen応答の選別に対話進行適合度を用いないRandom条件を設定した．
+各設定のBASiS条件では，第\ref{sec:method}章の4工程によって選好ペアを構築した．ペア数はESConvとMathDialが各2,500組，MediTODが2,324組である．比較条件として，小規模高品質コーパスから選好ペアを構築するTarget-only条件と，chosen応答の選別にBASiSのスコアを用いないRandom条件を設定した．
 
 Random条件では，領域に関連する語を用いて大規模コーパスの候補集合を絞り込んだ．キーワードの例は，ESConvでは\texttt{sad}，\texttt{anxious}，\texttt{relationship problem}，MathDialでは\texttt{learn}，\texttt{tutor}，\texttt{math}，MediTODでは\texttt{symptom}，\texttt{pain}，\texttt{doctor}である．この候補集合からseed 42で実際のassistant応答を無作為に抽出し，chosen応答とした．同一の会話文脈に対して一般的に品質の低い応答を8件生成し，BASiSで再スコアリングした上で，chosenとの差が最大となる最低スコアの応答をrejectedとした．BASiSのスコアはrejectedの選択にのみ使用し，Randomのchosen応答の選別には用いていない．ペア数はBASiS条件と揃えた．
 
-Target-only条件では，各小規模コーパスのtrain splitに含まれる実際のassistant応答をchosenとした．ESConvではstrategy，MathDialではteacher move，MediTODではresponse slotの偏りを抑えて抽出した．同一文脈に対して弱い応答を8件生成して再スコアリングし，chosenとの差が最大となる応答をrejectedとした．各領域で500組の選好ペアを用いた．
+Target-only条件では，各小規模コーパスのtrain splitに含まれる実際のassistant応答をchosenとした．ESConvではstrategy，MathDialではteacher move，MediTODではresponse slotの偏りを抑えて抽出した．同一文脈に対して弱い応答を8件生成して再スコアリングし，chosenとの差が最大となる応答をrejectedとした．各設定で500組の選好ペアを用いた．
 
-BASiS内部のLLM処理にはResponses APIを使用した．工程1のコーパス分析と確率推定には\texttt{gpt-5.4-pro}，工程3の観測ラベル付与には\texttt{gpt-5.4}を用い，いずれもtemperatureを1.0，reasoning effortを\texttt{high}に設定した．Oracle評価には，後述する別の設定を用いた．
+BASiS内部のLLM処理にはResponses APIを使用した．工程1のコーパス分析と確率推定には\texttt{gpt-5.4-pro}，工程3の観測ラベル付与には\texttt{gpt-5.4}を用い，いずれもtemperatureを1.0，reasoning effortを\texttt{high}に設定した．LLM評価には，後述する別の設定を用いた．
 \endgroup
-
-人手評価は，研究室メンバー9名を対象に実施した．実験参加者が回答するための負担を抑えるため，各領域の評価用対話を10件に絞り，Base，BASiS，Randomの三条件を比較した．各対話について三つの応答をA--Cとしてモデル名を伏せて提示し，同じモデルが常に同じ記号にならないよう，応答と記号の対応を入れ替えた．
-評価者は，表\ref{tab:human_items}の各質問について，それぞれの応答がどの程度当てはまるかを1（全く当てはまらない）から7（非常によく当てはまる）までの7段階で評価した．さらに，各対話で目的に最も適した応答を一つ選択し，差を付けにくい場合は「ほぼ同じ」，評価できない場合は「判断できない」を選べるようにした．ESConvとMathDialでは9名全員の回答を用い，MediTODでは未完了回答者2名を除いた7名の完全な回答を分析した．
-また，軸ごとに各参加者の10件の平均値を算出し，参加者を分析単位とした．三条件の差をFriedman検定で検証してKendallの$W$を効果量として求め，有意差が認められた軸では，三組すべての対応あり置換検定にHolm補正を適用した．平均値の95\%信頼区間は，参加者単位のブートストラップを2,000回行って算出した．最終選択は同一参加者による反復回答であるため，件数と割合を記述統計として報告する．
-
-Oracle評価では，各実験設定について100件の評価用対話を用意し，Base，Target-only，BASiS，Randomの各モデルから応答を生成した．四条件で同じ評価用対話を用いることで，対話の違いによる影響を抑えた対応のある比較とした．LLMを評価者として応答を比較し，評価時にはモデル名を提示せず，四条件の提示順をランダム化した．Oracle LLMにはGPT-5.4を使用し，temperatureを0に設定した．それまでの会話履歴と評価対象の応答に加え，表\ref{tab:oracle_axes}の各評価軸について，定義，高得点・低得点となる条件，および共通の採点基準を提示した．採点基準は，1--2点を明確に不適切または文脈を無視した応答，3--4点を評価軸への適合が弱い応答，5--6点を最低限満たす応答，7--8点を十分に満たす良い応答，9--10点を改善点が少ない非常に良い応答とし，10点はほぼ理想的な応答に限定した．モデル名や応答の長さだけで判断しないよう指示し，軸別の1--10の整数値，総合値，および1--2文の根拠を出力させた．
-Oracle評価の各軸について四条件間の差をFriedman検定で検証し，有意な場合は六組すべての対応あり置換検定に軸内Holm補正を適用した．有意水準は$\alpha=.05$とし，平均値にはブートストラップ95\%信頼区間を示した．
-
-
-\subsection{実験条件と評価方法}
-\label{sec:evalprotocol}
-
-本実験では，小規模目的コーパスを直接学習するだけで十分か，BASiSによる学習が有効か，およびデータ選別そのものに効果があるかを分けて検証するため，以下の三つの比較を行った．
-
-\textbf{目的コーパスのみを用いた学習の評価：}
-小規模高品質コーパスのみを直接学習することで，目的コーパスの対話進行を十分に反映できるかを確認するため，Base条件とTarget-only条件を比較した．また，Target-only条件とBASiS条件の比較により，小規模コーパスを分析・モデル化して大規模汎用コーパスの選別へ利用することの追加的な効果を検証した．
-
-\textbf{BASiSによる学習効果の評価：}
-BASiSによって選別したデータを用いた学習が，目的コーパスの対話進行の再現度を向上させるかを検証するため，学習を行っていないBase条件と，BASiSによる選別データで学習したBASiS条件を比較した．
-
-\textbf{データ選別の効果の評価：}
-BASiS条件で確認された変化が，DPO学習を行ったこと自体や粗い話題の一致だけではなく，BASiSによるデータ選別に起因するかを検証するため，BASiS条件とRandom条件を比較した．Random条件では，小規模高品質コーパスの主要な話題を表す大まかなキーワードで大規模汎用コーパスをカテゴリ単位に絞り込み，そのカテゴリ内からBASiS条件と同数の学習データを無作為に選別した．学習方法とハイパーパラメータはBASiS条件と共通とした．
 
 \begin{table}[t]
   \centering
-  \caption{各実験条件におけるDPO学習と学習データ}
+  \caption{各モデル条件におけるDPO学習と学習データ}
   \label{tab:conditions}
   \small
   \renewcommand{\arraystretch}{1.2}
@@ -392,11 +380,17 @@ BASiS条件で確認された変化が，DPO学習を行ったこと自体や粗
   \end{tabular}
 \end{table}
 
-表\ref{tab:conditions}に，四つの実験条件を示す．Base条件はDPO学習を行っていない学習前のモデルである．Target-only条件は，小規模高品質な目的コーパスのみを用いてDPO学習を行ったモデルである．BASiS条件は，対話進行適合度スコアに基づいて大規模汎用コーパスから選別したデータを用いる．Random条件は，キーワードで大まかに絞り込んだカテゴリ内から無作為に選別したデータを用いる．
-また，すべての実験設定で，同一のLLMであるQwen3.5-27Bを使用した．Base条件には学習前のモデルを使用し，Target-only，BASiS，Random条件にはLoRAを適用したDPO学習を行った．各実験設定において，BASiS条件とRandom条件の学習データ数および選好データの形式を揃え，両条件の主な違いが，ベイズ的対話モデルによる対話進行適合度に基づく選別と，粗い話題カテゴリ内での無作為選別となるようにした．
-DPOの学習率は$5\times10^{-6}$，$\beta=0.1$とした．LoRAはランク$r=8$，$\alpha=16$，dropoutを$0.05$とし，学習エポック数を1とした．これらの学習設定は三種類のコーパスペアと三つのDPO学習条件で共通とし，実験設定間で学習条件が変化しないようにした．
+表\ref{tab:conditions}に四条件を示す．Baseは追加学習前のモデル，Target-onlyは小規模高品質コーパスのみでDPO学習したモデル，BASiSは対話進行適合度スコアで選別したデータを用いるモデル，Randomはキーワードで絞り込んだカテゴリから無作為に選んだデータを用いるモデルである．すべてQwen3.5-27Bを用い，Target-only，BASiS，RandomにはLoRAによるDPO学習を行った．BASiSとRandomでは学習データ数，選好データ形式，学習設定を揃えた．DPOの学習率は$5\times10^{-6}$，$\beta=0.1$，LoRAは$r=8$，$\alpha=16$，dropoutは$0.05$とし，1エポック学習した．
 
-表\ref{tab:oracle_axes}に，各実験設定で用いる七つのOracle評価軸をまとめる．
+BASiSとBaseの比較によってRQ1を検証する．BASiSとRandomの比較はRQ2の中心的な検証であり，両条件の主な違いは，参照コーパスから得た対話進行をchosen応答の選別に用いるかどうかである．Target-onlyはLLM評価にのみ含める診断的条件であり，現在利用できる小規模コーパスを直接学習するだけで十分かを確認する．学習データの出所とペア数がBASiSと異なるため，この比較によってベイズ的モデル化だけの効果が分離されるとは解釈しない．
+
+\BasisSubsubsection{人手評価}
+人手評価では，各設定に必要な対話進行が生成応答に適切に表れていると人間が判断するかを直接検証した．BaseとBASiSの比較によってRQ1を，BASiSとRandomの比較によってRQ2を検証する．参加者の負担を抑えるためTarget-onlyは含めず，直接学習条件は検証しない．研究室メンバー9名を対象とし，各設定10件の対話文脈で三条件を比較した．応答をA--Cとしてモデル名を伏せ，同じ条件が常に同じ記号にならないよう対応を入れ替えた．評価者は表\ref{tab:human_items}の質問について，各応答を1（全く当てはまらない）から7（非常によく当てはまる）の7段階で評価し，最後に最も適切な応答，または「ほぼ同じ」「判断できない」を選択した．ESConvとMathDialでは9名全員，MediTODでは未完了回答者2名を除く7名の回答を分析した．
+
+\begin{comment}
+% The LLM-evaluation table is retained here only as the pre-reorganization layout.
+% The visible copy follows the human-evaluation table.
+表\ref{tab:oracle_axes}に，各設定で用いるLLM評価軸をまとめる．
 \begin{table*}[t]
   \centering
   \caption{各実験におけるOracle評価軸（1--10点；すべて高いほど望ましい）}
@@ -472,13 +466,13 @@ MathDialとWildChat-1Mを用いた実験では，数学的な答えの正しさ�
 MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応答品質，および医学的安全性を評価する\cite{saley2024meditod}．具体的には，直前までの症状や背景に即した応答，医療対話としての総合的な品質，情報不足時に診断や治療方針を急がないこと，不確実性の扱い，患者にとっての理解しやすさ，および根拠の乏しい診断や危険な医学的助言の回避を扱う．
 なお，表中のUnsafe Medical Advice AvoidanceおよびUnsupported Diagnosis Avoidanceについては，危険な助言や根拠のない診断を行う度合いではなく，それらを適切に回避できている度合いとして採点する．したがって，他の評価軸と同様に，得点が高いほど望ましい応答であることを表す．
 
-\textbf{人手評価項目：}
-人手評価では，各領域の応答戦略と対話進行を，人間の評価者が理解しやすい質問文によって評価した．各質問は，提示された応答についてどの程度当てはまるかを7段階リッカート尺度で評価する形式とした．
-すべての質問項目について，1を「全く当てはまらない」，7を「非常によく当てはまる」とする．評価者には三条件のモデル名や学習方法を知らせず，応答内容のみに基づいて評価を求めた．
+\end{comment}
+
+項目ごとに各参加者の10件の平均値を算出し，参加者を分析単位とした．Friedman検定とKendallの$W$を用い，有意な項目では三組の対応あり置換検定にHolm補正を適用した．95\%信頼区間は参加者単位のブートストラップを2,000回行って算出した．最終選択は反復回答であるため，件数と割合を記述統計として報告する．
 
 \begin{table*}[t]
   \centering
-  \caption{各実験における人手評価項目（7段階；1＝全く当てはまらない，7＝非常によく当てはまる）}
+  \caption{各対話設定における人手評価項目（7段階；1＝全く当てはまらない，7＝非常によく当てはまる）}
   \label{tab:human_items}
   \footnotesize
   \renewcommand{\arraystretch}{1.08}
@@ -525,6 +519,52 @@ MediTODとWildChat-1Mを用いた実験では，病歴聴取の適切さ，応�
 
 最終選択の選択肢は，三領域で共通して「応答A」「応答B」「応答C」「ほぼ同じ」「判断できない」とした．
 
+\BasisSubsubsection{LLMによる大規模評価}\label{sec:evalprotocol}
+各設定100件の対話文脈を対象に，Base，Target-only，BASiS，Randomを比較した．これは，LLMを評価者として用いるLLM-as-a-judge方式の評価である．これにより，小規模コーパスの直接学習と，大規模コーパスからの対話進行に基づく選別を診断的に比較する．四条件で同じ対話文脈を用い，モデル名を伏せて提示順をランダム化した．評価LLMにはGPT-5.4を用い，temperatureを0に設定した．会話履歴と評価対象応答に加え，表\ref{tab:oracle_axes}の各軸について，定義，高得点・低得点の条件，共通の採点基準を提示した．1--2点を明確に不適切，3--4点を適合が弱い，5--6点を最低限満たす，7--8点を十分に満たす，9--10点を改善点が少ない応答とし，10点はほぼ理想的な応答に限定した．モデル名や応答長だけで判断しないよう指示し，軸別の整数値，総合値，および短い根拠を出力させた．
+
+\begin{table*}[t]
+  \centering
+  \caption{各対話設定におけるLLM評価軸（1--10点；すべて高いほど望ましい）}
+  \label{tab:oracle_axes}
+  \small
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabularx}{\BasisOracleTableWidth}{@{}A@{\hspace{0.8em}}Q@{}}
+    \toprule
+    \multicolumn{1}{c}{\textbf{評価軸}} & \multicolumn{1}{c}{\textbf{評価内容}} \\
+    \midrule
+    \BasisCorpusHeader{コーパスペア：ESConv $\times$ DailyDialog}
+    ESConv Support Behavior Strength & ESConvに特徴的な共感的支援行動の明確さ \\
+    ESConv Tone Similarity & 温かく受容的で非断定的な語調のESConv類似度 \\
+    Supporter Role Consistency & 支援者の役割を保ち，説教・自己開示・逸脱を避ける度合い \\
+    Non-directive Support & 意思を尊重し，断定や押し付けを避ける度合い \\
+    Strategy/Stage Alignment & 応答戦略とその時点の会話段階との適合 \\
+    Premature Advice Avoidance & 感情・状況を理解してから助言へ移る適切さ \\
+    Naturalness & 文脈に合った自然な会話としての成立度 \\
+    \addlinespace[0.45em]
+    \BasisCorpusHeader{コーパスペア：MathDial $\times$ WildChat-1M}
+    Equitable Tutoring & 学習者が自ら考え，説明し，解法を探索する余地 \\
+    Learner Reasoning Diagnosis & 学習者の推論の正誤・不足・混乱の把握 \\
+    Mistake Location and Targeting & 推論の誤りや未完了箇所の正確な特定 \\
+    Guidance Quality & 質問・ヒント・説明・例の正確さと有用性 \\
+    Feedback Actionability & 次に考え，計算し，確認すべき行動の明確さ \\
+    Answer Revealing Calibration & 解答を示す量・時機と理解状態・会話段階の適合 \\
+    Teacher Move--Stage Alignment & 教師の応答戦略と会話段階の適合 \\
+    \addlinespace[0.45em]
+    \BasisCorpusHeader{コーパスペア：MediTOD $\times$ WildChat-1M}
+    Response Relevance & 直前までの症状・背景に即した質問・応答の関連性 \\
+    Overall Quality & 関連性・明瞭さ・自然さ・情報収集への有用性 \\
+    Premature Assessment Avoidance & 情報不足時に診断・治療方針を急がない度合い \\
+    Appropriate Uncertainty & 不確実性と追加確認の必要性を適切に示す度合い \\
+    Understandability & 専門用語を抑えた明確で理解しやすい質問・説明 \\
+    Unsafe Medical Advice Avoidance & 有害となり得る不適切な医学的助言を避ける度合い \\
+    Unsupported Diagnosis Avoidance & 根拠不足時に特定の疾患・原因の断定を避ける度合い \\
+    \bottomrule
+  \end{tabularx}
+\end{table*}
+
+ESConvでは支援行動，語調，支援者役割，非指示性，会話段階との適合，助言の時機，自然さを評価する\cite{mir2019styletransfer,liu2021esconv,zhang2018persona}．MathDialでは，学習者の推論を促し，誤りを診断し，質問・ヒント・説明・解答提示を段階に応じて使い分けられるかを評価する\cite{macina2023mathdial}．MediTODでは，問診の適切さ，応答品質，医学的安全性を評価する\cite{saley2024meditod}．Unsafe Medical Advice AvoidanceとUnsupported Diagnosis Avoidanceは望ましくない行動を回避する度合いであり，他の軸と同様に高得点ほど望ましい．各軸についてFriedman検定を行い，有意な場合は六組の対応あり置換検定に軸内Holm補正を適用した．有意水準は$\alpha=.05$とし，平均値にはブートストラップ95\%信頼区間を示した．
+
+\iffalse
 \begin{figure*}[t]
   \begin{minipage}[t]{0.485\textwidth}
     \centering
@@ -659,6 +699,116 @@ Oracle評価では，Target-onlyが21軸のいずれでもBaseを有意に上回
 BASiSは，参照元と選別対象のコーパスを変更するだけで，同一のパイプラインを三領域へ適用した．人手評価とOracle評価の全評価軸で最高平均値を示し，最終選択でも三領域すべてで最も多く選ばれたことから，BASiSは特定の語調に限定されず，各目的コーパスに固有の応答戦略を抽出してモデルへ反映できると考えられる．領域ごとに強く改善した側面が異なったことも，単一の固定ガイドラインではなく，各コーパスから状態・戦略を誘導する設計の利点を示している．
 したがって，今回の結果はBASiSの有効性を示す明確な初期的根拠である一方，利用者層全体への一般化には，外部評価者とより多くの対話例による検証が必要である．今後は対象を広げるとともに，コーパスごとの状態・戦略・望ましい状態群の設計を洗練することで，BASiSの強みをより多様な対話領域へ展開できると考えられる．
 \endgroup
+\fi
+
+\subsection{人手評価結果}
+\label{sec:results}
+\setlength{\emergencystretch}{3em}
+
+BASiSは人手評価の全19項目で最高平均値を示し，BaseとRandomをそれぞれ16項目で有意に上回り，三設定すべてで最終選択として最も多く選ばれた．
+
+\noindent\textbf{感情支援．}\par\normalfont
+\noindent 図\ref{fig:esconv_human}に示すように，BASiSは七項目すべてで最高平均値を示し，助言のタイミングを除く六項目でBaseとRandomを有意に上回った．支援行動の強さはBase，BASiS，Randomの順に4.22，5.64，3.97，語調の類似度は4.59，6.17，4.43であり，有意な項目のKendallの$W$は.479--.876であった．助言のタイミングもBASiSが最高平均値だったが，対応比較は有意ではなかった．最終選択率は74.4\%であった．
+
+\noindent\textbf{数学チュータリング．}\par\normalfont
+\noindent 図\ref{fig:mathdial_human}では，BASiSが七項目すべてでBaseとRandomを有意に上回った．学習者の思考を促す項目は4.28，5.42，3.73，次の行動の明確さは4.13，5.43，3.72であり，Kendallの$W$は.716--.939であった．最終選択率は61.1\%であった．
+
+\begin{figure*}[t]
+  \begin{minipage}[t]{0.485\textwidth}\centering
+    \includegraphics[width=\linewidth]{figures/esconv_user_evaluation_scores_publication.pdf}
+    \caption{ESConvとDailyDialogにおける人手評価結果．棒は参加者ごとの10件の平均値，エラーバーは参加者単位のブートストラップ95\%信頼区間を表す．括弧はHolm補正後の有意なBASiSとの比較を表す（$*p<.05$，$**p<.01$）．}
+    \Description{感情支援の七項目についてBase，BASiS，Randomを比較した棒グラフ．BASiSは全項目で最高平均値を示し，助言のタイミングを除く六項目で両条件を有意に上回る．}
+    \label{fig:esconv_human}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\textwidth}\centering
+    \includegraphics[width=\linewidth]{figures/mathdial_user_evaluation_scores_publication.pdf}
+    \caption{MathDialとWildChat-1Mにおける人手評価結果．棒とエラーバーは参加者ごとの平均値とブートストラップ95\%信頼区間を表す．括弧はHolm補正後の有意なBASiSとの比較を表す（$*p<.05$，$**p<.01$）．}
+    \Description{数学チュータリングの七項目についてBase，BASiS，Randomを比較した棒グラフ．BASiSは全項目で両条件を有意に上回る．}
+    \label{fig:mathdial_human}
+  \end{minipage}
+\end{figure*}
+
+\noindent\textbf{医療問診．}\par\normalfont
+\noindent 図\ref{fig:meditod_human}では，BASiSが五項目すべてで最高平均値を示した．診断や対応を急がないこと，危険な医学的助言を避けること，根拠のない診断を避けることの三項目でBaseとRandomを有意に上回り，Kendallの$W$は.799--.813であった．情報の重複回避と不確実性の扱いに関する項目では，Friedman検定が有意ではなかった．最終選択率は44.3\%で最も高かった．
+
+\begin{figure*}[t]
+  \begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\centering
+    \includegraphics[width=\linewidth]{figures/meditod_user_evaluation_scores_publication.pdf}
+    \caption{MediTODとWildChat-1Mにおける人手評価結果．棒とエラーバーは完全回答者7名の平均値と参加者単位のブートストラップ95\%信頼区間を表す．括弧はHolm補正後の有意なBASiSとの比較を表す（$*p<.05$）．}
+    \Description{医療問診の五項目についてBase，BASiS，Randomを比較した棒グラフ．BASiSは全項目で最高平均値を示し，三項目で両条件を有意に上回る．}
+    \label{fig:meditod_human}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\textwidth}\vspace{0pt}\centering
+    \makeatletter\def\@captype{table}\makeatother
+    \caption{人手評価における最終選択の件数と割合}
+    \label{tab:human_final_choice}
+    \small\renewcommand{\arraystretch}{1.18}
+    \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}lccc@{}}
+      \toprule
+      \multicolumn{1}{c}{\textbf{選択}} & \textbf{ESConv} & \textbf{MathDial} & \textbf{MediTOD} \\
+      \midrule
+      Base & 14 (15.6\%) & 16 (17.8\%) & 11 (15.7\%) \\
+      \textbf{BASiS} & \textbf{67 (74.4\%)} & \textbf{55 (61.1\%)} & \textbf{31 (44.3\%)} \\
+      Random & 6 (6.7\%) & 12 (13.3\%) & 19 (27.1\%) \\
+      ほぼ同じ & 2 (2.2\%) & 3 (3.3\%) & 8 (11.4\%) \\
+      判断できない & 1 (1.1\%) & 4 (4.4\%) & 1 (1.4\%) \\
+      \bottomrule
+    \end{tabular*}
+  \end{minipage}
+\end{figure*}
+
+表\ref{tab:human_final_choice}に最終選択の分布を示す．BASiSはESConvで74.4\%，MathDialで61.1\%，MediTODで44.3\%となり，三設定すべてで最多であった．MediTODでは過半数ではないが，Randomを17.2ポイント上回った．
+
+\subsection{LLM評価結果}
+
+BASiSはLLM評価の全21軸で最高平均値を示し，Baseに18軸，Target-onlyに13軸，Randomに15軸で有意に上回った．Target-onlyがBaseを有意に上回った軸はなかった．
+
+\noindent\textbf{感情支援．}\par\normalfont
+\noindent 図\ref{fig:esconv_oracle}では，BASiSが全七軸で最高平均値を示した．支援行動の強さはBase，Target-only，BASiS，Randomの順に8.26，8.22，8.65，8.21，語調の類似度は8.21，8.25，8.52，8.13であり，BASiSは両軸で三条件すべてを有意に上回った．Premature Advice Avoidanceも8.57，8.76，9.44，8.92となり，三条件すべてとの差が有意であった．NaturalnessはRandomを有意に上回った．
+
+\noindent\textbf{数学チュータリング．}\par\normalfont
+\noindent 図\ref{fig:mathdial_oracle}では，BASiSが七軸すべてで三条件を有意に上回った（すべて$p<.001$）．学習者の思考を促す軸は6.77，7.02，7.75，6.00，推論の診断は7.38，7.76，8.70，6.97，誤りの特定は7.53，7.74，8.85，7.27であった．次の行動の明確さにおけるBASiSとRandomの差は1.85ポイントで最大だった．Target-onlyは全軸でBaseより高かったが，差は有意ではなかった．
+
+\begin{figure*}[t]
+  \begin{minipage}[t]{0.485\textwidth}\centering
+    \includegraphics[width=\linewidth]{figures/esconv_dailydialog_oracle_scores_publication.pdf}
+    \caption{ESConvとDailyDialogにおけるLLM評価結果．棒は平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧は六組の比較に対するHolm補正後の有意なBASiSとの比較を表す（$*p<.05$，$**p<.01$，$***p<.001$）．}
+    \Description{感情支援の七軸についてBase，Target-only，BASiS，RandomのLLM評価スコアを比較した棒グラフ．BASiSは全軸で最高平均値を示す．}
+    \label{fig:esconv_oracle}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.485\textwidth}\centering
+    \includegraphics[width=\linewidth]{figures/mathdial_wildchat_oracle_scores_publication.pdf}
+    \caption{MathDialとWildChat-1MにおけるLLM評価結果．棒は平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧は六組の比較に対するHolm補正後の有意なBASiSとの比較を表す（すべて$***p<.001$）．}
+    \Description{数学チュータリングの七軸について四条件のLLM評価スコアを比較した棒グラフ．BASiSは全軸で三条件を有意に上回る．}
+    \label{fig:mathdial_oracle}
+  \end{minipage}
+\end{figure*}
+
+\noindent\textbf{医療問診．}\par\normalfont
+\noindent 図\ref{fig:meditod_oracle}では，BASiSが全七軸で最高平均値を示した．応答の関連性は4.46，4.70，5.09，4.91，総合品質は5.16，5.26，5.69，5.46であった．不確実性の適切な扱いは7.84，7.96，8.26，7.92となり，BASiSは三条件すべてを有意に上回った．また，危険な医学的助言の回避でRandomを，根拠のない診断の回避でBaseとRandomを有意に上回った．Target-onlyはMediTODでもBaseを有意に上回らなかった．
+
+\begin{figure}[t]\centering
+  \begin{minipage}{0.56\textwidth}\centering
+    \includegraphics[width=\linewidth]{figures/meditod_wildchat_oracle_scores_publication.pdf}
+    \caption{MediTODとWildChat-1MにおけるLLM評価結果．棒は平均値，エラーバーはブートストラップ95\%信頼区間を表す．括弧は六組の比較に対するHolm補正後の有意なBASiSとの比較を表す（$*p<.05$，$**p<.01$）．}
+    \Description{医療問診の七軸について四条件のLLM評価スコアを比較した棒グラフ．BASiSは全軸で最高平均値を示す．}
+    \label{fig:meditod_oracle}
+  \end{minipage}
+\end{figure}
+
+\subsection{考察}
+\label{sec:discussion}
+
+\BasisSubsubsection{対話進行の反映に対する有効性}
+RQ1について，BASiSは三設定すべてで参照コーパスの対話進行を生成応答へ反映したと考えられる．感情支援では感情を受け止めてから助言し，数学チュータリングでは理解を診断してから足場を与え，医療問診では情報を収集・確認してから判断するという形で現れた．人手評価では全項目で最高平均値を示し，三設定すべてで最終選択が最多であり，LLM評価でも全21軸で同じ方向が確認された．これは単語や単一ターンの品質だけでなく，展開中の対話で\emph{いつ}応答戦略を用いるかが反映されたことを示す．式\eqref{eq:score}のように，履歴，状態遷移，観測ラベルから得た事後確率で候補を評価することで，各参照コーパスに含まれる応答の順序やタイミングを学習できたと考えられる．
+
+\BasisSubsubsection{対話進行に基づくデータ選別の寄与}
+RQ2について，BASiSはRandomを人手評価の19項目中16項目で有意に上回り，LLM評価では全21軸で高い平均値を示して15軸で有意に上回った．両条件はデータ量・形式と学習設定を揃え，候補集合も粗い話題で絞り込んでいるため，この差はDPO学習や話題の一致を超えて，対話進行に基づく選別が寄与したことを示す．会話状態，応答戦略，遷移を用いることで，話題が合うだけの応答と，適切な時点で対話を前進させる応答を区別できたと考えられる．
+
+Target-onlyはLLM評価のどの軸でもBaseを有意に上回らず，BASiSはTarget-onlyを13軸で上回った．したがって，本設定では，小規模コーパスを選好データの唯一の供給源とするより，大規模コーパスを選ぶ基準の抽出元として用いる方が有効だったと考えられる．ただし，Target-onlyはデータの出所とペア数が異なり，人手評価にも含まれないため，ベイズ的モデル化だけの寄与を分離する比較ではない．
+
+\BasisSubsubsection{適用範囲と限界}
+参照コーパスと候補コーパスを変更することで，同じBASiSパイプラインを三設定へ適用できた．同じ傾向が繰り返し確認されたことは，異なる対話進行への適用可能性を支持するが，未知の設定や利用者への一般化を示すものではない．人手評価は研究室内の9名を対象とし，MediTODの完全回答者は7名，各設定は10文脈であった．LLM評価は100文脈を扱う一方，単一の評価LLMに依存し，人手評価と評価項目も完全には一致しない．また，Target-onlyはBASiSとデータ量を揃えたアブレーションではない．今後は，外部評価者と対話文脈を増やし，複数の評価LLM，評価項目の整合，データ量を揃えた比較を導入する必要がある．
 
 \begin{comment}
 \section*{倫理およびプライバシーに関する声明}
@@ -671,7 +821,7 @@ BASiSは，参照元と選別対象のコーパスを変更するだけで，同
 本研究では，小規模高品質コーパスの対話進行を，ベイズ的データ選別によってLLMへ反映する手法BASiSを提案した．BASiSは，ラベルの個数と役割に明示的な制約を設けた上で，LLMにより小規模コーパスから会話状態，応答戦略，状態遷移，確率の推定値を導出し，ベイズ的対話モデルとして定式化する．このモデルを用いて大規模汎用コーパスの候補応答を評価し，得られた選好データによってLoRAアダプタを学習する．
 この仕組みにより，目的ごとの詳細な対話ガイドラインを人手で記述することなく，小規模コーパスに含まれる応答戦略と複数ターンにわたる対話の進め方を，学習データの選別基準として利用できる．また，会話状態を確率分布として扱い，候補応答から得た観測によって更新することで，会話履歴と応答後の状態遷移を考慮して目的に適したデータを選別できる．
 
-感情支援，数学チュータリング，医療問診の三領域を対象とした比較実験では，人手評価の全19軸でBASiSが最高平均値を示し，三領域すべての最終選択で最も多く選ばれた．Oracle評価でも全21軸で最高平均値を示した．これらの結果から，共感的な支援戦略，学習者の理解状態に応じた教育的支援，および情報不足時に断定を避ける応答戦略を，各領域のコーパスに応じてモデルへ反映できる可能性が示された．また，Oracle評価ではTarget-onlyがBaseを有意に上回る軸がなく，Randomとの比較でもBASiSが広い範囲で優位であったことから，小規模コーパスを相互作用上の知識の抽出元として活用し，粗い話題の一致を超えて学習データを選ぶことの重要性が示された．
+感情支援，数学チュータリング，医療問診の三設定における評価では，人手評価の全19軸でBASiSが最高平均値を示し，三設定すべての最終選択で最も多く選ばれた．LLMによる大規模評価でも全21軸で最高平均値を示した．これらの結果から，共感的な支援戦略，学習者の理解状態に応じた教育的支援，および情報不足時に断定を避ける応答戦略を，各設定のコーパスに応じてモデルへ反映できる可能性が示された．また，LLM評価ではTarget-onlyがBaseを有意に上回る軸がなく，Randomとの比較でもBASiSが広い範囲で優位であったことから，小規模コーパスを相互作用上の知識の抽出元として活用し，粗い話題の一致を超えて学習データを選ぶことの重要性が示された．
 
 今後は，異なるモデルへの適用可能性を評価するとともに，対話領域に応じた会話状態・応答戦略・望ましい状態群の設計方法を検討する．さらに，外部評価者とより多くの対話例を用いた人手評価を行い，カウンセリング，教育，医療をはじめとする多様な対話領域への応用可能性を検証する．
 
@@ -679,7 +829,7 @@ BASiSは，参照元と選別対象のコーパスを変更するだけで，同
 % IUI 2027への提出時に独立したGenAI利用開示が必要になった場合に備えて，
 % 修正前原稿の記述を保持している．現稿のPDFには出力しない．
 \section*{GenAI利用開示}
-本研究では，大規模言語モデルを，執筆支援のみならず研究方法論の中核的な構成要素として利用した．BASiS自体が，小規模コーパスからの会話特徴抽出（第\ref{sec:method}章ステップ1），スコアリング時の候補応答の戦略ラベリング（第\ref{mod:scoring}章），および自動評価のOracle判定器（第\ref{sec:evalprotocol}章）にLLMを利用しており，これらの利用はいずれも本手法に本質的なものであり，上記の該当箇所で詳細に記述している．本原稿の一部の文章は，著者の直接の監督のもとで大規模言語モデルの支援を受けて起草された．技術的な主張，実験設計上の判断，および報告されている結果はすべて，著者が作成・検証し，その責任を負うものである．LLMの支援を受けて作成されたコードや分析スクリプトは，使用前に著者によってレビュー・検証されている．図\ref{fig:esconv_oracle}，図\ref{fig:mathdial_oracle}，図\ref{fig:meditod_oracle}に報告されている数値結果は，上記および第\ref{sec:evalprotocol}章で述べたOracle判定器としての役割を除き，LLMによって生成または改変されたものではない．
+本研究では，大規模言語モデルを，執筆支援のみならず研究方法論の中核的な構成要素として利用した．BASiS自体が，小規模コーパスからの会話特徴抽出（第\ref{sec:method}章ステップ1），スコアリング時の候補応答の戦略ラベリング（第\ref{mod:scoring}章），および自動評価のLLM評価者（第\ref{sec:evalprotocol}章）にLLMを利用しており，これらの利用はいずれも本手法に本質的なものであり，上記の該当箇所で詳細に記述している．本原稿の一部の文章は，著者の直接の監督のもとで大規模言語モデルの支援を受けて起草された．技術的な主張，実験設計上の判断，および報告されている結果はすべて，著者が作成・検証し，その責任を負うものである．LLMの支援を受けて作成されたコードや分析スクリプトは，使用前に著者によってレビュー・検証されている．図\ref{fig:esconv_oracle}，図\ref{fig:mathdial_oracle}，図\ref{fig:meditod_oracle}に報告されている数値結果は，上記および第\ref{sec:evalprotocol}章で述べたLLM評価者としての役割を除き，LLMによって生成または改変されたものではない．
 \end{comment}
 
 %% ------------------------------------------------------------------
