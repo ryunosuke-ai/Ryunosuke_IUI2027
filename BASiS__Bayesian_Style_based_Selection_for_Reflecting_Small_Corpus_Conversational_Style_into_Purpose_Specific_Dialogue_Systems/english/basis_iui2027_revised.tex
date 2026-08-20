@@ -117,7 +117,7 @@ LLM-based response generation has approached this requirement in two main ways. 
 
 A separate line of research has modeled dialogue progression through dialogue actions, response strategies, and their transitions. Ganesh et al. predicted the next teacher talk move in classroom dialogue \cite{ganesh2021teacher}; Wan et al. modeled relationships between user emotion states and response strategies as a heterogeneous graph \cite{wan2025emodynamix}; and Rudolph et al. regularized next-dialogue-act prediction using a transition matrix derived from counseling conversations \cite{rudolph2026transition}. These studies capture important structure beyond surface utterances, but primarily evaluate action or strategy prediction. Their integration with LLMs for natural-language response generation, and evaluation of whether the modeled progression appears in generated responses, remain limited.
 
-To bridge these two lines of work, we propose BASiS (Bayesian Style-based Selection), a method for transferring dialogue progression from a small, high-quality corpus to an LLM. BASiS first induces a progression model comprising conversational states, response strategies, state transitions, and their probabilistic relationships. It then scores candidate responses in a large general-purpose corpus according to their compatibility with that progression and constructs preference pairs from the scores. Finally, it adapts the LLM using Direct Preference Optimization (DPO) \cite{rafailov2023dpo} with Low-Rank Adaptation (LoRA) \cite{hu2021lora}. This combination uses large-corpus selection to scale the interactional knowledge encoded in the small corpus, while reducing the need to manually author detailed dialogue guidelines. By maintaining a probability distribution over conversational states, BASiS can account for dialogue history and multiple valid response strategies. We evaluate the same pipeline in emotional support, mathematics tutoring, and medical history-taking by changing the reference corpus and candidate pool.
+To bridge these two lines of work, we propose BASiS (Bayesian Style-based Selection), a method for transferring dialogue progression from a small, high-quality corpus to an LLM. BASiS first induces a progression model comprising conversational states, response strategies, state transitions, and their probabilistic relationships. It then scores candidate responses in a large general-purpose corpus according to their compatibility with that progression and constructs preference pairs from the scores. Finally, it adapts the LLM using Direct Preference Optimization (DPO) \cite{rafailov2023dpo} with Low-Rank Adaptation (LoRA) \cite{hu2021lora}. This combination uses selection from a large corpus to scale the interactional knowledge encoded in the small corpus, while reducing the need to manually author detailed dialogue guidelines. By maintaining a probability distribution over conversational states, BASiS can account for dialogue history and multiple valid response strategies. We evaluate the same pipeline in emotional support, mathematics tutoring, and medical history-taking by changing the reference corpus and candidate pool.
 
 The remainder of this paper is organized as follows. Section~\ref{sec:relwork} reviews related work on guideline-based response control, dialogue-history-based prediction of dialogue actions and response strategies, and training-data selection for LLMs. Section~\ref{sec:method} describes the four steps of the BASiS pipeline. Section~\ref{sec:evaluation} presents the evaluation design, results, and discussion. Finally, Section~\ref{sec:conclusion} concludes the paper.
 
@@ -139,7 +139,7 @@ Corpus-based dialogue modeling and data-centric adaptation together suggest a br
 \subsection{Concept}
 \label{sec:method_concept}
 
-We propose BASiS, which adapts an LLM to the response strategies and dialogue progression encoded in a small, high-quality corpus through Bayesian data selection. BASiS converts these interactional patterns into a probabilistic dialogue model. Instead of training directly on the small corpus, BASiS uses the model as a criterion for selecting data from a large general-purpose corpus.
+We propose BASiS (Bayesian Style-based Selection), which adapts an LLM to the response strategies and dialogue progression encoded in a small, high-quality corpus through Bayesian data selection. BASiS converts these interactional patterns into a probabilistic dialogue model. Instead of training directly on the small corpus, BASiS uses the model as a criterion for selecting data from a large general-purpose corpus.
 BASiS evaluates each dialogue instance in the large corpus according to its compatibility with the target corpus's dialogue progression. It thereby incorporates the interactional knowledge in the small corpus into training data without requiring detailed dialogue guidelines to be written manually for each setting.
 The selected data are ultimately used for DPO training, which adapts the LLM to the response strategies and progression patterns of the small corpus.
 
@@ -325,7 +325,7 @@ The LLM operations within BASiS use the Responses API. We use \texttt{gpt-5.4-pr
   \end{tabular}
 \end{table}
 
-Table~\ref{tab:conditions} summarizes the conditions. Base receives no DPO training; Target-only uses only the small target corpus; and BASiS and Random use large-corpus data selected by the compatibility score or sampled after broad-keyword filtering, respectively.
+Table~\ref{tab:conditions} summarizes the conditions. Base receives no DPO training; Target-only uses only the small target corpus; and BASiS and Random use large-corpus data selected by the compatibility score or sampled after filtering with broad domain-related keywords, respectively.
 All conditions use Qwen3.5-27B. Target-only, BASiS, and Random use LoRA-based DPO, while Base remains unchanged. Within each setting, BASiS and Random use the same amount and format of preference data and differ principally in how chosen responses are selected. We use a DPO learning rate of $5\times10^{-6}$, $\beta=0.1$, LoRA rank $r=8$, $\alpha=16$, dropout $0.05$, and one training epoch for all three DPO-trained conditions.
 
 The BASiS--Base comparison addresses RQ1 by testing whether BASiS adaptation changes generated responses in the intended direction. The BASiS--Random comparison provides the primary test for RQ2: the conditions share the amount and format of preference data and the training configuration, but differ in whether corpus-derived dialogue progression guides the selection of chosen responses. Target-only is an additional diagnostic condition in the LLM-based evaluation. It examines whether direct training on the available small corpus is sufficient under the present setup; because its data source and pair count differ from BASiS, this comparison does not isolate the effect of Bayesian modeling.
@@ -468,10 +468,10 @@ For each axis, we tested differences among the four conditions using the Friedma
 
 BASiS had the highest mean on all 19 human-rated items, significantly exceeded Base and Random on 16 items each, and was selected most frequently in all three dialogue settings.
 
-\noindent\textbf{Emotional Support.}\quad
+\noindent\textbf{Emotional Support}\quad
 Figure~\ref{fig:esconv_human} shows that BASiS had the highest mean on all seven items and significantly exceeded both Base and Random on six, with advice timing as the exception (Holm-adjusted $p<.05$). ESConv Support Behavior Strength averaged 4.22, 5.64, and 3.97 for Base, BASiS, and Random, respectively; ESConv Tone Similarity averaged 4.59, 6.17, and 4.43. Kendall's $W$ ranged from .479 to .876 on significant items. Premature Advice Avoidance also favored BASiS in the mean, but its post-hoc comparisons were nonsignificant. BASiS accounted for 74.4\% of final choices.
 
-\noindent\textbf{Mathematics Tutoring.}\quad
+\noindent\textbf{Mathematics Tutoring}\quad
 Figure~\ref{fig:mathdial_human} shows that BASiS significantly exceeded both Base and Random on all seven items (Holm-adjusted $p<.05$). Equitable Tutoring averaged 4.28, 5.42, and 3.73, and Feedback Actionability averaged 4.13, 5.43, and 3.72. Kendall's $W$ ranged from .716 to .939, and BASiS accounted for 61.1\% of final choices.
 
 \begin{figure*}[t]
@@ -491,7 +491,7 @@ Figure~\ref{fig:mathdial_human} shows that BASiS significantly exceeded both Bas
   \end{minipage}
 \end{figure*}
 
-\noindent\textbf{Medical History-Taking.}\quad
+\noindent\textbf{Medical History-Taking}\quad
 Figure~\ref{fig:meditod_human} shows that BASiS had the highest mean on all five items. It significantly exceeded both Base and Random on Premature Assessment Avoidance, Unsafe Medical Advice Avoidance, and Unsupported Diagnosis Avoidance (Holm-adjusted $p<.05$), with Kendall's $W$ from .799 to .813. The Friedman tests were nonsignificant for Coverage Without Redundancy and Appropriate Uncertainty. BASiS was selected most often in the final choice, at 44.3\%.
 
 \begin{figure*}[t]
@@ -533,10 +533,10 @@ Table~\ref{tab:human_final_choice} summarizes the final-choice distribution. BAS
 
 BASiS had the highest mean on all 21 LLM-rated axes and significantly exceeded Base, Target-only, and Random on 18, 13, and 15 axes, respectively. Target-only did not significantly exceed Base on any axis.
 
-\noindent\textbf{Emotional Support.}\quad
+\noindent\textbf{Emotional Support}\quad
 Figure~\ref{fig:esconv_oracle} shows that BASiS had the highest mean on all seven axes. For Base, Target-only, BASiS, and Random, ESConv Support Behavior Strength averaged 8.26, 8.22, 8.65, and 8.21, and ESConv Tone Similarity averaged 8.21, 8.25, 8.52, and 8.13; BASiS significantly exceeded all three conditions on both axes. Premature Advice Avoidance averaged 8.57, 8.76, 9.44, and 8.92, again with significant differences from all three conditions. Naturalness was significantly higher than Random.
 
-\noindent\textbf{Mathematics Tutoring.}\quad
+\noindent\textbf{Mathematics Tutoring}\quad
 Figure~\ref{fig:mathdial_oracle} shows that BASiS exceeded all three comparison conditions on all seven axes; all 21 comparisons were significant (all $p<.001$). For Base, Target-only, BASiS, and Random, Equitable Tutoring averaged 6.77, 7.02, 7.75, and 6.00. Learner Reasoning Diagnosis averaged 7.38, 7.76, 8.70, and 6.97, and Mistake Location and Targeting averaged 7.53, 7.74, 8.85, and 7.27. The 1.85-point BASiS--Random difference on Feedback Actionability was the largest among the seven axes. Target-only had a higher mean than Base on all axes, but none of the differences was significant.
 
 \begin{figure*}[t]
@@ -556,7 +556,7 @@ Figure~\ref{fig:mathdial_oracle} shows that BASiS exceeded all three comparison 
   \end{minipage}
 \end{figure*}
 
-\noindent\textbf{Medical History-Taking.}\quad
+\noindent\textbf{Medical History-Taking}\quad
 Figure~\ref{fig:meditod_oracle} shows that BASiS had the highest mean on all seven axes. For Base, Target-only, BASiS, and Random, Response Relevance averaged 4.46, 4.70, 5.09, and 4.91, and Overall Quality averaged 5.16, 5.26, 5.69, and 5.46. Appropriate Uncertainty averaged 7.84, 7.96, 8.26, and 7.92, with BASiS significantly exceeding all three conditions. Unsafe Medical Advice Avoidance was significantly higher than Random, and Unsupported Diagnosis Avoidance was significantly higher than Base and Random. Target-only did not significantly exceed Base on any MediTOD axis.
 
 \begin{figure}[t]
@@ -573,9 +573,9 @@ Figure~\ref{fig:meditod_oracle} shows that BASiS had the highest mean on all sev
 \subsection{Discussion}
 \label{sec:discussion}
 
-\subsubsection{Effectiveness of Dialogue-Progression Transfer}
+\subsubsection{Effectiveness of Transferring Dialogue Progression}
 
-The results answer RQ1 by showing that BASiS improved the realization of reference-corpus dialogue progression in generated responses across all three evaluated settings. The specific behavior differed by setting but followed a common temporal structure: emotional-support responses acknowledged and explored feelings before offering advice; mathematics-tutoring responses diagnosed the learner's reasoning and provided scaffolding before revealing an answer; and medical-history-taking responses gathered and confirmed information before making an assessment. Human raters gave BASiS the highest mean on every item and selected it most frequently in all three settings, while the larger-scale LLM-based evaluation showed the same overall direction across all 21 axes.
+The results answer RQ1 by showing that BASiS improved the realization of dialogue progression represented in the reference corpus in generated responses across all three evaluated settings. The specific behavior differed by setting but followed a common temporal structure: emotional-support responses acknowledged and explored feelings before offering advice; mathematics-tutoring responses diagnosed the learner's reasoning and provided scaffolding before revealing an answer; and medical-history-taking responses gathered and confirmed information before making an assessment. Human raters gave BASiS the highest mean on every item and selected it most frequently in all three settings, while the larger-scale LLM-based evaluation showed the same overall direction across all 21 axes.
 
 These results indicate that BASiS transfers more than isolated wording or single-turn response quality. The gains concern \emph{when} a response strategy is appropriate within the unfolding interaction. This pattern is consistent with Equation~\eqref{eq:score}: candidate responses are evaluated through posterior state probabilities derived from the preceding history, state transitions, and observation labels. Selecting responses that move the dialogue toward desirable states can therefore expose the model to the sequencing of acknowledgment, diagnosis, guidance, information gathering, and assessment represented in each reference corpus.
 
