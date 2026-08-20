@@ -1,0 +1,210 @@
+\section{コーパス分析プロンプトの指示内容}
+\label{app:prompts}
+
+工程1では，抽出した会話本文と既存アノテーションをまとめて分析するようLLMへ指示した．具体的には，意味の近いラベルを統合し，対話進行の局面を表す4--7個の会話状態と，各応答の機能を表す応答戦略を生成し，両者を異なる概念として区別するよう求めた．さらに，望ましい対話進行を表す対象状態を特定し，初期状態分布，状態遷移確率，観測尤度を推定させた．既存アノテーションは分析の根拠として用いるが，その名称を状態ラベルへ機械的に転用しないよう指示した．
+
+\subsection{各設定に固有の指示}
+
+\noindent\textbf{ESConv.} 支援戦略のアノテーションに加え，相談者の感情，問題，状況，対話後の評価とコメントを提示した．相談者の状況を理解・承認してから適切なタイミングで共同計画や励ましへ進む流れを捉え，早すぎる助言，一般的すぎる支援，文脈を十分に踏まえない応答を区別するよう指示した．
+
+\noindent\textbf{MathDial.} 数学問題，参照解答，完全な指導対話，Teacher moveのアノテーションを提示した．学習者の推論の把握と誤りの診断から，足場かけ，説明，自己修正，理解確認へ進む流れを表現し，早すぎる直接解答と学習者の現在の考えに沿わない応答を区別するよう指示した．
+
+\noindent\textbf{MediTOD.} 完全な病歴聴取対話と既存アノテーションを提示した．主訴と症状属性の聴取から，関連する危険徴候や背景情報の確認，情報の統合，十分な根拠に基づく評価・方針へ進む流れを表現し，早すぎる評価，不要な再質問，文脈に合わない応答を区別するよう指示した．
+
+\section{生成されたベイズ的対話モデル}
+\label{app:models}
+
+\definecolor{basisMatrixHeat}{RGB}{49,130,189}
+\newcommand{\BasisHeatCell}[1]{%
+  \cellcolor{basisMatrixHeat!\fpeval{round(#1*85,0)}}\strut #1}
+\newcolumntype{Z}{>{\collectcell\BasisHeatCell}r<{\endcollectcell}}
+
+本付録では，三つの固定モデルで使用した全会話状態，全応答戦略，対象状態，および確率を示す．ベイズモデルでは，各応答戦略ラベルを観測として扱う．ヒートマップ中の状態IDと応答戦略IDは，ラベル一覧表の完全な名称に対応する．全ヒートマップで共通の色尺度を使用し，確率が高いほどセルを濃くするとともに，正確な数値も併記する．対象欄の「Yes」は，式\eqref{eq:score}の\(S_{\mathrm{target}}\)に含まれることを示す．
+
+\subsection{ESConv}
+
+\begin{table}[H]
+  \caption{ESConvの全ラベルと初期状態分布．}
+  \label{tab:app_esconv_inventory_ja}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    状態ID & 会話状態 & 対象 & 初期確率 & 戦略ID & 応答戦略 \\
+    \midrule
+    S1 & \texttt{opening\_rapport}        & Yes & 0.44 & O1 & \texttt{greet\_checkin} \\
+    S2 & \texttt{clarify\_problem}        & Yes & 0.26 & O2 & \texttt{explore\_question} \\
+    S3 & \texttt{empathic\_support}       & Yes & 0.14 & O3 & \texttt{reflect\_validate} \\
+    S4 & \texttt{collaborative\_planning} & Yes & 0.07 & O4 & \texttt{practical\_guidance} \\
+    S5 & \texttt{closing\_encouragement}  & Yes & 0.03 & O5 & \texttt{self\_disclosure} \\
+    S6 & \texttt{misaligned\_support}     & No  & 0.06 & O6 & \texttt{close\_meta} \\
+       &                                      &     &      & O7 & \texttt{misattuned\_generic} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{ESConvの確率行列．確率が高いほどセルを濃くし，各セルに正確な数値を併記している．}
+  \centering
+  \begin{minipage}[t]{0.43\textwidth}
+    \centering\scriptsize
+    \textbf{（a）状態遷移確率\(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{2.3pt}
+    \begin{tabular}{@{}l*{6}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} \\
+      \midrule
+      S1 & .10 & .48 & .19 & .07 & .04 & .12 \\
+      S2 & .03 & .26 & .34 & .25 & .04 & .08 \\
+      S3 & .02 & .20 & .32 & .30 & .10 & .06 \\
+      S4 & .01 & .12 & .21 & .36 & .23 & .07 \\
+      S5 & .01 & .04 & .10 & .12 & .66 & .07 \\
+      S6 & .04 & .16 & .16 & .16 & .08 & .40 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.53\textwidth}
+    \centering\scriptsize
+    \textbf{（b）観測尤度\(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{2.3pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} \\
+      \midrule
+      S1 & .42 & .29 & .15 & .03 & .04 & .03 & .04 \\
+      S2 & .05 & .43 & .26 & .09 & .05 & .03 & .09 \\
+      S3 & .03 & .12 & .53 & .10 & .12 & .04 & .06 \\
+      S4 & .02 & .16 & .17 & .47 & .08 & .04 & .06 \\
+      S5 & .03 & .04 & .23 & .07 & .05 & .52 & .06 \\
+      S6 & .04 & .14 & .07 & .16 & .11 & .08 & .40 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
+
+\subsection{MathDial}
+
+\begin{table}[H]
+  \caption{MathDialの全ラベルと初期状態分布．}
+  \label{tab:app_mathdial_inventory_ja}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    状態ID & 会話状態 & 対象 & 初期確率 & 戦略ID & 応答戦略 \\
+    \midrule
+    S1 & \texttt{orientation}            & Yes & 0.54 & O1 & \texttt{solution\_process\_elicitation} \\
+    S2 & \texttt{fault\_mapping}          & Yes & 0.20 & O2 & \texttt{diagnostic\_probe} \\
+    S3 & \texttt{repair\_cycle}           & Yes & 0.09 & O3 & \texttt{focused\_step\_prompt} \\
+    S4 & \texttt{stalled\_recovery}       & Yes & 0.06 & O4 & \texttt{analogy\_transfer\_prompt} \\
+    S5 & \texttt{resolution\_window}      & Yes & 0.04 & O5 & \texttt{diagnosis\_grounded\_explanation} \\
+    S6 & \texttt{ungrounded\_resolution}  & No  & 0.03 & O6 & \texttt{verification\_reflection} \\
+    S7 & \texttt{interaction\_breakdown}  & No  & 0.04 & O7 & \texttt{premature\_direct\_answer} \\
+       &                                    &     &      & O8 & \texttt{off\_style\_response} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{MathDialの確率行列．確率が高いほどセルを濃くし，各セルに正確な数値を併記している．}
+  \centering
+  \begin{minipage}[t]{0.44\textwidth}
+    \centering\scriptsize
+    \textbf{（a）状態遷移確率\(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{1.9pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} & \multicolumn{1}{c}{S7} \\
+      \midrule
+      S1 & .11 & .49 & .17 & .06 & .10 & .03 & .04 \\
+      S2 & .03 & .24 & .41 & .15 & .08 & .05 & .04 \\
+      S3 & .02 & .12 & .32 & .20 & .25 & .05 & .04 \\
+      S4 & .02 & .13 & .30 & .15 & .32 & .05 & .03 \\
+      S5 & .05 & .08 & .12 & .07 & .54 & .03 & .11 \\
+      S6 & .03 & .08 & .18 & .22 & .19 & .24 & .06 \\
+      S7 & .05 & .14 & .13 & .10 & .08 & .16 & .34 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.54\textwidth}
+    \centering\scriptsize
+    \textbf{（b）観測尤度\(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{1.9pt}
+    \begin{tabular}{@{}l*{8}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} & \multicolumn{1}{c}{O8} \\
+      \midrule
+      S1 & .45 & .20 & .08 & .05 & .05 & .10 & .03 & .04 \\
+      S2 & .08 & .43 & .20 & .10 & .06 & .07 & .03 & .03 \\
+      S3 & .03 & .19 & .36 & .24 & .08 & .06 & .02 & .02 \\
+      S4 & .03 & .09 & .15 & .05 & .48 & .10 & .07 & .03 \\
+      S5 & .04 & .08 & .16 & .04 & .10 & .52 & .02 & .04 \\
+      S6 & .03 & .05 & .07 & .03 & .13 & .08 & .57 & .04 \\
+      S7 & .05 & .07 & .06 & .05 & .06 & .08 & .07 & .56 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
+
+\subsection{MediTOD}
+
+\begin{table}[H]
+  \caption{MediTODの全ラベルと初期状態分布．}
+  \label{tab:app_meditod_inventory_ja}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    状態ID & 会話状態 & 対象 & 初期確率 & 戦略ID & 応答戦略 \\
+    \midrule
+    S1 & \texttt{agenda\_entry}            & Yes & 0.58 & O1  & \texttt{open\_complaint\_invitation} \\
+    S2 & \texttt{problem\_representation}  & Yes & 0.18 & O2  & \texttt{missing\_information\_clarification} \\
+    S3 & \texttt{risk\_boundary}           & Yes & 0.07 & O3  & \texttt{symptom\_attribute\_probe} \\
+    S4 & \texttt{whole\_person\_context}  & Yes & 0.05 & O4  & \texttt{associated\_red\_flag\_probe} \\
+    S5 & \texttt{evidence\_consolidation}  & Yes & 0.03 & O5  & \texttt{history\_context\_probe} \\
+    S6 & \texttt{insufficient\_basis\_path} & No & 0.05 & O6  & \texttt{summary\_and\_stage\_signal} \\
+    S7 & \texttt{broken\_context\_path}   & No  & 0.04 & O7  & \texttt{conditional\_assessment\_or\_plan} \\
+       &                                     &     &      & O8  & \texttt{unsupported\_assessment\_or\_advice} \\
+       &                                     &     &      & O9  & \texttt{redundant\_requestioning} \\
+       &                                     &     &      & O10 & \texttt{context\_misaligned\_response} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{MediTODの確率行列．確率が高いほどセルを濃くし，各セルに正確な数値を併記している．}
+  \centering
+  \begin{minipage}[t]{0.40\textwidth}
+    \centering\scriptsize
+    \textbf{（a）状態遷移確率\(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{1.2pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} & \multicolumn{1}{c}{S7} \\
+      \midrule
+      S1 & .16  & .51  & .13 & .08  & .05 & .04  & .03  \\
+      S2 & .03  & .37  & .31 & .16  & .07 & .035 & .025 \\
+      S3 & .02  & .14  & .35 & .30  & .12 & .04  & .03  \\
+      S4 & .015 & .065 & .09 & .48  & .27 & .045 & .035 \\
+      S5 & .02  & .04  & .04 & .06  & .67 & .10  & .07  \\
+      S6 & .04  & .09  & .06 & .05  & .13 & .55  & .08  \\
+      S7 & .05  & .11  & .08 & .08  & .08 & .12  & .48  \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.58\textwidth}
+    \centering\scriptsize
+    \textbf{（b）観測尤度\(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{1.4pt}
+    \begin{tabular}{@{}l@{\hspace{2pt}}*{10}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} & \multicolumn{1}{c}{O8} & \multicolumn{1}{c}{O9} & \multicolumn{1}{c}{O10} \\
+      \midrule
+      S1 & .50  & .12  & .10  & .05  & .04 & .06  & .04 & .02  & .03   & .04   \\
+      S2 & .04  & .12  & .52  & .14  & .06 & .05  & .03 & .01  & .015  & .015  \\
+      S3 & .025 & .09  & .15  & .54  & .07 & .055 & .04 & .015 & .0075 & .0075 \\
+      S4 & .015 & .07  & .065 & .10  & .56 & .07  & .05 & .015 & .025  & .03   \\
+      S5 & .015 & .07  & .04  & .05  & .08 & .39  & .31 & .015 & .015  & .015  \\
+      S6 & .025 & .035 & .05  & .04  & .04 & .07  & .15 & .53  & .025  & .035  \\
+      S7 & .025 & .045 & .06  & .05  & .06 & .04  & .04 & .05  & .32   & .31   \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}

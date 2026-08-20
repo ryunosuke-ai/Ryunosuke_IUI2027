@@ -12,6 +12,7 @@
 \usepackage{tabularx}
 \usepackage{array}
 \usepackage{colortbl}
+\usepackage{collcell}
 \usepackage{comment}
 \usepackage{pifont}
 
@@ -205,7 +206,7 @@ BASiSの4つの工程を図\ref{fig:basis_architecture}に示す．上段Aの\em
 
 工程1の入力は，小規模高品質コーパスから抽出した80会話の本文と既存アノテーションである．80会話は分割せず，一度のプロンプトですべてLLMへ提示した．出力は，コーパスに含まれる会話状態，応答戦略，状態遷移，およびそれらの確率の推定値からなる対話進行の表現である．各ターンについて，\emph{会話状態}は対話相手の状況または現在の対話段階，\emph{応答戦略}は個々の応答が果たす観測可能な機能，\emph{状態遷移}は応答前の状態から応答後の状態への移行を表す．
 
-プロンプトでは，抽出した会話全体を通して意味の近いラベルを統合し，会話状態を4--7個とし，会話状態と応答戦略を異なる概念として定義した上で，各ターンにラベルを付与し，望ましい対話進行を表す状態を特定するよう指示した．既存アノテーションは各ターンの機能を判断する根拠として用いるが，その名称を会話状態として機械的に転用するわけではない．初期状態確率，状態遷移確率，観測尤度はラベルの出現頻度から算出せず，LLMにコーパス全体の傾向を表す数値として出力させた．出力後には，ラベルの欠落，各確率が$[0,1]$の範囲内にあるか，確率分布の各行の総和が1であるかを検査し，必要な行は工程2で正規化した．例えば，本実験で使用する感情支援対話コーパスESConv\cite{liu2021esconv}からは，挨拶や短い安否確認を通じて相談者が安心して話せる雰囲気を作る状態の\texttt{opening\_\allowbreak rapport}と，相談者の感情を受け止めて孤立感や心理的負担を和らげる状態の\texttt{empathic\_\allowbreak support}が生成された．また，状況を理解するために文脈に沿って質問する応答戦略の\texttt{explore\_\allowbreak question}と，発言内容や感情を言い換えて認める\texttt{reflect\_\allowbreak validate}が生成された．
+プロンプトでは，抽出した会話全体を通して意味の近いラベルを統合し，会話状態を4--7個とし，会話状態と応答戦略を異なる概念として定義した上で，各ターンにラベルを付与し，望ましい対話進行を表す状態を特定するよう指示した．既存アノテーションは各ターンの機能を判断する根拠として用いるが，その名称を会話状態として機械的に転用するわけではない．初期状態確率，状態遷移確率，観測尤度はラベルの出現頻度から算出せず，LLMにコーパス全体の傾向を表す数値として出力させた．出力後には，ラベルの欠落，各確率が$[0,1]$の範囲内にあるか，確率分布の各行の総和が1であるかを検査し，必要な行は工程2で正規化した．例えば，本実験で使用する感情支援対話コーパスESConv\cite{liu2021esconv}からは，挨拶や短い安否確認を通じて相談者が安心して話せる雰囲気を作る状態の\texttt{opening\_\allowbreak rapport}と，相談者の感情を受け止めて孤立感や心理的負担を和らげる状態の\texttt{empathic\_\allowbreak support}が生成された．また，状況を理解するために文脈に沿って質問する応答戦略の\texttt{explore\_\allowbreak question}と，発言内容や感情を言い換えて認める\texttt{reflect\_\allowbreak validate}が生成された．プロンプトの指示内容を付録\ref{app:prompts}に，三つの対話設定で得られたモデル全体を付録\ref{app:models}に示す．
 
 \phantomsection
 \label{mod:bayesian_modeling}
@@ -839,5 +840,11 @@ Target-onlyはLLM評価のどの軸でもBaseを有意に上回らず，BASiSは
 %% ------------------------------------------------------------------
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{basis_ja}
+
+\clearpage
+\appendix
+%TC:ignore
+\input{basis_appendix_ja}
+%TC:endignore
 
 \end{document}

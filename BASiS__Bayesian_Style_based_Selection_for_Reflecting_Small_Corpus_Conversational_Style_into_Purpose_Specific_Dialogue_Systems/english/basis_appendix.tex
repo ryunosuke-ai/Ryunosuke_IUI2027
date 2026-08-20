@@ -1,0 +1,213 @@
+\section{Corpus-Analysis Prompt Instructions}
+\label{app:prompts}
+
+Step~1 used a shared instruction to analyze the selected dialogue text and existing annotations as a whole. The LLM was asked to merge labels with similar meanings, identify 4--7 conversational states representing stages of dialogue progression, define response strategies describing the function of each response, and distinguish the states from the strategies. It then identified the target states and estimated the initial-state distribution, state-transition probabilities, and observation likelihoods. Existing annotation names were used as evidence but were not copied mechanically into the generated state labels.
+
+\subsection{Setting-Specific Instructions}
+
+\noindent\textbf{ESConv.} The prompt supplied supporter-strategy annotations together with information about the speaker's emotion, problem, and situation and the post-dialogue ratings and comments. It asked the LLM to capture progression from understanding and validating the help seeker's situation to appropriately timed planning and encouragement, while distinguishing premature advice, generic support, and responses that fail to engage with the context.
+
+\noindent\textbf{MathDial.} The prompt supplied the mathematics problem, reference answer, complete tutoring dialogue, and Teacher-move annotations. It asked the LLM to represent progression from eliciting the learner's reasoning and diagnosing an error to scaffolding, explanation, self-correction, and verification. Premature direct answers and responses unrelated to the learner's current reasoning were represented separately.
+
+\noindent\textbf{MediTOD.} The prompt supplied complete history-taking dialogues and their existing annotations. It asked the LLM to represent progression from eliciting the chief complaint and symptom attributes to checking associated risks and background information, consolidating the evidence, and moving to an appropriately qualified assessment or plan. Premature assessment, unnecessary repetition, and contextually mismatched responses were distinguished from this progression.
+
+\section{Induced Bayesian Dialogue Models}
+\label{app:models}
+
+\definecolor{basisMatrixHeat}{RGB}{49,130,189}
+\newcommand{\BasisHeatCell}[1]{%
+  \cellcolor{basisMatrixHeat!\fpeval{round(#1*85,0)}}\strut #1}
+\newcolumntype{Z}{>{\collectcell\BasisHeatCell}r<{\endcollectcell}}
+
+This appendix reports every conversational state, response-strategy label, target state, and probability used in the three fixed models. In the Bayesian model, each response-strategy label is treated as an observation. State and strategy IDs in the heatmaps refer to the full labels in the inventory tables. All heatmaps use the same scale: darker cells indicate higher probabilities, and each cell retains its exact value. A target mark indicates membership in \(S_{\mathrm{target}}\) in Equation~\eqref{eq:score}.
+
+\subsection{ESConv}
+
+\begin{table}[H]
+  \caption{Complete ESConv label inventory and initial-state distribution.}
+  \label{tab:app_esconv_inventory}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    State ID & Conversational state & Target & Initial & Strategy ID & Response strategy \\
+    \midrule
+    S1 & \texttt{opening\_rapport}        & Yes & 0.44 & O1 & \texttt{greet\_checkin} \\
+    S2 & \texttt{clarify\_problem}        & Yes & 0.26 & O2 & \texttt{explore\_question} \\
+    S3 & \texttt{empathic\_support}       & Yes & 0.14 & O3 & \texttt{reflect\_validate} \\
+    S4 & \texttt{collaborative\_planning} & Yes & 0.07 & O4 & \texttt{practical\_guidance} \\
+    S5 & \texttt{closing\_encouragement}  & Yes & 0.03 & O5 & \texttt{self\_disclosure} \\
+    S6 & \texttt{misaligned\_support}     & No  & 0.06 & O6 & \texttt{close\_meta} \\
+       &                                      &     &      & O7 & \texttt{misattuned\_generic} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{ESConv probability matrices. Darker cells indicate higher probabilities; exact values are printed in each cell.}
+  \label{tab:app_esconv_matrices}
+  \centering
+  \begin{minipage}[t]{0.43\textwidth}
+    \centering\scriptsize
+    \textbf{(a) Transition probability \(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{2.3pt}
+    \begin{tabular}{@{}l*{6}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} \\
+      \midrule
+      S1 & .10 & .48 & .19 & .07 & .04 & .12 \\
+      S2 & .03 & .26 & .34 & .25 & .04 & .08 \\
+      S3 & .02 & .20 & .32 & .30 & .10 & .06 \\
+      S4 & .01 & .12 & .21 & .36 & .23 & .07 \\
+      S5 & .01 & .04 & .10 & .12 & .66 & .07 \\
+      S6 & .04 & .16 & .16 & .16 & .08 & .40 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.53\textwidth}
+    \centering\scriptsize
+    \textbf{(b) Observation likelihood \(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{2.3pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} \\
+      \midrule
+      S1 & .42 & .29 & .15 & .03 & .04 & .03 & .04 \\
+      S2 & .05 & .43 & .26 & .09 & .05 & .03 & .09 \\
+      S3 & .03 & .12 & .53 & .10 & .12 & .04 & .06 \\
+      S4 & .02 & .16 & .17 & .47 & .08 & .04 & .06 \\
+      S5 & .03 & .04 & .23 & .07 & .05 & .52 & .06 \\
+      S6 & .04 & .14 & .07 & .16 & .11 & .08 & .40 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
+
+\subsection{MathDial}
+
+\begin{table}[H]
+  \caption{Complete MathDial label inventory and initial-state distribution.}
+  \label{tab:app_mathdial_inventory}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    State ID & Conversational state & Target & Initial & Strategy ID & Response strategy \\
+    \midrule
+    S1 & \texttt{orientation}            & Yes & 0.54 & O1 & \texttt{solution\_process\_elicitation} \\
+    S2 & \texttt{fault\_mapping}          & Yes & 0.20 & O2 & \texttt{diagnostic\_probe} \\
+    S3 & \texttt{repair\_cycle}           & Yes & 0.09 & O3 & \texttt{focused\_step\_prompt} \\
+    S4 & \texttt{stalled\_recovery}       & Yes & 0.06 & O4 & \texttt{analogy\_transfer\_prompt} \\
+    S5 & \texttt{resolution\_window}      & Yes & 0.04 & O5 & \texttt{diagnosis\_grounded\_explanation} \\
+    S6 & \texttt{ungrounded\_resolution}  & No  & 0.03 & O6 & \texttt{verification\_reflection} \\
+    S7 & \texttt{interaction\_breakdown}  & No  & 0.04 & O7 & \texttt{premature\_direct\_answer} \\
+       &                                    &     &      & O8 & \texttt{off\_style\_response} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{MathDial probability matrices. Darker cells indicate higher probabilities; exact values are printed in each cell.}
+  \label{tab:app_mathdial_matrices}
+  \centering
+  \begin{minipage}[t]{0.44\textwidth}
+    \centering\scriptsize
+    \textbf{(a) Transition probability \(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{1.9pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} & \multicolumn{1}{c}{S7} \\
+      \midrule
+      S1 & .11 & .49 & .17 & .06 & .10 & .03 & .04 \\
+      S2 & .03 & .24 & .41 & .15 & .08 & .05 & .04 \\
+      S3 & .02 & .12 & .32 & .20 & .25 & .05 & .04 \\
+      S4 & .02 & .13 & .30 & .15 & .32 & .05 & .03 \\
+      S5 & .05 & .08 & .12 & .07 & .54 & .03 & .11 \\
+      S6 & .03 & .08 & .18 & .22 & .19 & .24 & .06 \\
+      S7 & .05 & .14 & .13 & .10 & .08 & .16 & .34 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.54\textwidth}
+    \centering\scriptsize
+    \textbf{(b) Observation likelihood \(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{1.9pt}
+    \begin{tabular}{@{}l*{8}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} & \multicolumn{1}{c}{O8} \\
+      \midrule
+      S1 & .45 & .20 & .08 & .05 & .05 & .10 & .03 & .04 \\
+      S2 & .08 & .43 & .20 & .10 & .06 & .07 & .03 & .03 \\
+      S3 & .03 & .19 & .36 & .24 & .08 & .06 & .02 & .02 \\
+      S4 & .03 & .09 & .15 & .05 & .48 & .10 & .07 & .03 \\
+      S5 & .04 & .08 & .16 & .04 & .10 & .52 & .02 & .04 \\
+      S6 & .03 & .05 & .07 & .03 & .13 & .08 & .57 & .04 \\
+      S7 & .05 & .07 & .06 & .05 & .06 & .08 & .07 & .56 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
+
+\subsection{MediTOD}
+
+\begin{table}[H]
+  \caption{Complete MediTOD label inventory and initial-state distribution.}
+  \label{tab:app_meditod_inventory}
+  \centering\small
+  \begin{tabular}{@{}c l c r@{\hspace{1.5em}}c l@{}}
+    \toprule
+    State ID & Conversational state & Target & Initial & Strategy ID & Response strategy \\
+    \midrule
+    S1 & \texttt{agenda\_entry}            & Yes & 0.58 & O1  & \texttt{open\_complaint\_invitation} \\
+    S2 & \texttt{problem\_representation}  & Yes & 0.18 & O2  & \texttt{missing\_information\_clarification} \\
+    S3 & \texttt{risk\_boundary}           & Yes & 0.07 & O3  & \texttt{symptom\_attribute\_probe} \\
+    S4 & \texttt{whole\_person\_context}  & Yes & 0.05 & O4  & \texttt{associated\_red\_flag\_probe} \\
+    S5 & \texttt{evidence\_consolidation}  & Yes & 0.03 & O5  & \texttt{history\_context\_probe} \\
+    S6 & \texttt{insufficient\_basis\_path} & No & 0.05 & O6  & \texttt{summary\_and\_stage\_signal} \\
+    S7 & \texttt{broken\_context\_path}   & No  & 0.04 & O7  & \texttt{conditional\_assessment\_or\_plan} \\
+       &                                     &     &      & O8  & \texttt{unsupported\_assessment\_or\_advice} \\
+       &                                     &     &      & O9  & \texttt{redundant\_requestioning} \\
+       &                                     &     &      & O10 & \texttt{context\_misaligned\_response} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \caption{MediTOD probability matrices. Darker cells indicate higher probabilities; exact values are printed in each cell.}
+  \label{tab:app_meditod_matrices}
+  \centering
+  \begin{minipage}[t]{0.40\textwidth}
+    \centering\scriptsize
+    \textbf{(a) Transition probability \(P(s_t\mid s_{t-1})\)}\\[3pt]
+    \setlength{\tabcolsep}{1.2pt}
+    \begin{tabular}{@{}l*{7}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{S1} & \multicolumn{1}{c}{S2} & \multicolumn{1}{c}{S3} & \multicolumn{1}{c}{S4} & \multicolumn{1}{c}{S5} & \multicolumn{1}{c}{S6} & \multicolumn{1}{c}{S7} \\
+      \midrule
+      S1 & .16  & .51  & .13 & .08  & .05 & .04  & .03  \\
+      S2 & .03  & .37  & .31 & .16  & .07 & .035 & .025 \\
+      S3 & .02  & .14  & .35 & .30  & .12 & .04  & .03  \\
+      S4 & .015 & .065 & .09 & .48  & .27 & .045 & .035 \\
+      S5 & .02  & .04  & .04 & .06  & .67 & .10  & .07  \\
+      S6 & .04  & .09  & .06 & .05  & .13 & .55  & .08  \\
+      S7 & .05  & .11  & .08 & .08  & .08 & .12  & .48  \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.58\textwidth}
+    \centering\scriptsize
+    \textbf{(b) Observation likelihood \(P(o_t\mid s_t)\)}\\[3pt]
+    \setlength{\tabcolsep}{1.4pt}
+    \begin{tabular}{@{}l@{\hspace{2pt}}*{10}{Z}@{}}
+      \toprule
+      & \multicolumn{1}{c}{O1} & \multicolumn{1}{c}{O2} & \multicolumn{1}{c}{O3} & \multicolumn{1}{c}{O4} & \multicolumn{1}{c}{O5} & \multicolumn{1}{c}{O6} & \multicolumn{1}{c}{O7} & \multicolumn{1}{c}{O8} & \multicolumn{1}{c}{O9} & \multicolumn{1}{c}{O10} \\
+      \midrule
+      S1 & .50  & .12  & .10  & .05  & .04 & .06  & .04 & .02  & .03   & .04   \\
+      S2 & .04  & .12  & .52  & .14  & .06 & .05  & .03 & .01  & .015  & .015  \\
+      S3 & .025 & .09  & .15  & .54  & .07 & .055 & .04 & .015 & .0075 & .0075 \\
+      S4 & .015 & .07  & .065 & .10  & .56 & .07  & .05 & .015 & .025  & .03   \\
+      S5 & .015 & .07  & .04  & .05  & .08 & .39  & .31 & .015 & .015  & .015  \\
+      S6 & .025 & .035 & .05  & .04  & .04 & .07  & .15 & .53  & .025  & .035  \\
+      S7 & .025 & .045 & .06  & .05  & .06 & .04  & .04 & .05  & .32   & .31   \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+\end{table}
